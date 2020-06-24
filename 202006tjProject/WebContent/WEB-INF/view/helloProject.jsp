@@ -11,5 +11,6 @@
 <h3>ㅇㅅㅇ ㅎㅇㅇ</h3>
 <h4>힘내서 잘해봐요!^^</h4>
 <h5>네 잘해봐요 'ㅠ'</h5>
+<h6>(window preference team ignoreResource)ignore 할 파일 - */target/*(웹 다이나믹은 없음!), .project, .classpath, .settings</h6>
 </body>
 </html>
