@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="word.mapper.WordbookMapper">
+	<insert id="insertWordbook" parameterType="wordbook" keyProperty="id">
+		insert into wordbook(owner_id,favorite,title,wordbook_address) 
+		values(#{ownerId},#{favorite},#{title},#{wordbookAddress})
+	</insert>
+	<select id="selectWordbookById" resultType="wordbook">
+		select id,owner_id,favorite,shared,title,reg_date,u_date,wordbook_address from wordbook where id=#{id}
+	</select>
+	<select id="selectWordbookAll" resultType="wordbook">
+		select id,owner_id,favorite,shared,title,reg_date,u_date,wordbook_address from wordbook
+	</select>
+	<update id="updateWordbook" parameterType="wordbook">
+		update wordbook set owner_id=#{ownerId}, favorite=#{favorite}, shared=#{shared}, 
+		title=#{title}, wordbook_address=#{wordbookAddress} where id=#{id}
+	</update>
+	<delete id="deleteWordbook">
+		delete from wordbook where id=#{id}
+	</delete>
+</mapper>

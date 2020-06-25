@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="word.mapper.SharingMapper">
+	<insert id="insertSharing" parameterType="sharing" keyProperty="id">
+		insert into sharing(wordbook_id,owner_id,guest_id) 
+		values(#{wordbookId},#{ownerId},#{guestId})
+	</insert>
+	<select id="selectSharingById" resultType="sharing">
+		select id,wordbook_id,owner_id,guest_id from sharing where id=#{id}
+	</select>
+	<select id="selectSharingAll" resultType="sharing">
+		select id,wordbook_id,owner_id,guest_id from sharing
+	</select>
+	<update id="updateSharing" parameterType="sharing">
+		update sharing set wordbook_id=#{wordbookId}, owner_id=#{ownerId}, guest_id=#{guestId} 
+		where id=#{id}
+	</update>
+	<delete id="deleteSharing">
+		delete from sharing where id=#{id}
+	</delete>
+</mapper>

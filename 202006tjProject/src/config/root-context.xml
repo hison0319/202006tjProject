@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<context:component-scan base-package="hosting.controller"/>
+	<context:component-scan base-package="member.controller, member.service"/>
+	<context:component-scan base-package="notice.controller, notice.service"/>
+	<context:component-scan base-package="word.controller, word.service"/>
+	
+	<context:property-placeholder location="classpath:config/db_value.properties"/>
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${db.driverClass}"/>
+		<property name="url" value="${db.url}"/>
+		<property name="username" value="${db.username}"/>
+		<property name="password" value="${db.password}"/>
+	</bean>
+	
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:config/mybatisConfig.xml"/>
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:member/mapper/memberMapper.xml</value>
+				<value>classpath:notice/mapper/noticeMapper.xml</value>
+				<value>classpath:word/mapper/wordbookMapper.xml</value>
+				<value>classpath:word/mapper/sharingMapper.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<mybatis-spring:scan base-package="member.mapper"/>
+	<mybatis-spring:scan base-package="notice.mapper"/>
+	<mybatis-spring:scan base-package="word.mapper"/>
+	
+	<mvc:annotation-driven/>
+</beans>
