@@ -13,6 +13,7 @@
     <meta name="description" content="basic" />
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <script src="/js/notice/noticeUpdateForm.js"></script>
     <link rel="stylesheet" href="/css/main.css" />
 </head>
 
@@ -31,14 +32,48 @@
     </header>
     
     <!-- container -->
-    <section class="wrapper major-pad">
-        <div class="inner">
-			<div>공지사항 수정 폼</div>
-        </div>
-    </section>
-
     <section class="wrapper style">
-        <div class="inner"></div>
+        <div class="inner">
+            <div class="posting">
+                <div class="textWindow">
+                    <form action="update" name="noticeForm" method="POST">
+                        <input type="text" name="id" value="${notice.id}" class="skip"/>
+                        <div class="col-6 col-12-xsmall">                        	
+                            <input type="text" name="writerId" value="${notice.writerId}" readonly/>
+                            <input type="text" name="title" value="${notice.title}" maxlength="100" />
+                        </div>
+                        <div class="col-12">
+                            <textarea name="contents" maxlength="1000" rows="6">${notice.contents}</textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="writeOption">
+                    <button class="icon fas fa-undo" aria-label="실행취소 (Ctrl-Z)" data-tip="실행취소 ‪(Ctrl-Z)‬"></button>
+                    <button class="icon fas fa-redo" aria-label="재실행 (Ctrl-Y)" data-tip="재실행 ‪(Ctrl-Y)‬"></button>
+                    <select name="textSize" class="textSize" aria-label="크기 ‪(Ctrl-Shift--, Ctrl-Shift-+)‬" data-tip="크기 ‪(Ctrl-Shift--, Ctrl-Shift-+)‬">
+                        <option value="">- 글자크기 -</option>
+                        <option value="16">16</option>
+                        <option value="14">14</option>
+                        <option value="12">12</option>
+                        <option value="12">10</option>
+                        <option value="12">8</option>
+                    </select>
+                    <button class="icon fas fa-bold" aria-label="굵게 ‪(Ctrl-B)‬" data-tip="굵게 ‪(Ctrl-B)‬"></button>
+                    <button class="icon fas fa-italic" aria-label="기울임꼴 ‪(Ctrl-I)‬‬" data-tip="기울임꼴 ‪(Ctrl-I)‬‬"></button>
+                    <button class="icon fas fa-underline" aria-label="밑줄 ‪(Ctrl-U)‬‬" data-tip="밑줄 ‪(Ctrl-U)‬"></button>
+                    <button name="textArray" class="textArray" aria-label="정렬‬" data-tip="정렬‬">
+                        <div class="fas fa-align-left"><span class="skip">왼쪽정렬</span></div>
+                        <div class="fas fa-align-center displayNone"><span class="skip">가운데정렬</span></div>
+                        <div class="fas fa-align-right displayNone"><span class="skip">오른쪽정렬</span></div>
+                    </button>
+                </div>
+            </div>
+            <div class="conclusion">
+                <button class="upLoad" aria-label="게시하기" data-tip="게시하기" onclick="sumbmitCheck()">수정하기</button>
+                <button class="cancel" aria-label="전부삭제" data-tip="전부삭제">내용 삭제</button>
+            </div>
+        </div>
     </section>
 
 

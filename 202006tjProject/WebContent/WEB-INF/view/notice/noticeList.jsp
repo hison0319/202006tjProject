@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE HTML>
 
 <html>
@@ -14,7 +15,7 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<script src="/js/notice/notice.js"></script>
+<script src="/js/notice/noticeList.js"></script>
 <link rel="stylesheet" href="/css/main.css" />
 </head>
 
@@ -33,15 +34,39 @@
 	<!-- container -->
 	<section class="wrapper major-pad">
 		<div class="inner">
-			<div class="notice">
-				<span class="writerId">${notice.writerId}</span><span class="regDate">&nbsp;&nbsp; ${notice.regDate}</span>
-				<h3 class="title">${notice.title}</h3>
-				<p class="contents">${notice.contents}</p>
-			</div>
-			<div class="center_position">
-				<button class="button" onclick="showList()">목록이동</button>
-				<button class="button" onclick="updateForm(${notice.id})">수정</button>
-				<button class="button" onclick="deleteCheck(${notice.id})">삭제</button>
+			<div class="table-wrapper">
+				<table>
+					<thead>
+						<tr>
+							<th>작성자</th>
+							<th>제목</th>
+							<th>공지일시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="nL" items="${noticeList}">
+							<tr>
+								<td>${nL.writerId}</td>
+								<td><a href="show?id=${nL.id}">${nL.title}</a></td>
+								<td>${nL.regDate}</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+				<div class="center_position">
+					<ul class="pagination">
+						<li><span class="button disabled">Prev</span></li>
+						<li><a href="#" class="page active">1</a></li>
+						<li><a href="#" class="page">2</a></li>
+						<li><a href="#" class="page">3</a></li>
+						<li><span>&hellip;</span></li>
+						<li><a href="#" class="page">8</a></li>
+						<li><a href="#" class="page">9</a></li>
+						<li><a href="#" class="page">10</a></li>
+						<li><a href="#" class="button">Next</a></li>
+					</ul>
+				</div>
+				<button class="right_position" id="btnInsert">공지 등록</button>
 			</div>
 		</div>
 	</section>

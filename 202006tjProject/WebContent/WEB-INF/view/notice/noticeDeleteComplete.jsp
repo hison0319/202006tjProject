@@ -5,7 +5,7 @@
 <html>
 
 <head>
-    <title>noticeUpdateComplete</title>
+    <title>noticeComplete</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="robots" content="noindex, nofollow" />
@@ -13,11 +13,11 @@
     <meta name="description" content="basic" />
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <script src="/js/notice/noticeUpdateComplete.js"></script>
+    <script src="/js/notice/noticeDeleteComplete.js"></script>
     <link rel="stylesheet" href="/css/main.css" />
 </head>
 
-<body class="is-preload" onload="goback(${id})">
+<body class="is-preload">
 
     <!-- Header -->
     <header id="header">
@@ -34,7 +34,7 @@
     <!-- container -->
     <section class="wrapper major-pad">
         <div class="inner">
-			<div class="center_position">공지사항 수정 완료</div>
+			<div class="center_position">공지사항 삭제 완료</div>
         </div>
     </section>
 
