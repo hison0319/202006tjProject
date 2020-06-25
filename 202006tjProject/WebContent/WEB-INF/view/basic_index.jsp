@@ -8,9 +8,9 @@
     <title>Untitled</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>봄봄백과</title>
+    <title>단어장</title>
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="keywords" content="봄봄백과" />
+    <meta name="keywords" content="단어장" />
     <meta name="description" content="basic" />
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -66,10 +66,9 @@
     <footer id="footer">
         <div class="inner">
             <div class="aboutUsSub"><strong>단어장<br /></strong>
-                <p>시각장애인과 시각장애인이 아닌 사람들의 봄을 공유함으로써 모두를 위한 백과사전을 만드는 공간입니다.<br /> 이 활동은 우리 모두에게 큰 도움이 될 것 입니다. <br />당신의 봄을 백과사전에 공유해주세요!
-                </p>
+                <p>단어장을 만들어 사용하세요.</p>
             </div>
-            <p class="copyright">&copy; Untitled Corp. All rights reserved. </p>
+            <p class="copyright">&copy; Untitled eunji yoonseon hani. All rights reserved. </p>
             <ul class="menu">
                 <li><a href="#">이용약관</a></li>
                 <li><a href="#">사이트 정책</a></li>

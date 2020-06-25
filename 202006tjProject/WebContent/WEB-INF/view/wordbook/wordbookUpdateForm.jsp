@@ -5,10 +5,9 @@
 <html>
 
 <head>
-    <title>Untitled</title>
+    <title>wordbookUpdateForm</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>단어장</title>
     <meta name="robots" content="noindex, nofollow" />
     <meta name="keywords" content="단어장" />
     <meta name="description" content="basic" />
@@ -27,18 +26,15 @@
                 <li>
                     <a href="encyclopedia.html" Tabindex="2">단어장</a>
                 </li>
-            </ul>`
+            </ul>
         </nav>
     </header>
     
     <!-- container -->
     <section class="wrapper major-pad">
         <div class="inner">
-            
-            <h2>안녕하세요!</h2>
-            <div>로그인이동</div>
-            <div>회원가입이동</div>
-
+			<div>단어장 생성 창</div>
+			<div>핵심기능 구현</div>
         </div>
     </section>
 

@@ -6,5 +6,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("notice")
 public class NoticeController {
-
+	//공지사항 조회 기능
+	public String noticeListShow() {
+		return "";
+	}
+	//운영자 아이디 확인 기능 구현
+	public String noticeAdmin() {
+		return "";
+	}
+	//공지사항 삽입 기능
+	public String noticeInsertForm() {
+		return "";
+	}
+	public String noticeInsert() {
+		return "";
+	}
+	//공지사항 수정 기능
+	public String noticeUpdateForm() {
+		return "";
+	}
+	public String noticeUpdate() {
+		return "";
+	}
+	//공지사항 삭제 기능
+	public String noticeDelete() {
+		return "";
+	}
 }
