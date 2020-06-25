@@ -33,7 +33,48 @@
     <!-- container -->
     <section class="wrapper major-pad">
         <div class="inner">
-			<div>공지사항 리스트</div>
+			<div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>작성자</th>
+                            <th>제목</th>
+                            <th>공지일시</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>조은지</td>
+                            <td><a>만나서 반갑습니다.</a></td>
+                            <td>2020.06.25</td>
+                        </tr>
+                        <tr>
+                            <td>심윤선</td>
+                            <td><a>저도 반갑습니다.</a></td>
+                            <td>2020.06.25</td>
+                        </tr>
+                        <tr>
+                            <td>손한이</td>
+                            <td><a>저도 반갑습니다.</a></td>
+                            <td>2020.06.25</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="center_position">
+                    <ul class="pagination">
+                        <li><span class="button disabled">Prev</span></li>
+                        <li><a href="#" class="page active">1</a></li>
+                        <li><a href="#" class="page">2</a></li>
+                        <li><a href="#" class="page">3</a></li>
+                        <li><span>&hellip;</span></li>
+                        <li><a href="#" class="page">8</a></li>
+                        <li><a href="#" class="page">9</a></li>
+                        <li><a href="#" class="page">10</a></li>
+                        <li><a href="#" class="button">Next</a></li>
+                    </ul>
+                </div>
+                <button class="right_position">공지 등록</button>
+            </div>
         </div>
     </section>
 

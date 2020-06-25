@@ -3,10 +3,7 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600|Raleway:500,700,800");
 
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900|Noto+Serif+KR:200,300,400,500,600,700,900&display=swap&subset=korean"rel="stylesheet" > html,
-
-
-
+html,
 body,
 div,
 span,
@@ -3066,4 +3063,12 @@ label {
     text-indent: -999px;
     position: absolute;
     left: -999px;
+}
+
+.center_position {
+    margin: 0 auto;
+    text-align: center;
+}
+.right_position {
+    float: right;
 }
