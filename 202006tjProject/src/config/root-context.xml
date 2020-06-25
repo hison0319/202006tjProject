@@ -42,4 +42,9 @@
 	<mybatis-spring:scan base-package="word.mapper"/>
 	
 	<mvc:annotation-driven/>
+	
+	<mvc:resources location="/resource/assets/css/" mapping="/css/**"></mvc:resources>
+	<mvc:resources location="/resource/assets/js/" mapping="/js/**"></mvc:resources>
+	<mvc:resources location="/resource/assets/sass/" mapping="/sass/**"></mvc:resources>
+	<mvc:resources location="/resource/assets/webfonts/" mapping="/webfonts/**"></mvc:resources>
 </beans>

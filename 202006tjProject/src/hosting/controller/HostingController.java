@@ -10,6 +10,6 @@ public class HostingController {
 	
 	@GetMapping("show")
 	public String showIndex() {
-		return "helloProject";
+		return "basic_index";
 	}
 }
