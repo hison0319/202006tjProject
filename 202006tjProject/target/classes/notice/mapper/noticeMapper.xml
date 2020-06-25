@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notice.mapper.NoticeMapper">
+	<insert id="insertNotice" parameterType="notice" keyProperty="id">
+		insert into notice(title,writer_id,contents) 
+		values(#{title},#{writerId},#{contents})
+	</insert>
+	<select id="selectNoticeById" resultType="notice">
+		select id,title,writer_id,contents,reg_date from notice where id=#{id}
+	</select>
+	<select id="selectNoticeAll" resultType="notice">
+		select id,title,writer_id,contents,reg_date from notice
+	</select>
+	<update id="updateNotice" parameterType="notice">
+		update notice set title=#{title}, writer_id=#{writerId}, contents=#{contents} 
+		where id=#{id}
+	</update>
+	<delete id="deleteNotice">
+		delete from notice where id=#{id}
+	</delete>
+</mapper>
