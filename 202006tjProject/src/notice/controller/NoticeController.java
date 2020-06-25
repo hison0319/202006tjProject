@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class NoticeController {
 	//공지사항 조회 기능
 	public String noticeListShow() {
-		return "";
+		return "notice";
 	}
 	//운영자 아이디 확인 기능 구현
 	public String noticeAdmin() {
@@ -16,20 +16,20 @@ public class NoticeController {
 	}
 	//공지사항 삽입 기능
 	public String noticeInsertForm() {
-		return "";
+		return "noticeInsertForm";
 	}
 	public String noticeInsert() {
-		return "";
+		return "noticeInsertComplete";
 	}
 	//공지사항 수정 기능
 	public String noticeUpdateForm() {
-		return "";
+		return "noticeUpdateForm";
 	}
 	public String noticeUpdate() {
-		return "";
+		return "noticeUpdateComplete";
 	}
 	//공지사항 삭제 기능
 	public String noticeDelete() {
-		return "";
+		return "notice";
 	}
 }
