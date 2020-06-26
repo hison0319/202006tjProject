@@ -1,18 +1,28 @@
 package member.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-@RequestMapping("singup")
-public class SignupController {
-	// 회원가입 창 이동
-	public String signupForm() {
-		return "";
-	}
+import member.dto.MemberDto;
+import member.service.MemberService;
 
-	// 회원가입 기능 구현
-	public String signupService() {
-		return "";
+@Controller
+@RequestMapping("/signup")
+public class SignupController {
+	@Autowired
+	MemberService memberService;
+	
+	@GetMapping("/form")
+	public String form() {
+		return "member/signupFrom";
+	}
+	
+	@PostMapping("/insert")
+	public String insert(MemberDto memberDto) {
+		memberService.insertMember(memberDto);  //받아온 정보를 DB에 insert
+		return "member/signupComplete";
 	}
 }

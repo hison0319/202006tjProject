@@ -29,14 +29,14 @@ public class LoginController {
 	@ResponseBody
 	@PostMapping("matching")
 	public MemberDto loginService(HttpSession session, Model m, MemberDto memberDto) {
-		if(memberService.selectMemberByMemberId(memberDto.getMemberId())==null) {
+		if(memberService.selectMemberByMemberId(memberDto.getMemberId())==null) {  //아이디가 틀렸을 경우
 			return null;
 		}
-		else {
+		else { 
 			if(memberService.selectMemberByMemberIdPw(memberDto.getMemberId(), memberDto.getPassword())==null) {
 				return memberService.selectMemberByMemberId(memberDto.getMemberId());
-			}
-			else {
+			}  //아이디는 맞고 비밀번호가 틀렸을 경우
+			else {  //둘 다 맞을 시
 				int loginId = memberService.selectMemberByMemberId(memberDto.getMemberId()).getId();
 				session.setAttribute("loginId", loginId);
 				return memberService.selectMemberByMemberIdPw(memberDto.getMemberId(), memberDto.getPassword());
@@ -45,7 +45,7 @@ public class LoginController {
 	}
 	
 	@GetMapping("complete")
-	public String complete() {
+	public String complete() {  //로그인 성공
 		return "member/loginComplete";
 	}
 }
