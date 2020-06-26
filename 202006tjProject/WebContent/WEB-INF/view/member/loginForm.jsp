@@ -34,7 +34,7 @@
 		<div class="inner">
 			<div class="login">Login</div>
 			<br>
-			<form method="post" action="#">
+			<form method="post" action="matching">
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
 						<div class="other_id">
@@ -46,13 +46,13 @@
 						<br>
 
 						<div class="login_id">
-							<input type="text" name="demo-id" id="demo-id" value=""
+							<input type="text" name="memberId"  id="demo-id" value=""
 								placeholder="ID">
 						</div>
 						<br>
 
 						<div class="login_pw">
-							<input type="password" name="demo-pw" id="demo-pw" value=""
+							<input type="password" name="password" id="demo-pw" value=""
 								placeholder="PASSWORD">
 						</div>
 						<br>
@@ -103,6 +103,7 @@
 	<script src="/js/breakpoints.min.js"></script>
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
+	<script src="/js/login/login.js"></script>
 
 </body>
 
