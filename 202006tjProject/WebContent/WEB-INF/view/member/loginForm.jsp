@@ -1,91 +1,108 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
 
 <html>
 
 <head>
-    <title>loginForm</title>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="keywords" content="단어장" />
-    <meta name="description" content="basic" />
-    <meta name="author" content="HaniSon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <script src="/js/login/login.js"></script>
-    <link rel="stylesheet" href="/css/main.css" />
+<title>loginForm</title>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="keywords" content="단어장" />
+<meta name="description" content="basic" />
+<meta name="author" content="HaniSon" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" href="/css/login.css" />
 </head>
 
 <body class="is-preload">
 
-    <!-- Header -->
-    <header id="header">
-        <nav id="nav">
-            <ul>
-                <li><a href="index.html">홈</a></li>
-                <li>
-                    <a href="encyclopedia.html" Tabindex="2">단어장</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    
-    <!-- container -->
-    <section class="wrapper major-pad">
-        <div class="inner">
-            <div class="log_in">
-            <div>카카오 로그인</div>
-            <div>네이버?구글 로그인</div>
-                <div>Login</div>
-                <form method="post" action="#">
-                    <div class="row gtr-uniform">
-                        <div class="col-6 col-12-xsmall">
-                            <div>
-                                <input type="text" name="demo-name" id="demo-name" value="" placeholder="ID"></li>
-                                <input type="password" name="demo-name" id="demo-name" value="" placeholder="PASSWORD"></li>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <ul class="actions">
-                                <li><input type="submit" value="Login" class="primary"></li>
-                                <li><input type="reset" value="Reset"></li>
-                            </ul>
-                        </div>
-                    </div>
-                </form>
-            </div>
+	<!-- Header -->
+	<header id="header">
+		<nav id="nav">
+			<ul>
+				<li><a href="index.html">홈</a></li>
+				<li><a href="encyclopedia.html" Tabindex="2">단어장</a></li>
+			</ul>
+		</nav>
+	</header>
 
-        </div>
-    </section>
+	<!-- container -->
+	<section class="wrapper major-pad">
+		<div class="inner">
+			<div class="login">Login</div>
+			<br>
+			<form method="post" action="#">
+				<div class="row gtr-uniform">
+					<div class="col-6 col-12-xsmall">
+						<div class="other_id">
+							<ul class="actions stacked">
+								<li><a href="#" class="button primary">네이버 아이디로 로그인</a></li>
+								<li><a href="#" class="button primary">구글 아이디로 로그인</a></li>
+							</ul>
+						</div>
+						<br>
 
-    <section class="wrapper style">
-        <div class="inner"></div>
-    </section>
+						<div class="login_id">
+							<input type="text" name="demo-id" id="demo-id" value=""
+								placeholder="ID">
+						</div>
+						<br>
+
+						<div class="login_pw">
+							<input type="password" name="demo-pw" id="demo-pw" value=""
+								placeholder="PASSWORD">
+						</div>
+						<br>
+
+						<div class="login_sub">
+							<input type="submit" value="Login" class="primary">
+						</div>
+
+						<div class="search_member">
+							<ul class="actions stacked">
+								<li><a href="#" class="button small">아이디 찾기</a></li>
+								<li><a href="#" class="button small">비밀번호 찾기</a></li>
+							</ul>
+						</div>
+						<br>
 
 
-    <!-- Footer -->
-    <footer id="footer">
-        <div class="inner">
-            <div class="aboutUsSub"><strong>단어장<br /></strong>
-                <p>단어장을 만들어 사용하세요.</p>
-            </div>
-            <p class="copyright">&copy; Untitled eunji yoonseon hani. All rights reserved. </p>
-            <ul class="menu">
-                <li><a href="#">이용약관</a></li>
-                <li><a href="#">사이트 정책</a></li>
-            </ul>
-        </div>
-    </footer>
+					</div>
+				</div>
+			</form>
+		</div>
+	</section>
 
-    <!-- Scripts -->
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.scrollex.min.js"></script>
-    <script src="/js/jquery.dropotron.min.js"></script>
-    <script src="/js/browser.min.js"></script>
-    <script src="/js/breakpoints.min.js"></script>
-    <script src="/js/util.js"></script>
-    <script src="/js/main.js"></script>
+
+
+
+	<!-- Footer -->
+	<footer id="footer">
+		<div class="inner">
+			<div class="aboutUsSub">
+				<strong>단어장<br /></strong>
+				<p>단어장을 만들어 사용하세요.</p>
+			</div>
+			<p class="copyright">&copy; Untitled eunji yoonseon hani. All
+				rights reserved.</p>
+			<ul class="menu">
+				<li><a href="#">이용약관</a></li>
+				<li><a href="#">사이트 정책</a></li>
+			</ul>
+		</div>
+	</footer>
+
+	<!-- Scripts -->
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/jquery.scrollex.min.js"></script>
+	<script src="/js/jquery.dropotron.min.js"></script>
+	<script src="/js/browser.min.js"></script>
+	<script src="/js/breakpoints.min.js"></script>
+	<script src="/js/util.js"></script>
+	<script src="/js/main.js"></script>
 
 </body>
 
