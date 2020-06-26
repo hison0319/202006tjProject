@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML>
 
 <html>
@@ -40,8 +41,10 @@
 			</div>
 			<div class="center_position">
 				<button class="button" onclick="showList()">목록이동</button>
+				<c:if test="${sessionScope.loginId>=1&&sessionScope.loginId<=20}">
 				<button class="button" onclick="updateForm(${notice.id})">수정</button>
 				<button class="button" onclick="deleteCheck(${notice.id})">삭제</button>
+				</c:if>
 			</div>
 		</div>
 	</section>

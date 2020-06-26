@@ -53,7 +53,7 @@ public class MyTest {
 		NoticeDto notice = new NoticeDto("test", 1, "test");
 		noticeService.insertNotice(notice);
 		System.out.println(noticeService.selectNoticeById(notice.getId()));
-		System.out.println(noticeService.selectNoticeAll());
+		System.out.println(noticeService.selectNoticeList(1,5));
 	}
 	//공지 업데이트 델리트
 	@Test @Ignore
@@ -63,7 +63,7 @@ public class MyTest {
 		noticeService.updateNotice(notice);
 		System.out.println(noticeService.selectNoticeById(1));
 		noticeService.deleteNotice(2);
-		System.out.println(noticeService.selectNoticeAll());
+		System.out.println(noticeService.selectNoticeList(1,5));
 	}
 	//단어장 삽입 셀렉 전체셀렉
 	@Test @Ignore

@@ -10,8 +10,11 @@
 	<select id="selectNoticeById" resultType="notice">
 		select id,title,writer_id,contents,reg_date from notice where id=#{id}
 	</select>
-	<select id="selectNoticeAll" resultType="notice">
-		select id,title,writer_id,contents,reg_date from notice
+	<select id="selectNoticeList" resultType="notice">
+		select id,title,writer_id,contents,reg_date from notice order by id desc limit #{first}, #{ea}
+	</select>
+	<select id="selectNoticeCount" resultType="int">
+		select count(*) from notice
 	</select>
 	<update id="updateNotice" parameterType="notice">
 		update notice set title=#{title}, writer_id=#{writerId}, contents=#{contents} 

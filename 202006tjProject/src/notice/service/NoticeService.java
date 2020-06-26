@@ -23,8 +23,8 @@ public class NoticeService {
 	}
 
 	// 공지 전체 조회
-	public List<NoticeDto> selectNoticeAll() {
-		return noticeMapper.selectNoticeAll();
+	public List<NoticeDto> selectNoticeList(int first, int ea) {
+		return noticeMapper.selectNoticeList(first, ea);
 	}
 
 	// 공지 수정
@@ -35,5 +35,10 @@ public class NoticeService {
 	// 공지 삭제
 	public void deleteNotice(int id) {
 		noticeMapper.deleteNotice(id);
+	}
+	
+	//공지 총 갯수 조회
+	public int selectNoticeCount() {
+		return noticeMapper.selectNoticeCount();
 	}
 }

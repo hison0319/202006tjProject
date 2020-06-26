@@ -25,7 +25,7 @@
 	<header id="header">
 		<nav id="nav">
 			<ul>
-				<li><a href="index.html">홈</a></li>
+				<li><a href="/">홈</a></li>
 				<li><a href="encyclopedia.html" Tabindex="2">단어장</a></li>
 			</ul>
 		</nav>
@@ -55,18 +55,33 @@
 				</table>
 				<div class="center_position">
 					<ul class="pagination">
+						<c:if test="${pageNum>1}">
+						<li><a href="showList?pageNumStr=${pageNum-1}" class="button">Prev</a></li>
+						</c:if>
+						<c:if test="${pageNum<=1}">
 						<li><span class="button disabled">Prev</span></li>
-						<li><a href="#" class="page active">1</a></li>
-						<li><a href="#" class="page">2</a></li>
-						<li><a href="#" class="page">3</a></li>
-						<li><span>&hellip;</span></li>
-						<li><a href="#" class="page">8</a></li>
-						<li><a href="#" class="page">9</a></li>
-						<li><a href="#" class="page">10</a></li>
-						<li><a href="#" class="button">Next</a></li>
+						</c:if>
+						<c:forEach var="pN" items="${pageNumList}" end="4">
+							<c:choose>
+								<c:when test="${pN != pageNum}">
+									<li><a href="showList?pageNumStr=${pN}" class="page">${pN}</a></li>
+								</c:when>
+								<c:when test="${pN == pageNum}">
+									<li><a href="showList?pageNumStr=${pN}" class="page active">${pN}</a></li>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+						<c:if test="${pages>pageNum}">
+						<li><a href="showList?pageNumStr=${pageNum+1}" class="button">Next</a></li>
+						</c:if>
+						<c:if test="${pages<=pageNum}">
+						<li><span class="button disabled">Next</span></li>
+						</c:if>
 					</ul>
 				</div>
-				<button class="right_position" id="btnInsert">공지 등록</button>
+				<c:if test="${sessionScope.loginId>=1&&sessionScope.loginId<=20}">
+					<button class="right_position" id="btnInsert">공지 등록</button>			
+				</c:if>
 			</div>
 		</div>
 	</section>
