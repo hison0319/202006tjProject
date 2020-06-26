@@ -13,10 +13,10 @@ public class WordbookController {
 	public String wordbookListShow() {
 		return "wordbook/wordbookList";
 	}
-	//단어장 생성 기능
+	
+	//단어장 생성 페이지
 	@GetMapping("form")
 	public String wordbookForm() {
-		//핵심기능!
 		return "wordbook/wordbookUpdateForm";
 	}
 	
