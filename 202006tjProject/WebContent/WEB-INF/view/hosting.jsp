@@ -23,12 +23,12 @@
     <header id="header">
         <nav id="nav">
             <ul>
-                <li><a href="/">홈</a></li>
+                <li><a href="${pageContext.request.contextPath}/">홈</a></li>
                 <li>
                     <a href="encyclopedia.html" Tabindex="2">단어장</a>
                 </li>
                 <li>
-                    <a href="notice/showList" Tabindex="2">공지사항</a>
+                    <a href="${pageContext.request.contextPath}/notice/showList" Tabindex="2">공지사항</a>
                 </li>
             </ul>
         </nav>
