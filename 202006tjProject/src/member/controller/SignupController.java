@@ -17,7 +17,7 @@ public class SignupController {
 	
 	@GetMapping("/form")
 	public String form() {
-		return "member/signupFrom";
+		return "member/signupForm";
 	}
 	
 	@PostMapping("/insert")
