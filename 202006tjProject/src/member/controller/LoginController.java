@@ -46,6 +46,6 @@ public class LoginController {
 	
 	@GetMapping("complete")
 	public String complete() {
-		return "wordbook/wordbookList";
+		return "member/loginComplete";
 	}
 }
