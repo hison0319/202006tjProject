@@ -27,6 +27,9 @@
                 <li>
                     <a href="encyclopedia.html" Tabindex="2">단어장</a>
                 </li>
+                <li>
+                    <a href="notice/showList" Tabindex="2">공지사항</a>
+                </li>
             </ul>
         </nav>
     </header>
