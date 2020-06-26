@@ -2,6 +2,7 @@ package member.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +36,21 @@ public class MemberService {
 	// 회원 삭제
 	public void deleteMember(int id) {
 		memberMapper.deleteMember(id);
+	}
+	
+	//로그인용 회원 조회
+	public MemberDto selectMemberByMemberId(String memberId) {
+		try {
+			return memberMapper.selectMemberByMemberId(memberId);
+		} catch(NullPointerException e) {
+			return null;
+		}
+	}
+	public MemberDto selectMemberByMemberIdPw(String memberId, String password) {
+		try {
+			return memberMapper.selectMemberByMemberIdPw(memberId, password);
+		} catch(NullPointerException e) {
+			return null;
+		}
 	}
 }

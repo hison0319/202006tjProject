@@ -2,6 +2,8 @@ package member.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import member.dto.MemberDto;
 
 public interface MemberMapper {
@@ -19,4 +21,8 @@ public interface MemberMapper {
 	
 	//회원 삭제
 	public void deleteMember(int id);
+	
+	//로그인용 회원 조회
+	public MemberDto selectMemberByMemberId(@Param("memberId")String memberId);
+	public MemberDto selectMemberByMemberIdPw(@Param("memberId")String memberId, @Param("password")String password);
 }
