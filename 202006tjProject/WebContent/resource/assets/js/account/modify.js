@@ -5,53 +5,17 @@ window.addEventListener("DOMContentLoaded",function(){
 	var passwordPattern = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
 	var emailPattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 	var phonePattern =  /^\d{3}\d{3,4}\d{4}$/;
+
+	var emailOk = true;
+	var PhoneOk = true;
 	
-	var memberIdOk = false;
-	var emailOk = false;
-	var phoneOk = false;
-	
-	$("#memberId").on("change",function() {
-		alert("사용가능한 아이디인지 확인받으세요.");
-		var memberIdOk = false;
-	});
 	$("#email").on("change",function() {
-		alert("사용가능한 이메일인지 확인받으세요.");
+		alert("사용가능한 메일인지 확인받으세요.");
 		var emailOk = false;
 	});
 	$("#phone").on("change",function() {
-		alert("사용가능한 폰번호인지 확인받으세요.");
+		alert("사용가능한 전화번호인지 확인받으세요.");
 		var emailOk = false;
-	});
-	
-	$("#id_check").on("click",function(){
-		//아이디 공백확인
-	    if ($("#memberId").val() == "") {
-	       alert("아이디를 입력해주세요.");
-	       $("#memberId").focus();
-	       return false;
-	      }
-	    //아이디의 유효성 검사
-	    if (!memberIdPattern.test($("#memberId").val())) {
-	       alert("아이디를 올바르게 입력해주세요.");
-	       $("#memberId").val("");
-	       $("#memberId").focus();
-	       return false;
-	      }
-		let formData = $("#memberId").serialize();
-		$.ajax({
-			url:"/signup/confirmMemberId",
-			type:"post",
-			data:formData,
-			success:function(data){
-				if(data == "t") {
-					memberIdOk = true;
-					alert("사용가능 합니다.");
-				} else {
-					alert("중복된 아이디가 있습니다.");
-				}
-			}
-		})
-		return false;
 	});
 	
 	$("#email_check").on("click",function(){
@@ -70,15 +34,16 @@ window.addEventListener("DOMContentLoaded",function(){
 	      }
 		let formData = $("#email").serialize();
 		$.ajax({
-			url:"/signup/confirmEmail",
+			url:"/account/confirmEmail",
 			type:"post",
 			data:formData,
 			success:function(data){
-				if(data == "t") {
-					emailOk = true;
+				if(data == "s") {
+					alert("변경하지 않았습니다.")
+				} else if (data == "t"){
 					alert("사용가능 합니다.");
 				} else {
-					alert("중복된 메일이 있습니다.");
+					alert("중복된 메일이 있습니다.");					
 				}
 			}
 		})
@@ -101,15 +66,16 @@ window.addEventListener("DOMContentLoaded",function(){
 	      }
 		let formData = $("#phone").serialize();
 		$.ajax({
-			url:"/signup/confirmPhone",
+			url:"/account/confirmPhone",
 			type:"post",
 			data:formData,
 			success:function(data){
-				if(data == "t") {
-					phoneOk = true;
+				if(data == "s") {
+					alert("변경하지 않았습니다.")
+				} else if (data == "t"){
 					alert("사용가능 합니다.");
 				} else {
-					alert("중복된 폰번호가 있습니다.");
+					alert("중복된 메일이 있습니다.");					
 				}
 			}
 		})
@@ -118,19 +84,6 @@ window.addEventListener("DOMContentLoaded",function(){
 	
 	$("form").on("submit",function(){
 
-	    //아이디 공백확인
-	    if ($("#memberId").val() == "") {
-	       alert("아이디를 입력해주세요.");
-	       $("#memberId").focus();
-	       return false;
-	      }
-	    //아이디의 유효성 검사
-	    if (!memberIdPattern.test($("#memberId").val())) {
-	       alert("아이디를 올바르게 입력해주세요.");
-	       $("#memberId").val("");
-	       $("#memberId").focus();
-	       return false;
-	      }
 	    //비밀번호 공백 확인
 	    if ($("#password").val() == "") {
 	       alert("비밀번호를 입력하세요");
@@ -184,18 +137,14 @@ window.addEventListener("DOMContentLoaded",function(){
 	          $("#phone").focus();
 	          return false;
 	      }
-	    if (!memberIdOk) {
-		 	alert("사용 가능한 아이디인지 확인받으세요.");
-		  	return false;
-		   }
-	    if (!emailOk) {
-	    	alert("사용 가능한 이메일인지 확인받으세요.");
-	    	return false;
-	    }
-	    if (!phoneOk) {
+	   if (!emailOk) {
+		   alert("사용 가능한 이메일인지 확인받으세요.");
+		   return false;
+	   }
+	   if (!phoneOk) {
 	    	alert("사용 가능한 전화번호인지 확인받으세요.");
 	    	return false;
-	    }
+	   }
 	});
 });
 

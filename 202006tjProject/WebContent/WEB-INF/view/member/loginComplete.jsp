@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    
 <html>
 
 <head>
@@ -21,17 +23,30 @@
     <header id="header">
         <nav id="nav">
             <ul>
-                <li><a href="${pageContext.request.contextPath}/">홈</a></li>
-                <li>
-                    <a href="#">단어장</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
-                </li>
-                <li>
-                	<a href="${pageContext.request.contextPath}/account/showMemberInfo">마이페이지</a>
-                </li>
-            </ul>
+				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
+				<li><a href="#">단어장</a></li>
+				<li><a
+					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
+				</li>
+				<c:choose>
+					<c:when test="${sessionScope.loginMember == null}">
+						<li style="white-space: nowrap;">
+							<a href="${pageContext.request.contextPath}/login/form" class="button">LogIn</a>
+						</li>
+						<li style="white-space: nowrap;">
+							<a href="${pageContext.request.contextPath}/signup/form" class="button">SignUp</a>
+						</li>
+					</c:when>
+					<c:when test="${sessionScope.loginMember != null}">
+						<li>
+							<a href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
+						</li>
+						<li style="white-space: nowrap;">
+							<a href="#" class="button">LogOut</a>
+						</li>
+					</c:when>
+				</c:choose>
+			</ul>
         </nav>
     </header>
     

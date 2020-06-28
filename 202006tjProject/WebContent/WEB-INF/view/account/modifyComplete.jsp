@@ -6,17 +6,17 @@
 <html>
 
 <head>
-<title>Untitled</title>
+<title>accountModify</title>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>단어장</title>
 <meta name="robots" content="noindex, nofollow" />
 <meta name="keywords" content="단어장" />
 <meta name="description" content="basic" />
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="stylesheet" href="/css/main.css" />
+	
+<link rel="stylesheet" href="/css/signup.css" />
 </head>
 
 <body class="is-preload">
@@ -54,14 +54,10 @@
 
 	<!-- container -->
 	<section class="wrapper major-pad">
-		<div class="inner">
-
-			<h2>안녕하세요!</h2>
-			<a href="${pageContext.request.contextPath}/login/form">로그인이동</a><br>
-			<a href="${pageContext.request.contextPath}/signup/form">회원가입이동</a>
-
-		</div>
-	</section>
+        <div class="inner">
+            <div>회원 정보 수정 완료</div>
+        </div>
+    </section>
 
 	<section class="wrapper style">
 		<div class="inner"></div>

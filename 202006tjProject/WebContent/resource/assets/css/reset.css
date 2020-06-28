@@ -3054,15 +3054,13 @@ table.alt tbody tr td {
 .skip,
 legend,
 label {
-    width: 1px;
-    height: 1px;
+    width: 0px;
+    height: 0px;
     display: inline-block;
     overflow: hidden;
     font-size: 0;
     line-height: 0;
     text-indent: -999px;
-    position: absolute;
-    left: -999px;
 }
 
 .center_position {

@@ -1,28 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE HTML>
 
 <html>
 
 <head>
-    <title>signupForm</title>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="keywords" content="단어장" />
-    <meta name="description" content="basic" />
-    <meta name="author" content="HaniSon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="/css/signup.css" />
+<title>accountModify</title>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="keywords" content="단어장" />
+<meta name="description" content="basic" />
+<meta name="author" content="HaniSon" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" href="/css/signup.css" />
+
 </head>
 
 <body class="is-preload">
 
-    <!-- Header -->
-    <header id="header">
-        <nav id="nav">
-            <ul>
+	<!-- Header -->
+	<header id="header">
+		<nav id="nav">
+			<ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
 				<li><a href="#">단어장</a></li>
 				<li><a
@@ -47,29 +49,18 @@
 					</c:when>
 				</c:choose>
 			</ul>
-        </nav>
-    </header>
-    
-    <!-- container -->
-    <section class="wrapper major-pad">
+		</nav>
+	</header>
+
+	<!-- container -->
+	<section class="wrapper major-pad">
         <div class="inner">
-        	<div class="signup">회원 가입</div>
+        	<div class="update_form">회원 정보 수정</div>
         	<br>
-			<form name="signupForm" action="insert" method="post">
+			<form name="updateForm" action="update" method="post">
 				<div class="row gtr-uniform">
-						<div class="signup_id">아이디
-						<br>
-							<input type="text" id="memberId" name="memberId" value="${member.memberId}" maxlength="15" placeholder="띄어쓰기 없이 영/숫자 6-10자">
-							<c:if test="${ememberId != null}"><p style="color:red">아이디 형식에 맞지 않습니다.</p></c:if>
-						</div>
-						<br>
-						
-						<div class="id_check">
-						<br>
-							<button type="button" id="id_check" name="memberIdCheck">아이디 가능 확인</button>
-						</div>
-						<br>
-						
+						<input type="text" name="id" value="${sessionScope.loginMember.id}" class="skip" readonly="readonly"/>
+						<input type="text" name="memberId" value="${sessionScope.loginMember.memberId}" class="skip" readonly="readonly"/>					
 						<div class="signup_pw">비밀번호
 						<br>
 							<input type="password" id="password" name="password" value="" maxlength="15" placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합">
@@ -85,7 +76,7 @@
 						
 						<div class="signup_email">이메일
 						<br>
-							<input type="email" id="email" name="email" value="${member.email}" placeholder="">
+							<input type="email" id="email" name="email" value="${sessionScope.loginMember.email}" placeholder="">
 							<c:if test="${eemail != null}"><p style="color:red">이메일 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<br>
@@ -98,7 +89,7 @@
 						
 						<div class="signup_phone">휴대폰 번호
 						<br>
-							<input type="text" id="phone" name="phone" value="${member.phone}" placeholder="숫자만 입력해주세요.">
+							<input type="text" id="phone" name="phone" value="${sessionScope.loginMember.phone}" placeholder="숫자만 입력해주세요.">
 							<c:if test="${ephone != null}"><p style="color:red">전화번호 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<br>
@@ -111,12 +102,12 @@
 						
 						<div class="signup_addr">주소
 						<br>
-							<input type="text" id="address" name="address" value="${member.address}" placeholder="">
+							<input type="text" id="address" name="address" value="${sessionScope.loginMember.address}" placeholder="">
 						</div>
 						<br>
 						
 						<div class="signup_sub">
-							<input type="submit" value="회원가입" class="primary">
+							<input type="submit" value="회원정보 수정" class="primary">
 						</div>
 						
 						<div class="signup_reset">
@@ -127,34 +118,36 @@
         </div>
     </section>
 
-    <section class="wrapper style">
-        <div class="inner"></div>
-    </section>
+	<section class="wrapper style">
+		<div class="inner"></div>
+	</section>
 
 
-    <!-- Footer -->
-    <footer id="footer">
-        <div class="inner">
-            <div class="aboutUsSub"><strong>단어장<br /></strong>
-                <p>단어장을 만들어 사용하세요.</p>
-            </div>
-            <p class="copyright">&copy; Untitled eunji yoonseon hani. All rights reserved. </p>
-            <ul class="menu">
-                <li><a href="#">이용약관</a></li>
-                <li><a href="#">사이트 정책</a></li>
-            </ul>
-        </div>
-    </footer>
+	<!-- Footer -->
+	<footer id="footer">
+		<div class="inner">
+			<div class="aboutUsSub">
+				<strong>단어장<br /></strong>
+				<p>단어장을 만들어 사용하세요.</p>
+			</div>
+			<p class="copyright">&copy; Untitled eunji yoonseon hani. All
+				rights reserved.</p>
+			<ul class="menu">
+				<li><a href="#">이용약관</a></li>
+				<li><a href="#">사이트 정책</a></li>
+			</ul>
+		</div>
+	</footer>
 
-    <!-- Scripts -->
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.scrollex.min.js"></script>
-    <script src="/js/jquery.dropotron.min.js"></script>
-    <script src="/js/browser.min.js"></script>
-    <script src="/js/breakpoints.min.js"></script>
-    <script src="/js/util.js"></script>
-    <script src="/js/main.js"></script>
-    <script src="/js/signup/signup.js"></script>
+	<!-- Scripts -->
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/jquery.scrollex.min.js"></script>
+	<script src="/js/jquery.dropotron.min.js"></script>
+	<script src="/js/browser.min.js"></script>
+	<script src="/js/breakpoints.min.js"></script>
+	<script src="/js/util.js"></script>
+	<script src="/js/main.js"></script>
+	<script src="/js/account/modify.js"></script>
 
 </body>
 

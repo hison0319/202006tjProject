@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE HTML>
 
 <html>
@@ -15,6 +15,7 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
+<script src="/js/account/info.js"></script>
 <link rel="stylesheet" href="/css/main.css" />
 </head>
 
@@ -22,23 +23,50 @@
 
 	<!-- Header -->
 	<header id="header">
-        <nav id="nav">
-            <ul>
-                <li><a href="${pageContext.request.contextPath}/">홈</a></li>
-                <li>
-                    <a href="#">단어장</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
-                </li>
-                <li>
-                	<a href="${pageContext.request.contextPath}/account/showMemberInfo">마이페이지</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
+		<nav id="nav">
+			<ul>
+				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
+				<li><a href="#">단어장</a></li>
+				<li><a
+					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
+				</li>
+				<c:choose>
+					<c:when test="${sessionScope.loginMember == null}">
+						<li style="white-space: nowrap;">
+							<a href="${pageContext.request.contextPath}/login/form" class="button">LogIn</a>
+						</li>
+						<li style="white-space: nowrap;">
+							<a href="${pageContext.request.contextPath}/signup/form" class="button">SignUp</a>
+						</li>
+					</c:when>
+					<c:when test="${sessionScope.loginMember != null}">
+						<li>
+							<a href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
+						</li>
+						<li style="white-space: nowrap;">
+							<a href="#" class="button">LogOut</a>
+						</li>
+					</c:when>
+				</c:choose>
+			</ul>
+		</nav>
+	</header>
 
 	<!-- container -->
+	<section class="wrapper style">
+		<div class="inner">
+			<div class="col-6 col-12-medium">
+				<h5 class="alt">Alternate</h5>
+				<ul class="alt">
+					<li>내 정보 보기.(활성화 시 글씨 진하게)</li>
+					<li>공유목록 보기.</li>
+					<li><button type="button" class="button" onclick="btnModify()">내 정보
+				수정하기</button>.</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
 	<section class="wrapper major-pad">
 		<div class="inner">
 			<ul class="bulleted-icons">
@@ -66,17 +94,17 @@
 						class="icon solid fa-id-card"></span></span>
 					<h3>CERTIFIED</h3>
 					<p>
-					<c:choose>
-						<c:when test="${sessionScope.loginMember.certified == 1}">CERTIFIED</c:when>
-						<c:when test="${sessionScope.loginMember.certified == 0}">NOT CERTIFIED</c:when>
-					</c:choose>
+						<c:choose>
+							<c:when test="${sessionScope.loginMember.certified == 1}">CERTIFIED</c:when>
+							<c:when test="${sessionScope.loginMember.certified == 0}">
+						NOT CERTIFIED
+						<button type="button" class="button" onclick="btnCertified()">Email
+									인증하기</button>
+							</c:when>
+						</c:choose>
 					</p></li>
 			</ul>
 		</div>
-	</section>
-
-	<section class="wrapper style">
-		<div class="inner"></div>
 	</section>
 
 

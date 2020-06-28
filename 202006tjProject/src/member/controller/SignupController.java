@@ -40,6 +40,7 @@ public class SignupController {
 			List<FieldError> errors = result.getFieldErrors();
 			for(FieldError fe : errors) {
 				m.addAttribute("e"+fe.getField(), fe.getField());
+				System.out.println(fe.getField());
 			}
 			m.addAttribute("member",member);
 			return "member/signupForm";
@@ -47,7 +48,6 @@ public class SignupController {
 			try {
 				memberService.insertMember(member);
 			} catch (Exception e) {
-				System.out.println(e);
 				m.addAttribute("member",member);
 				return "member/signupForm";
 			}
