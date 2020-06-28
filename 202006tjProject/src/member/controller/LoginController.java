@@ -34,14 +34,12 @@ public class LoginController {
 		}  //아이디를 틀릴 경우
 		else {
 			if(memberService.selectMemberByMemberIdPw(memberDto.getMemberId(), memberDto.getPassword())==null) {
-				System.out.println(memberService.selectMemberByMemberId(memberDto.getMemberId()));
 				return "p";
 			}  //아이디는 맞고 비밀번호를 틀릴 경우
 			else {
 				MemberDto loginMember = memberService.selectMemberByMemberId(memberDto.getMemberId());  //로그인 한 멤버의 id숫자 가져옴
-				System.out.println(loginMember);
-				System.out.println(loginMember.getId());
 				session.setAttribute("loginMember", loginMember);
+				System.out.println(loginMember);
 				return "t";
 			}
 		}

@@ -2509,7 +2509,7 @@ input[type="radio"]:focus + label:before {
 }
 
 .icon-wrapper .icon:before {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
 }
 
 .icon-wrapper.major {
@@ -2518,11 +2518,11 @@ input[type="radio"]:focus + label:before {
 }
 
 .icon-wrapper.small {
-    font-size: 0.75em;
+    font-size: 1.75em;
 }
 
 .icon-wrapper.small .icon:before {
-    font-size: 1.25rem;
+    font-size: 2.25rem;
 }
 
 
@@ -2815,7 +2815,7 @@ ul.bulleted-icons li .icon-wrapper {
 }
 
 ul.bulleted-icons li .icon-wrapper .icon:before {
-    font-size: 1rem;
+    font-size: 1.5rem;
 }
 
 ul.bulleted-icons li h3 {

@@ -11,11 +11,17 @@
 		select id,member_id,password,email,phone,address,reg_date,certified from member where id=#{id}
 	</select>
 	<select id="selectMemberByMemberId" resultType="member">
-		select id, member_id from member where member_id=#{memberId}
+		select id,member_id,password,email,phone,address,reg_date,certified from member where BINARY(member_id)=#{memberId}
 	</select>
 	<select id="selectMemberByMemberIdPw" resultType="member">
 		select id,member_id,password,certified from member
-		 where member_id=#{memberId} AND password=#{password}
+		 where BINARY(member_id)=#{memberId} AND BINARY(password)=#{password}
+	</select>
+	<select id="selectMemberByEmail" resultType="String">
+		select email from member where email=#{email}
+	</select>
+	<select id="selectMemberByPhone" resultType="String">
+		select phone from member where phone=#{phone}
 	</select>
 	<select id="selectMemberAll" resultType="member">
 		select id,member_id,password,email,phone,address,reg_date,certified from member
