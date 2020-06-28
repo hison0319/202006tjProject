@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML>
 
 <html>
 
 <head>
-<title>notice</title>
+<title>certification</title>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="robots" content="noindex, nofollow" />
@@ -15,7 +14,6 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<script src="/js/notice/notice.js"></script>
 <link rel="stylesheet" href="/css/main.css" />
 </head>
 
@@ -42,20 +40,27 @@
 	<!-- container -->
 	<section class="wrapper major-pad">
 		<div class="inner">
-			<div class="notice">
-				<span class="writerId">${notice.writerId}</span><span class="regDate">&nbsp;&nbsp; ${notice.regDate}</span>
-				<h3 class="title">${notice.title}</h3>
-				<p class="contents">${notice.contents}</p>
-			</div>
-			<div class="center_position">
-				<button class="button" onclick="showList()">목록이동</button>
-				<c:if test="${sessionScope.loginMember.id>=1&&sessionScope.loginMember.id<=20}">
-				<button class="button" onclick="updateForm(${notice.id})">수정</button>
-				<button class="button" onclick="deleteCheck(${notice.id})">삭제</button>
-				</c:if>
-			</div>
+			<div class="certi">certification</div>
+			<br>
+			<form method="post" action="certification">
+				<div class="row gtr-uniform">
+					<div class="col-6 col-12-xsmall">
+						<div class="login_id">
+							<input type="text" name="email" id="member_email" value="">
+						</div>
+						<br>
+						<div class="login_sub">
+							<input type="submit" value="Login" class="primary">
+						</div>
+						<br>
+					</div>
+				</div>
+			</form>
 		</div>
 	</section>
+
+
+
 
 	<!-- Footer -->
 	<footer id="footer">

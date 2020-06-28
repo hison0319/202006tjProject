@@ -28,18 +28,21 @@ public class LoginController {
 	//로그인 기능 구현
 	@ResponseBody
 	@PostMapping("matching")
-	public MemberDto loginService(HttpSession session, Model m, MemberDto memberDto) {
+	public String loginService(HttpSession session, Model m, MemberDto memberDto) {
 		if(memberService.selectMemberByMemberId(memberDto.getMemberId())==null) {
 			return null;
 		}  //아이디를 틀릴 경우
 		else {
 			if(memberService.selectMemberByMemberIdPw(memberDto.getMemberId(), memberDto.getPassword())==null) {
-				return memberService.selectMemberByMemberId(memberDto.getMemberId());
+				System.out.println(memberService.selectMemberByMemberId(memberDto.getMemberId()));
+				return "p";
 			}  //아이디는 맞고 비밀번호를 틀릴 경우
 			else {
-				int loginId = memberService.selectMemberByMemberId(memberDto.getMemberId()).getId();  //로그인 한 멤버의 id숫자 가져옴
-				session.setAttribute("loginId", loginId);  //세션에 id숫자 저장
-				return memberService.selectMemberByMemberIdPw(memberDto.getMemberId(), memberDto.getPassword());
+				MemberDto loginMember = memberService.selectMemberByMemberId(memberDto.getMemberId());  //로그인 한 멤버의 id숫자 가져옴
+				System.out.println(loginMember);
+				System.out.println(loginMember.getId());
+				session.setAttribute("loginMember", loginMember);
+				return "t";
 			}
 		}
 	}

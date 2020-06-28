@@ -25,10 +25,13 @@
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">홈</a></li>
                 <li>
-                    <a href="encyclopedia.html" Tabindex="2">단어장</a>
+                    <a href="#">단어장</a>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/notice/showList" Tabindex="2">공지사항</a>
+                    <a href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
+                </li>
+                <li>
+                	<a href="${pageContext.request.contextPath}/account/showMemberInfo">마이페이지</a>
                 </li>
             </ul>
         </nav>
@@ -39,8 +42,8 @@
         <div class="inner">
             
             <h2>안녕하세요!</h2>
-            <div>로그인이동</div>
-            <div>회원가입이동</div>
+            <a href="${pageContext.request.contextPath}/login/form">로그인이동</a><br>
+            <a href="${pageContext.request.contextPath}/signup/form">회원가입이동</a>
 
         </div>
     </section>

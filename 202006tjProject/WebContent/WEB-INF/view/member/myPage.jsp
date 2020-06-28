@@ -1,19 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE HTML>
-
 <html>
 
 <head>
-    <title>noticeComplete</title>
+    <title>Untitled</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>단어장</title>
     <meta name="robots" content="noindex, nofollow" />
     <meta name="keywords" content="단어장" />
     <meta name="description" content="basic" />
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <script src="/js/notice/noticeDeleteComplete.js"></script>
     <link rel="stylesheet" href="/css/main.css" />
 </head>
 
@@ -40,7 +38,26 @@
     <!-- container -->
     <section class="wrapper major-pad">
         <div class="inner">
-			<div class="center_position">공지사항 삭제 완료</div>
+            <div class="log_in">
+                <div>Login</div>
+                <form method="post" action="#">
+                    <div class="row gtr-uniform">
+                        <div class="col-6 col-12-xsmall">
+                            <div>
+                                <input type="text" name="demo-name" id="demo-name" value="" placeholder="ID"></li>
+                                <input type="password" name="demo-name" id="demo-name" value="" placeholder="PASSWORD"></li>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <ul class="actions">
+                                <li><input type="submit" value="Login" class="primary"></li>
+                                <li><input type="reset" value="Reset"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </section>
 

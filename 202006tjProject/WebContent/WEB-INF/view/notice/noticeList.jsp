@@ -25,12 +25,15 @@
 	<header id="header">
         <nav id="nav">
             <ul>
-                <li><a href="/">홈</a></li>
+                <li><a href="${pageContext.request.contextPath}/">홈</a></li>
                 <li>
-                    <a href="encyclopedia.html" Tabindex="2">단어장</a>
+                    <a href="#">단어장</a>
                 </li>
                 <li>
-                    <a href="{pageContext.request.contextPath}/notice/showList" Tabindex="2">공지사항</a>
+                    <a href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
+                </li>
+                <li>
+                	<a href="${pageContext.request.contextPath}/account/showMemberInfo">마이페이지</a>
                 </li>
             </ul>
         </nav>
@@ -84,7 +87,7 @@
 						</c:if>
 					</ul>
 				</div>
-				<c:if test="${sessionScope.loginId>=1&&sessionScope.loginId<=20}">
+				<c:if test="${sessionScope.loginMember.id>=1&&sessionScope.loginMember.id<=20}">
 					<button class="right_position" id="btnInsert">공지 등록</button>			
 				</c:if>
 			</div>

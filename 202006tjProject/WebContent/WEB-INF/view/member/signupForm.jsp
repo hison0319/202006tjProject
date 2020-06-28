@@ -23,9 +23,15 @@
     <header id="header">
         <nav id="nav">
             <ul>
-                <li><a href="index.html">홈</a></li>
+                <li><a href="${pageContext.request.contextPath}/">홈</a></li>
                 <li>
-                    <a href="encyclopedia.html" Tabindex="2">단어장</a>
+                    <a href="#">단어장</a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
+                </li>
+                <li>
+                	<a href="${pageContext.request.contextPath}/account/showMemberInfo">마이페이지</a>
                 </li>
             </ul>
         </nav>
