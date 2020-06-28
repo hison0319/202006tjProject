@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML>
 
 <html>
@@ -35,45 +36,45 @@
         <div class="inner">
         	<div class="signup">회원 가입</div>
         	<br>
-			<form method="post" action="#">
+			<form name="signupForm" action="insert" method="post">
 				<div class="row gtr-uniform">
-					<div class="col-6 col-12-xsmall">
 						<div class="signup_id">아이디
 						<br>
-							<input type="text" name="demo-id" id="demo-id" value="" maxlength="15" placeholder="띄어쓰기 없이 영/숫자 6-10자">
-							<!-- 중복확인 -->
+							<input type="text" name="memberId" value="${member.memberId}" maxlength="15" placeholder="띄어쓰기 없이 영/숫자 6-10자">
+							<c:if test="${ememberId != null}"><p style="color:red">아이디 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<br>
 						
 						<div class="signup_pw">비밀번호
 						<br>
-							<input type="password" name="demo-pw" id="demo-pw" value="" maxlength="15" placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합">
+							<input type="password" name="password" value="" maxlength="15" placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합">
+							<c:if test="${epassword != null}"><p style="color:red">비밀번호 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<br>
 						
 						<div class="check_pw">비밀번호 확인
 						<br>
-							<input type="password" name="demo-pw" id="demo-pw" value="" placeholder="위의 비밀번호를 다시 입력해주세요.">
+							<input type="password" name="passwordConfirm" value="" placeholder="위의 비밀번호를 다시 입력해주세요.">
 						</div>
 						<br>
 						
 						<div class="signup_email">이메일
 						<br>
-							<input type="email" name="demo-email" id="demo-email" value="" placeholder="">@
-							<!-- 직접입력 -->
-							<!-- 보기(네이버...)-->
+							<input type="email" name="email" value="${member.email}" placeholder="">
+							<c:if test="${eemail != null}"><p style="color:red">이메일 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<br>
 						
 						<div class="signup_phone">휴대폰 번호
 						<br>
-							<input type="text" name="demo-phone" id="demo-phone" value="" placeholder="-없이 숫자만 입력해주세요.">
+							<input type="text" name="phone" value="${member.phone}" placeholder="010-0000-0000형식으로 입력해주세요.">
+							<c:if test="${ephone != null}"><p style="color:red">전화번호 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<br>
 						
 						<div class="signup_addr">주소
 						<br>
-							<input type="text" name="demo-addr" id="demo-addr" value="" placeholder="">
+							<input type="text" name="address" value="${member.address}" placeholder="">
 						</div>
 						<br>
 						
@@ -85,7 +86,6 @@
 							<input type="reset" value="처음으로">
 						</div>
 					</div>
-				</div>
 			</form>
             <div>유효성 검사</div>
         </div>

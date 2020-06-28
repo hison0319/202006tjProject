@@ -13,6 +13,7 @@
     <meta name="description" content="basic" />
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <script src="/js/signup/signupComplete.js"></script>
     <link rel="stylesheet" href="/css/main.css" />
 </head>
 

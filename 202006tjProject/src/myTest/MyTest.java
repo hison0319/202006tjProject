@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import member.controller.SignupController;
 import member.dto.MemberDto;
 import member.service.MemberService;
 import notice.dto.NoticeDto;
@@ -29,6 +30,8 @@ public class MyTest {
 	WordbookService wordbookService;
 	@Autowired
 	SharingService sharingService;
+	@Autowired
+	SignupController signupController;
 	//멤버 삽입 셀렉 전체셀렉
 	@Test @Ignore
 	public void testMember01() {
@@ -92,7 +95,7 @@ public class MyTest {
 		System.out.println(sharingService.selectSharingById(sharing.getId()));
 	}
 	//공유정보 업데이트 델리트
-	@Test
+	@Test @Ignore
 	public void testSharing02() {
 		SharingDto sharing = sharingService.selectSharingById(2);
 		sharing.setGuestId(25);
