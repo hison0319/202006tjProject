@@ -49,4 +49,10 @@ public class LoginController {
 	public String complete() {
 		return "member/loginComplete";
 	}
+	
+	@GetMapping("logout")
+	public String logout(HttpSession session) {
+		session.removeAttribute("loginMember");  //세션에서 로그인 정보 삭제
+		return "member/logout";  //만약 잘못 된 방법으로 로그아웃 접근 시 처리는?(뒤로가기 후 로그아웃 버튼 다시 누르기 등)
+	}
 }
