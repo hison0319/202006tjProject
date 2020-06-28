@@ -53,4 +53,20 @@ public class MemberService {
 			return null;
 		}
 	}
+	
+	//회원가입 용 이메일, 전화번호 조회
+	public String selectMemberByEmail(String email) {
+		try {
+			return memberMapper.selectMemberByEmail(email);
+		} catch(NullPointerException e) {
+			return null;
+		}
+	}
+	public String selectMemberByPhone(String phone) {
+		try {
+			return memberMapper.selectMemberByPhone(phone);
+		} catch(NullPointerException e) {
+			return null;
+		}
+	}
 }

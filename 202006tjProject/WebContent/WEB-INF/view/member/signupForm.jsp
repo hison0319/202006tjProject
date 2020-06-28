@@ -40,41 +40,59 @@
 				<div class="row gtr-uniform">
 						<div class="signup_id">아이디
 						<br>
-							<input type="text" name="memberId" value="${member.memberId}" maxlength="15" placeholder="띄어쓰기 없이 영/숫자 6-10자">
+							<input type="text" id="memberId" name="memberId" value="${member.memberId}" maxlength="15" placeholder="띄어쓰기 없이 영/숫자 6-10자">
 							<c:if test="${ememberId != null}"><p style="color:red">아이디 형식에 맞지 않습니다.</p></c:if>
+						</div>
+						<br>
+						
+						<div class="id_check">
+						<br>
+							<button type="button" id="id_check" name="memberIdCheck">아이디 가능 확인</button>
 						</div>
 						<br>
 						
 						<div class="signup_pw">비밀번호
 						<br>
-							<input type="password" name="password" value="" maxlength="15" placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합">
+							<input type="password" id="password" name="password" value="" maxlength="15" placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합">
 							<c:if test="${epassword != null}"><p style="color:red">비밀번호 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<br>
 						
 						<div class="check_pw">비밀번호 확인
 						<br>
-							<input type="password" name="passwordConfirm" value="" placeholder="위의 비밀번호를 다시 입력해주세요.">
+							<input type="password" id="passwordCheck" name="passwordConfirm" value="" placeholder="위의 비밀번호를 다시 입력해주세요.">
 						</div>
 						<br>
 						
 						<div class="signup_email">이메일
 						<br>
-							<input type="email" name="email" value="${member.email}" placeholder="">
+							<input type="email" id="email" name="email" value="${member.email}" placeholder="">
 							<c:if test="${eemail != null}"><p style="color:red">이메일 형식에 맞지 않습니다.</p></c:if>
+						</div>
+						<br>
+						
+						<div class="email_check">
+						<br>
+							<button type="button" id="email_check" name="emailCheck">이메일 가능 확인</button>
 						</div>
 						<br>
 						
 						<div class="signup_phone">휴대폰 번호
 						<br>
-							<input type="text" name="phone" value="${member.phone}" placeholder="010-0000-0000형식으로 입력해주세요.">
+							<input type="text" id="phone" name="phone" value="${member.phone}" placeholder="숫자만 입력해주세요.">
 							<c:if test="${ephone != null}"><p style="color:red">전화번호 형식에 맞지 않습니다.</p></c:if>
+						</div>
+						<br>
+						
+						<div class="phone_check">
+						<br>
+							<button type="button" id="phone_check" name="phoneCheck">전화번호 가능 확인</button>
 						</div>
 						<br>
 						
 						<div class="signup_addr">주소
 						<br>
-							<input type="text" name="address" value="${member.address}" placeholder="">
+							<input type="text" id="address" name="address" value="${member.address}" placeholder="">
 						</div>
 						<br>
 						
@@ -118,6 +136,7 @@
     <script src="/js/breakpoints.min.js"></script>
     <script src="/js/util.js"></script>
     <script src="/js/main.js"></script>
+    <script src="/js/signup/signup.js"></script>
 
 </body>
 

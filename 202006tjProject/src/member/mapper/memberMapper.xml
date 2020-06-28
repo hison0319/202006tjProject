@@ -17,6 +17,12 @@
 		select id,member_id,password,certified from member
 		 where BINARY(member_id)=#{memberId} AND BINARY(password)=#{password}
 	</select>
+	<select id="selectMemberByEmail" resultType="String">
+		select email from member where email=#{email}
+	</select>
+	<select id="selectMemberByPhone" resultType="String">
+		select phone from member where phone=#{phone}
+	</select>
 	<select id="selectMemberAll" resultType="member">
 		select id,member_id,password,email,phone,address,reg_date,certified from member
 	</select>

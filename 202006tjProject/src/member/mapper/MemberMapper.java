@@ -25,4 +25,8 @@ public interface MemberMapper {
 	//로그인용 회원 조회
 	public MemberDto selectMemberByMemberId(@Param("memberId")String memberId);
 	public MemberDto selectMemberByMemberIdPw(@Param("memberId")String memberId, @Param("password")String password);
+	
+	//회원가입용 아이디, 이메일, 전화번호 조회
+	public String selectMemberByEmail(@Param("email")String email);
+	public String selectMemberByPhone(@Param("phone")String phone);
 }

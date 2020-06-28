@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import member.dto.MemberDto;
 import member.dto.MemberVO;
@@ -41,15 +42,47 @@ public class SignupController {
 				m.addAttribute("e"+fe.getField(), fe.getField());
 			}
 			m.addAttribute("member",member);
-			System.out.println(member);
 			return "member/signupForm";
 		} else {
-			System.out.println(member);
-			memberService.insertMember(member);
+			try {
+				memberService.insertMember(member);
+			} catch (Exception e) {
+				System.out.println(e);
+				m.addAttribute("member",member);
+				return "member/signupForm";
+			}
 		}
 		return "member/signupComplete";
 	}
 	
+	//비동기 식 아이디, 이메일, 번호 중복 확인
+	@ResponseBody
+	@PostMapping(value="/confirmMemberId", produces="text/plain;charset=UTF-8")
+	public String confirmMemberId(String memberId) {
+		if(memberService.selectMemberByMemberId(memberId)==null) {
+			return "t";
+		} else {
+			return "f";
+		}
+	}
+	@ResponseBody
+	@PostMapping("/confirmEmail")
+	public String confirmEmail(String email) {
+		if(memberService.selectMemberByEmail(email)==null) {
+			return "t";
+		} else {
+			return "f";
+		}
+	}
+	@ResponseBody
+	@PostMapping("/confirmPhone")
+	public String confirmPhone(String phone) {
+		if(memberService.selectMemberByPhone(phone)==null) {
+			return "t";
+		} else {
+			return "f";
+		}
+	}
 	//정규식 기본 설명
 /*
  * public String stringReplace(String str) {

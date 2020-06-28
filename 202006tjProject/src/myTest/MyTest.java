@@ -102,6 +102,15 @@ public class MyTest {
 		System.out.println(sharingService.selectSharingById(2));
 		sharingService.updateSharing(sharing);
 		System.out.println(sharingService.selectSharingById(2));
-		
+	}
+	//회원가입 아이디, 메일, 번호 중복확인
+	@Test @Ignore
+	public void testSignup01() {
+		System.out.println("phoneX"+signupController.confirmPhone("010-7530-0079"));
+		System.out.println("phoneO"+signupController.confirmPhone("test"));
+		System.out.println("mailX"+signupController.confirmEmail("test@gmail.com"));
+		System.out.println("mailO"+signupController.confirmEmail(""));
+		System.out.println("memberIdX"+signupController.confirmMemberId("test0003"));		
+		System.out.println("memberIdO"+signupController.confirmMemberId("tsdf"));		
 	}
 }

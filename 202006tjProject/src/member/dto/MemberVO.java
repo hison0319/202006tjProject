@@ -14,7 +14,7 @@ public class MemberVO {
 	private String password;
 	@Pattern(regexp="^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$",message="메일 형식에 맞지 않습니다.")
 	private String email;
-	@Pattern(regexp ="^(01[1|6|7|8|9|0])-(\\d{3,4})-(\\d{4})$", message="전화번호 형식에 맞지 않습니다.")
+	@Pattern(regexp ="/^01([0|1|6|7|8|9]?)([0-9]{3,4})([0-9]{4})$/", message="전화번호 형식에 맞지 않습니다.")
 	private String phone;
 	private String address;
 	private Timestamp regDate;
