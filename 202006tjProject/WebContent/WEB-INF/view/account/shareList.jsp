@@ -43,7 +43,7 @@
 							<a href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
 						</li>
 						<li style="white-space: nowrap;">
-							<a href="#" class="button">LogOut</a>
+							<a href="${pageContext.request.contextPath}/login/logout" class="button">LogOut</a>
 						</li>
 					</c:when>
 				</c:choose>
