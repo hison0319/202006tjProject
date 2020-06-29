@@ -33,7 +33,7 @@
 				<c:choose>
 					<c:when test="${sessionScope.loginMember == null}">
 						<li style="white-space: nowrap;">
-							<a href="${pageContext.request.contextPath}/login/form" class="button">LogIn</a>
+							<a href="${pageContext.request.contextPath}/login/form" class="button primary">LogIn</a>
 						</li>
 						<li style="white-space: nowrap;">
 							<a href="${pageContext.request.contextPath}/signup/form" class="button">SignUp</a>
@@ -44,7 +44,7 @@
 							<a href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
 						</li>
 						<li style="white-space: nowrap;">
-							<a href="${pageContext.request.contextPath}/login/logout" class="button">LogOut</a>
+							<a href="#" class="button">LogOut</a>
 						</li>
 					</c:when>
 				</c:choose>
@@ -60,46 +60,30 @@
 			<form method="post" action="matching">
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
-						<div class="other_id">
-							<ul class="actions stacked">
-								<li><a href="#" class="button primary">네이버 아이디로 로그인</a></li>
-								<li><a href="#" class="button primary">구글 아이디로 로그인</a></li>
-							</ul>
-						</div>
-						<br>
-
-						<div class="login_id">
-							<input type="text" name="memberId"  id="demo-id" value=""
-								placeholder="ID">
-						</div>
-						<br>
-
-						<div class="login_pw">
-							<input type="password" name="password" id="demo-pw" value=""
-								placeholder="PASSWORD">
-						</div>
-						<br>
-
 						<div class="login_sub">
-							<input type="submit" value="Login" class="primary">
+							<input type="text" name="memberId" value="" placeholder="ID">
+							<br>
+                            <input type="password" name="password" value="" placeholder="PASSWORD">
+                            <br>
+                            <div class="login_btn_box">
+                                <ul class="actions stacked">
+                                    <li><input type="submit" style="width:100%;" value="로그인" class="button primary fit"></li>
+									<li><a href="#" class="button primary small fit">네이버 아이디로 로그인</a></li>
+									<li><a href="#" class="button primary small fit">구글 아이디로 로그인</a></li>
+									<li><a href="#" class="button small fit">아이디 찾기</a></li>
+                                    <li><a href="#" class="button small fit">비밀번호 찾기</a></li>
+								</ul>
+                            </div>
 						</div>
-
-						<div class="search_member">
-							<ul class="actions stacked">
-								<li><a href="#" class="button small">아이디 찾기</a></li>
-								<li><a href="#" class="button small">비밀번호 찾기</a></li>
-							</ul>
-						</div>
-						<br>
-
-
 					</div>
 				</div>
 			</form>
 		</div>
 	</section>
 
-
+    <section class="wrapper style">
+        <div class="inner"></div>
+    </section>
 
 
 	<!-- Footer -->

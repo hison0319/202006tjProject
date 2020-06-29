@@ -3,19 +3,27 @@
     /*회원가입 창*/
     
     .col-6 {
-       margin: 0 auto;
-   }
+    	margin: 0 auto;
+	}
 
-   .signup {
-       font-weight: bold;
-         text-align: center;
-   }
+	.signup {
+    	font-weight: bold;
+   		text-align: center;
+	}
 
-   .check_box {
-      margin-top: 3%;
-   }
-   
-   .signup_btn_box {
-      margin: 0 auto;
-      width: 70%;
-   }
+	.check_box {
+		margin-top: 3%;
+	}
+	
+	.signup_btn_box {
+		margin: 0 auto;
+		width: 70%;
+	}
+	
+	.error_next_box {
+    display: block;
+    margin: 9px 0 -2px;
+    font-size: 12px;
+    line-height: 14px;
+    color: red;
+}

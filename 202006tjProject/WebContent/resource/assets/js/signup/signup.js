@@ -1,5 +1,4 @@
 window.addEventListener("DOMContentLoaded",function(){
-	
 	//정규식
 	var empJ = /\s/g; //공백체크
 	var memberIdPattern = /^[a-z | A-Z]{3,6}[0-9]{3,6}$/;
@@ -10,6 +9,51 @@ window.addEventListener("DOMContentLoaded",function(){
 	var memberIdOk = false;
 	var emailOk = false;
 	var phoneOk = false;
+	
+	$("#memberId").on("keyup", function(){
+		if($("#memberId").val() != ""){
+			document.querySelector("#idMsg").innerText = "";
+		}
+		else {
+			document.querySelector("#idMsg").innerText = "필수 정보입니다";
+		}
+	});
+	
+	$("#password").on("keyup", function(){
+		if($("password").val() != ""){
+			document.querySelector("#pwMsg").innerText = "";
+		}
+		else {
+			document.querySelector("#pwMsg").innerText = "필수 정보입니다";
+		}
+	});
+	
+	$("#passwordCheck").on("keyup", function(){
+		if($("#passwordCheck").val() != ""){
+			document.querySelector("#pwCheckMsg").innerText = "";
+		}
+		else {
+			document.querySelector("#pwCheckMsg").innerText = "필수 정보입니다";
+		}
+	});
+	
+	$("#email").on("keyup", function(){
+		if($("#email").val() != ""){
+			document.querySelector("#emailMsg").innerText = "";
+		}
+		else {
+			document.querySelector("#emailMsg").innerText = "필수 정보입니다";
+		}
+	});
+	
+	$("phone").on("keyup", function(){
+		if($("#phone").val() != ""){
+			document.querySelector("#phoneMsg").innerText = "";
+		}
+		else {
+			document.querySelector("#phoneMsg").innerText = "필수 정보입니다";
+		}
+	});
 	
 	$("#memberId").on("change",function() {
 		alert("사용가능한 아이디인지 확인받으세요.");
@@ -23,6 +67,8 @@ window.addEventListener("DOMContentLoaded",function(){
 		alert("사용가능한 폰번호인지 확인받으세요.");
 		var emailOk = false;
 	});
+	
+
 	
 	$("#id_check").on("click",function(){
 		//아이디 공백확인
@@ -49,6 +95,7 @@ window.addEventListener("DOMContentLoaded",function(){
 					alert("사용가능 합니다.");
 				} else {
 					alert("중복된 아이디가 있습니다.");
+					$(".memberId").css("border","1px solid red");
 				}
 			}
 		})
@@ -197,8 +244,6 @@ window.addEventListener("DOMContentLoaded",function(){
 	    	alert("사용 가능한 전화번호인지 확인받으세요.");
 	    	return false;
 	    }
-	    var address = $("#sample4_postcode").val()+"/"+$("#sample4_roadAddress").val()+"/"+$("#sample4_jibunAddress").val()+"/"+$("#sample4_detailAddress").val()+"/"+$("#sample4_extraAddress").val();
-	    $("#address").val(address);
 	});
 });
 

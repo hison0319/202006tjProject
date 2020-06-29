@@ -2,16 +2,17 @@
 
     /*로그인 창*/
 
-   .col-6 {
-      margin: 0 auto;
-   }
+	.col-6 {
+		margin: 0 auto;
+	}
 
-   .login {
-       font-weight: bold;
-         text-align: center;
-   }
+	.login {
+    	font-weight: bold;
+   		text-align: center;
+	}
 
-   .login_btn_box {
-      margin: 0 auto;
-      width: 70%;
-   }
+	.login_btn_box {
+		margin: 0 auto;
+		width: 70%;
+	}
+
