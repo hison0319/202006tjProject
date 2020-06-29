@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	
 <!DOCTYPE HTML>
 
 <html>
@@ -23,8 +23,8 @@
 
 	<!-- Header -->
 	<header id="header">
-		<nav id="nav">
-			<ul>
+        <nav id="nav">
+            <ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
 				<li><a href="#">단어장</a></li>
 				<li><a
@@ -32,25 +32,25 @@
 				</li>
 				<c:choose>
 					<c:when test="${sessionScope.loginMember == null}">
-						<li style="white-space: nowrap;"><a
-							href="${pageContext.request.contextPath}/login/form"
-							class="button">LogIn</a></li>
-						<li style="white-space: nowrap;"><a
-							href="${pageContext.request.contextPath}/signup/form"
-							class="button">SignUp</a></li>
+						<li style="white-space: nowrap;">
+							<a href="${pageContext.request.contextPath}/login/form" class="button">LogIn</a>
+						</li>
+						<li style="white-space: nowrap;">
+							<a href="${pageContext.request.contextPath}/signup/form" class="button">SignUp</a>
+						</li>
 					</c:when>
 					<c:when test="${sessionScope.loginMember != null}">
-						<li><a
-							href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
+						<li>
+							<a href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
 						</li>
-						<li style="white-space: nowrap;"><a
-							href="${pageContext.request.contextPath}/login/logout"
-							class="button">LogOut</a></li>
+						<li style="white-space: nowrap;">
+							<a href="${pageContext.request.contextPath}/login/logout" class="button">LogOut</a>
+						</li>
 					</c:when>
 				</c:choose>
 			</ul>
-		</nav>
-	</header>
+        </nav>
+    </header>
 
 	<!-- container -->
 	<section class="wrapper major-pad">
@@ -60,23 +60,39 @@
 			<form method="post" action="matching">
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
-						<div class="login_sub">
-							<input type="text" name="memberId" value="" placeholder="ID">
-							<br> <input type="password" name="password" value=""
-								placeholder="PASSWORD"> <br>
-							<div class="login_btn_box">
-								<ul class="actions stacked">
-									<li><input type="submit" style="width: 100%;" value="로그인"
-										class="button primary fit"></li>
-									<li><a href="#" class="button primary small fit">네이버
-											아이디로 로그인</a></li>
-									<li><a href="#" class="button primary small fit">구글
-											아이디로 로그인</a></li>
-									<li><a href="#" class="button small fit">아이디 찾기</a></li>
-									<li><a href="#" class="button small fit">비밀번호 찾기</a></li>
-								</ul>
-							</div>
+						<div class="other_id">
+							<ul class="actions stacked">
+								<li><a href="#" class="button primary">네이버 아이디로 로그인</a></li>
+								<li><a href="#" class="button primary">구글 아이디로 로그인</a></li>
+							</ul>
 						</div>
+						<br>
+
+						<div class="login_id">
+							<input type="text" name="memberId"  id="demo-id" value=""
+								placeholder="ID">
+						</div>
+						<br>
+
+						<div class="login_pw">
+							<input type="password" name="password" id="demo-pw" value=""
+								placeholder="PASSWORD">
+						</div>
+						<br>
+
+						<div class="login_sub">
+							<input type="submit" value="Login" class="primary">
+						</div>
+
+						<div class="search_member">
+							<ul class="actions stacked">
+								<li><a href="#" class="button small">아이디 찾기</a></li>
+								<li><a href="#" class="button small">비밀번호 찾기</a></li>
+							</ul>
+						</div>
+						<br>
+
+
 					</div>
 				</div>
 			</form>

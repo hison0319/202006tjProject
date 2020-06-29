@@ -30,6 +30,9 @@
 		update member set member_id=#{memberId}, password=#{password}, email=#{email}, 
 		phone=#{phone}, address=#{address} where id=#{id}
 	</update>
+	<update id="updateMemberCertify" parameterType="member">
+		update member set certified=#{certified} where id=#{id}
+	</update>
 	<delete id="deleteMember">
 		delete from member where id=#{id}
 	</delete>

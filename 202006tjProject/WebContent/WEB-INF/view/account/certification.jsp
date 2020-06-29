@@ -17,7 +17,6 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="stylesheet" href="/css/main.css" />
-<script src="/js/account/certification.js"></script>
 </head>
 
 <body class="is-preload">
@@ -56,19 +55,17 @@
 	<!-- container -->
 	<section class="wrapper major-pad">
 		<div class="inner">
-			<div class="certify">certification</div>
+			<div class="certi">certification</div>
 			<br>
-			<h3 class="message">인증번호를 입력해주세요.</h3>
-			<form>
+			<form method="post" action="certification">
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
-						<input type="text" class="skip" name="certifyKey" value="${certifyKey}" readonly="readonly">
-						<div class="certify">
-							<input type="text" name="memberKey" value="" placeholder="인증번호를 입력하세요.">
+						<div class="login_id">
+							<input type="text" name="email" id="member_email" value="">
 						</div>
 						<br>
-						<div class="certify_sub">
-							<input type="submit" value="인증번호 제출" class="primary">
+						<div class="login_sub">
+							<input type="submit" value="Login" class="primary">
 						</div>
 						<br>
 					</div>
