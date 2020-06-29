@@ -118,7 +118,7 @@ public class WordbookController {
 		else {
 			try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(json), "MS949"))){
 				text = text.replaceAll(regex, " ");
-				String[] textArr = text.split("\s");
+				String[] textArr = text.split("\\s");
 				String word;
 				String[] responseBody = new String[textArr.length];
 				for (int i = 0; i < textArr.length; i++) {
