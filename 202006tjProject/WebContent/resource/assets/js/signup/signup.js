@@ -1,4 +1,5 @@
 window.addEventListener("DOMContentLoaded",function(){
+	
 	//정규식
 	var empJ = /\s/g; //공백체크
 	var memberIdPattern = /^[a-z | A-Z]{3,6}[0-9]{3,6}$/;
@@ -196,6 +197,8 @@ window.addEventListener("DOMContentLoaded",function(){
 	    	alert("사용 가능한 전화번호인지 확인받으세요.");
 	    	return false;
 	    }
+	    var address = $("#sample4_postcode").val()+"/"+$("#sample4_roadAddress").val()+"/"+$("#sample4_jibunAddress").val()+"/"+$("#sample4_detailAddress").val()+"/"+$("#sample4_extraAddress").val();
+	    $("#address").val(address);
 	});
 });
 

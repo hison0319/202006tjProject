@@ -2,37 +2,16 @@
 
     /*로그인 창*/
 
-	.login {
-    	font-weight: bold;
-   		text-align: center;
-	}
-	
-	.other_id {
-		margin: auto;
-		width: 50%;
-	}
+   .col-6 {
+      margin: 0 auto;
+   }
 
-	.login_id {
-    	width: 65%;
-    	margin: auto;
-	}
+   .login {
+       font-weight: bold;
+         text-align: center;
+   }
 
-	.login_pw {
-    	width: 65%;
-    	margin: auto;
-	}
-
-	.login_sub {
-    	text-align: center;
-    	float: left;
-	}
-	
-	.search_member {
-		float: left;
-	}
-	
-	.col-6 {
-    	margin: auto;
-	}
-
-}
+   .login_btn_box {
+      margin: 0 auto;
+      width: 70%;
+   }

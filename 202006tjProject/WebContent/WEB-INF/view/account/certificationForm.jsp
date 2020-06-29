@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	
 <!DOCTYPE HTML>
 
 <html>
 
 <head>
-<title>loginForm</title>
+<title>certification</title>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="robots" content="noindex, nofollow" />
@@ -16,15 +16,16 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="stylesheet" href="/css/login.css" />
+<link rel="stylesheet" href="/css/main.css" />
+<script src="/js/account/certificationForm.js"></script>
 </head>
 
 <body class="is-preload">
 
 	<!-- Header -->
 	<header id="header">
-		<nav id="nav">
-			<ul>
+        <nav id="nav">
+            <ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
 				<li><a href="#">단어장</a></li>
 				<li><a
@@ -32,51 +33,43 @@
 				</li>
 				<c:choose>
 					<c:when test="${sessionScope.loginMember == null}">
-						<li style="white-space: nowrap;"><a
-							href="${pageContext.request.contextPath}/login/form"
-							class="button">LogIn</a></li>
-						<li style="white-space: nowrap;"><a
-							href="${pageContext.request.contextPath}/signup/form"
-							class="button">SignUp</a></li>
+						<li style="white-space: nowrap;">
+							<a href="${pageContext.request.contextPath}/login/form" class="button">LogIn</a>
+						</li>
+						<li style="white-space: nowrap;">
+							<a href="${pageContext.request.contextPath}/signup/form" class="button">SignUp</a>
+						</li>
 					</c:when>
 					<c:when test="${sessionScope.loginMember != null}">
-						<li><a
-							href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
+						<li>
+							<a href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
 						</li>
-						<li style="white-space: nowrap;"><a
-							href="${pageContext.request.contextPath}/login/logout"
-							class="button">LogOut</a></li>
+						<li style="white-space: nowrap;">
+							<a href="${pageContext.request.contextPath}/login/logout" class="button">LogOut</a>
+						</li>
 					</c:when>
 				</c:choose>
 			</ul>
-		</nav>
-	</header>
+        </nav>
+    </header>
 
 	<!-- container -->
 	<section class="wrapper major-pad">
 		<div class="inner">
-			<div class="login">Login</div>
+			<div class="certify">certification</div>
 			<br>
-			<form method="post" action="matching">
+			<h3 class="message">인증번호를 전송해주세요!</h3>
+			<form>
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
-						<div class="login_sub">
-							<input type="text" name="memberId" value="" placeholder="ID">
-							<br> <input type="password" name="password" value=""
-								placeholder="PASSWORD"> <br>
-							<div class="login_btn_box">
-								<ul class="actions stacked">
-									<li><input type="submit" style="width: 100%;" value="로그인"
-										class="button primary fit"></li>
-									<li><a href="#" class="button primary small fit">네이버
-											아이디로 로그인</a></li>
-									<li><a href="#" class="button primary small fit">구글
-											아이디로 로그인</a></li>
-									<li><a href="#" class="button small fit">아이디 찾기</a></li>
-									<li><a href="#" class="button small fit">비밀번호 찾기</a></li>
-								</ul>
-							</div>
+						<div class="certify">
+							<input type="text" name="email" value="${sessionScope.loginMember.email}" readonly="readonly">
 						</div>
+						<br>
+						<div class="certify_sub">
+							<input type="submit" value="인증번호 전송" class="primary">
+						</div>
+						<br>
 					</div>
 				</div>
 			</form>
@@ -110,7 +103,6 @@
 	<script src="/js/breakpoints.min.js"></script>
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
-	<script src="/js/login/login.js"></script>
 
 </body>
 

@@ -1,8 +1,7 @@
 function btnCertified() {
-	
+	location.replace("/certify/form");
 }
 
 function btnModify() {
-	console.log("a");
 	location.replace("/account/confirmP");
 }

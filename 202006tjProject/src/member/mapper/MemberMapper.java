@@ -19,6 +19,9 @@ public interface MemberMapper {
 	//회원 수정
 	public void updateMember(MemberDto memberDto);
 	
+	//회원 인증 수정
+	public void updateMemberCertify(MemberDto memberDto);
+	
 	//회원 삭제
 	public void deleteMember(int id);
 	
