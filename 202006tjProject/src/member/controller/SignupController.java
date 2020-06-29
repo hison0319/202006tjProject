@@ -83,15 +83,4 @@ public class SignupController {
 			return "f";
 		}
 	}
-	//정규식 기본 설명
-/*
- * public String stringReplace(String str) {
-		String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
-		str = str.replaceAll(match, "");
-		return str;
-	한글유니코드(\uAC00-\uD7A3), 숫자 0~9(0-9), 
-	영어 소문자a~z(a-z), 대문자A~Z(A-Z), 공백(\s)를 
-	제외한(^) 단어일 경우 체크
-	}
- * */
 }

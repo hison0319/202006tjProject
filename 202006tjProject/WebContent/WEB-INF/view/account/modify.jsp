@@ -16,7 +16,6 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="stylesheet" href="/css/signup.css" />
-
 </head>
 
 <body class="is-preload">
@@ -55,10 +54,11 @@
 	<!-- container -->
 	<section class="wrapper major-pad">
         <div class="inner">
-        	<div class="update_form">회원 정보 수정</div>
+        	<div class="signup">회원 정보 수정</div>
         	<br>
 			<form name="updateForm" action="update" method="post">
 				<div class="row gtr-uniform">
+					<div class="col-6 col-12-xsmall">
 						<input type="text" name="id" value="${sessionScope.loginMember.id}" class="skip" readonly="readonly"/>
 						<input type="text" name="memberId" value="${sessionScope.loginMember.memberId}" class="skip" readonly="readonly"/>					
 						<div class="signup_pw">비밀번호
@@ -109,11 +109,8 @@
 						<div class="signup_sub">
 							<input type="submit" value="회원정보 수정" class="primary">
 						</div>
-						
-						<div class="signup_reset">
-							<input type="reset" value="처음으로">
-						</div>
 					</div>
+				</div>
 			</form>
         </div>
     </section>

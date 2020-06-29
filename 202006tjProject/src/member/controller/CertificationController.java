@@ -43,7 +43,6 @@ public class CertificationController {
 	@PostMapping("/confirm")
 	public boolean PostConfirm(HttpSession session, String certifyKey, String memberKey) {
 		try {
-			System.out.println("aaa");
 			return mailService.memberCertify(session, certifyKey, memberKey);
 		} catch (Exception e) {
 			return false;
