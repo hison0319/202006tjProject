@@ -68,7 +68,10 @@
                             <div class="login_btn_box">
                                 <ul class="actions stacked">
                                     <li><input type="submit" style="width:100%;" value="로그인" class="button primary fit"></li>
-									<li><a href="#" class="button primary small fit">네이버 아이디로 로그인</a></li>
+									<li>
+									<a href="https://kauth.kakao.com/oauth/authorize?client_id=e4e1b163f0c81274eec3c688bcfe3f54&redirect_uri=http://localhost:8080/kakaologin&response_type=code" class="button primary small fit">
+            								카카오 아이디로 로그인</a>
+            						</li>
 									<li><a href="#" class="button primary small fit">구글 아이디로 로그인</a></li>
 									<li><a href="#" class="button small fit">아이디 찾기</a></li>
                                     <li><a href="#" class="button small fit">비밀번호 찾기</a></li>
