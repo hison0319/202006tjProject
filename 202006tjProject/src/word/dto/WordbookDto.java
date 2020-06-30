@@ -18,6 +18,15 @@ public class WordbookDto {
 		this.title = title;
 		this.wordbookAddress = wordbookAddress;
 	}
+	public WordbookDto(int id, int ownerId, int favorite, int shared, String title, String wordbookAddress) {
+		super();
+		this.id = id;
+		this.ownerId = ownerId;
+		this.favorite = favorite;
+		this.shared = shared;
+		this.title = title;
+		this.wordbookAddress = wordbookAddress;
+	}
 	public WordbookDto(int id, int ownerId, int favorite, int shared, String title, Timestamp regDate, Timestamp uDate,
 			String wordbookAddress) {
 		this.id = id;

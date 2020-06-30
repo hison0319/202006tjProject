@@ -17,6 +17,9 @@
 		update wordbook set owner_id=#{ownerId}, favorite=#{favorite}, shared=#{shared}, 
 		title=#{title}, wordbook_address=#{wordbookAddress} where id=#{id}
 	</update>
+	<update id="updateWordbookFavorite">
+		update wordbook set favorite=#{favorite} where id=#{id};
+	</update>
 	<delete id="deleteWordbook">
 		delete from wordbook where id=#{id}
 	</delete>

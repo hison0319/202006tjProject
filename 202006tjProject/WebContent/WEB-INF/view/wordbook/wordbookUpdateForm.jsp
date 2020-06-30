@@ -53,8 +53,15 @@
     <!-- container -->
     <section class="wrapper major-pad">
         <div class="inner">
-			<div>단어장 생성 창</div>
-			<div>핵심기능 구현</div>
+			<form action="complete" method="post">
+				단어장 이름: <input type="text" required="required" name="title" id="title" />
+				텍스트 파일 업로드<br /><br />
+				<input type="file" accept=".txt" name="file" id="file"/> <hr />
+				직접 입력 <br />
+				<textarea name="text" id="text" cols="30" rows="10" style="resize:none" ></textarea>
+				<br />
+				<button id="submit" disabled="disabled">단어장 입력 완료</button>  <!-- 오른쪽이나 중앙 배치? -->
+			</form>
         </div>
     </section>
 
@@ -85,6 +92,7 @@
     <script src="/js/breakpoints.min.js"></script>
     <script src="/js/util.js"></script>
     <script src="/js/main.js"></script>
+    <script src="/js/wordbook/wordbookform.js"></script>
 
 </body>
 
