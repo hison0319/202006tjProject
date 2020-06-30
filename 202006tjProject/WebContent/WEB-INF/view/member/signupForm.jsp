@@ -63,33 +63,33 @@
 						<div class="signup_id">
 							아이디 <br> <input type="text" id="memberId" name="memberId"
 								value="${member.memberId}" min="6" max="15"
-								placeholder="띄어쓰기 없이 영/숫자 6-10자">
+								placeholder="띄어쓰기 없이 영/숫자 6-15자">
 							<c:if test="${ememberId != null}">
 								<p style="color: red">아이디 형식에 맞지 않습니다.</p>
 							</c:if>
 						</div>
+						<span class="error_next_box" id="idMsg" aria-live="assertive"></span>
 
 						<div class="id_check check_box">
-							<button type="button" id="id_check" name="memberIdCheck">아이디
-								중복 확인</button>
+							<button type="button" id="id_check" name="memberIdCheck">아이디 중복 확인</button>
 						</div>
 						<br>
 
 						<div class="signup_pw">
-							비밀번호 <br> <input type="password" id="password"
-								name="password" value="" min="6" max="15"
-								placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합">
+							비밀번호 <br> <input type="password" id="password" name="password" 
+							value="" min="6" max="15" placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합">
 							<c:if test="${epassword != null}">
 								<p style="color: red">비밀번호 형식에 맞지 않습니다.</p>
 							</c:if>
 						</div>
+						<span class="error_next_box" id="pwMsg" aria-live="assertive"></span>
 						<br>
 
 						<div class="check_pw">
 							비밀번호 확인 <br> <input type="password" id="passwordCheck"
-								name="passwordConfirm" value=""
-								placeholder="위의 비밀번호를 다시 입력해주세요.">
+								name="passwordConfirm" value="" placeholder="위의 비밀번호를 다시 입력해주세요.">
 						</div>
+						<span class="error_next_box" id="pwCheckMsg" aria-live="assertive"></span>
 						<br>
 
 						<div class="signup_email">
@@ -99,38 +99,38 @@
 								<p style="color: red">이메일 형식에 맞지 않습니다.</p>
 							</c:if>
 						</div>
+						<span class="error_next_box" id="emailMsg" aria-live="assertive"></span>
 
 						<div class="email_check check_box">
-							<button type="button" id="email_check" name="emailCheck">이메일
-								중복 확인</button>
+							<button type="button" id="email_check" name="emailCheck">이메일 중복 확인</button>
 						</div>
 						<br>
 
 						<div class="signup_phone">
-							휴대폰 번호 <br> <input type="text" id="phone" name="phone"
-								maxlength="11" value="${member.phone}"
-								placeholder="- 제외 숫자만 입력해주세요.">
+							휴대폰 번호 <br> <input type="text" id="phone" name="phone" 
+								value="${member.phone}" placeholder="- 제외 숫자만 입력해주세요.">
 							<c:if test="${ephone != null}">
 								<p style="color: red">전화번호 형식에 맞지 않습니다.</p>
 							</c:if>
 						</div>
+						<span class="error_next_box" id="phoneMsg" aria-live="assertive"></span>
 
 						<div class="phone_check check_box">
-							<button type="button" id="phone_check" name="phoneCheck">전화번호
-								중복 확인</button>
+							<button type="button" id="phone_check" name="phoneCheck">전화번호 중복 확인</button>
 						</div>
+						<br>
 
 						<br>
 						<div class="signup_addr">
-							주소<input type="text" id="address" name="address" class="skip"
-								value="${member.address}" placeholder=""> <input
-								type="text" id="sample4_postcode" placeholder="우편번호"> <input
-								type="button" onclick="sample4_execDaumPostcode()"
-								value="우편번호 찾기"><br> <input type="text"
-								id="sample4_roadAddress" placeholder="도로명주소"> <input
-								type="text" id="sample4_jibunAddress" placeholder="지번주소">
-							<span id="guide" style="color: #999; display: none"></span> <input
-								type="text" id="sample4_detailAddress" placeholder="상세주소">
+							주소 <br> <input type="text" id="address" name="address" class="skip" value="${member.address}"> 
+							<input type="text" id="sample4_postcode" placeholder="우편번호"> 
+							<div class="check_box">
+								<button type="button" onclick="sample4_execDaumPostcode()" value="">우편번호 찾기</button>
+							</div>
+							<br> 
+							<input type="text" id="sample4_roadAddress" placeholder="도로명주소"> 
+							<input type="text" id="sample4_jibunAddress" placeholder="지번주소">
+							<input type="text" id="sample4_detailAddress" placeholder="상세주소">
 							<input type="text" id="sample4_extraAddress" placeholder="참고항목">
 						</div>
 						<script
@@ -210,7 +210,7 @@
 										}).open();
 							}
 						</script>
-
+						<br>
 						<div class="signup_btn_box actions stacked">
 							<input type="submit" style="width: 100%;" value="회원가입"
 								class="button primary fit">

@@ -46,6 +46,7 @@ public class SignupController {
 			return "member/signupForm";
 		} else {
 			try {
+				System.out.println(member);
 				memberService.insertMember(member);
 			} catch (Exception e) {
 				m.addAttribute("member",member);
