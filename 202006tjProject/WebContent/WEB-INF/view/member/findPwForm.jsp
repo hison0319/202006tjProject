@@ -1,13 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-	
-<!DOCTYPE HTML>
-
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
 <html>
-
 <head>
-<title>loginForm</title>
+<meta charset="UTF-8">
+<title>findIdForm</title>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="robots" content="noindex, nofollow" />
@@ -16,7 +14,7 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="stylesheet" href="/css/login.css" />
+<link rel="stylesheet" href="/css/findIdPw.css" />
 </head>
 
 <body class="is-preload">
@@ -51,43 +49,34 @@
 			</ul>
         </nav>
     </header>
-
-	<!-- container -->
+    
+    <!-- container -->
 	<section class="wrapper major-pad">
 		<div class="inner">
-			<div class="login">Login</div>
+			<div class="findpw">비밀번호 찾기</div>
 			<br>
-			<form method="post" action="matching">
+			<form method="post" action="findingpw">
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
-						<div class="login_sub">
-							<input type="text" name="memberId" value="" placeholder="ID">
-							<br>
-                            <input type="password" name="password" value="" placeholder="PASSWORD">
-                            <br>
-                            <div class="login_btn_box">
-                                <ul class="actions stacked">
-                                    <li><input type="submit" style="width:100%;" value="로그인" class="button primary fit"></li>
-									<li>
-									<a href="https://kauth.kakao.com/oauth/authorize?client_id=e4e1b163f0c81274eec3c688bcfe3f54&redirect_uri=http://localhost:8080/kakaologin&response_type=code" class="button primary small fit">
-            								카카오 아이디로 로그인</a>
-            						</li>
-									<li><a href="#" class="button primary small fit">구글 아이디로 로그인</a></li>
-									<li><a href="${pageContext.request.contextPath}/findid/form" class="button small fit">아이디 찾기</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/findpw/form" class="button small fit">비밀번호 찾기</a></li>
-								</ul>
-                            </div>
+						<div class="find_sub">
+							<input type="email" id="email" name="email"
+								value="" placeholder="EMAIL">
+						</div>
+						<br>
+						<div class="find_btn_box actions stacked">
+							<input type="submit" style="width: 100%;" value="비밀번호 찾기"
+								class="button primary fit">
 						</div>
 					</div>
 				</div>
 			</form>
 		</div>
 	</section>
-
-    <section class="wrapper style">
+	
+	<section class="wrapper style">
         <div class="inner"></div>
     </section>
-
+	
 	<!-- Footer -->
 	<footer id="footer">
 		<div class="inner">
@@ -112,7 +101,7 @@
 	<script src="/js/breakpoints.min.js"></script>
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
-	<script src="/js/login/login.js"></script>
+	<script src="/js/findpw/findpw.js"></script>
 
 </body>
 

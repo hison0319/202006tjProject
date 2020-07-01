@@ -1,0 +1,29 @@
+@import url(main.css);
+
+    /*아이디 찾기 창*/
+
+	.col-6 {
+		margin: 0 auto;
+	}
+
+	.findid {
+    	font-weight: bold;
+   		text-align: center;
+	}
+	
+	.findpw {
+    	font-weight: bold;
+   		text-align: center;
+	}
+
+	.find_btn_box {
+		margin: 0 auto;
+		width: 70%;
+	}
+
+	.foundid {
+    display: block;
+    margin: 0 auto;
+    font-size: 21px;
+    line-height: 14px;
+}

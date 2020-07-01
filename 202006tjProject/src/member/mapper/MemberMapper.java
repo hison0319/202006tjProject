@@ -32,4 +32,7 @@ public interface MemberMapper {
 	//회원가입용 아이디, 이메일, 전화번호 조회
 	public String selectMemberByEmail(@Param("email")String email);
 	public String selectMemberByPhone(@Param("phone")String phone);
+	
+	//아이디 찾기용 이메일 조회
+	public String selectMemberIdByEmail(@Param("email")String email);
 }

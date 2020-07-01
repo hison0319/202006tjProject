@@ -74,4 +74,9 @@ public class MemberService {
 			return null;
 		}
 	}
+	
+	//이메일로 아이디 찾기
+	public String selectMemberIdByEmail(String email) {
+		return memberMapper.selectMemberIdByEmail(email);
+	}
 }

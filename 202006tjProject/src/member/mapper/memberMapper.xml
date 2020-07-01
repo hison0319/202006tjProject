@@ -36,4 +36,7 @@
 	<delete id="deleteMember">
 		delete from member where id=#{id}
 	</delete>
+	<select id="selectMemberIdByEmail" resultType="String">
+		select member_id from member where email=#{email}
+	</select>
 </mapper>
