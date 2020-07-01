@@ -26,6 +26,11 @@ public class SharingService {
 	public List<SharingDto> selectSharingAll() {
 		return sharingMapper.selectSharingAll();
 	}
+	
+	//단어장 사용자 조회
+	public List<SharingDto> selectSharingByWordbookId(int wordbookId){
+		return sharingMapper.selectSharingByWordbookId(wordbookId);
+	}
 
 	// 공유 수정
 	public void updateSharing(SharingDto sharingDto) {

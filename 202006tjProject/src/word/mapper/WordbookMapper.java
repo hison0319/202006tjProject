@@ -8,6 +8,9 @@ public interface WordbookMapper {
 	//단어장 조회
 	public WordbookDto selectWordbookById(int id);
 	
+	//사용자 단어장 조회
+	public List<WordbookDto> selectWordbookByOwnerId(int id);
+	
 	//단어장 추가
 	public void insertWordbook(WordbookDto wordbookDto);
 	

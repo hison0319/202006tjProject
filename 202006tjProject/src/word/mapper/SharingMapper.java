@@ -14,6 +14,9 @@ public interface SharingMapper {
 	//공유 전체 조회
 	public List<SharingDto> selectSharingAll();
 	
+	//단어장 사용자 조회
+	public List<SharingDto> selectSharingByWordbookId(int wordbookId);
+	
 	//공유 수정
 	public void updateSharing(SharingDto sharingDto);
 	

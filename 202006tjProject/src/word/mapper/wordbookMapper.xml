@@ -10,6 +10,9 @@
 	<select id="selectWordbookById" resultType="wordbook">
 		select id,owner_id,favorite,shared,title,reg_date,u_date,wordbook_address from wordbook where id=#{id}
 	</select>
+	<select id="selectWordbookByOwnerId" resultType="wordbook">
+		select * from wordbook where owner_id=#{id};
+	</select>
 	<select id="selectWordbookAll" resultType="wordbook">
 		select id,owner_id,favorite,shared,title,reg_date,u_date,wordbook_address from wordbook
 	</select>

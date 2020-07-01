@@ -56,7 +56,34 @@
 			<div>단어장 게시판</div>
 			<div>중요도 공개/비공개 정렬방식 검색 삭제 -> 비동기</div>
 			<div>생성 -> 동기</div>
+			<c:choose>
+				<c:when test="${loginPlease != null }">
+					<div>${loginPlease }</div>
+				</c:when>
+				<c:when test="${certifyPlease != null }">
+					<div>${certifyPlease }</div>
+				</c:when>
+				<c:otherwise>
+					<ol>
+						<c:forEach items="${list }" var="l">
+							<li>
+							<c:choose>
+								<c:when test="${l.favorite==0 }">
+									<a href="#"><span class="favorite" id="favorite${l.id }">ㅡㅅㅡ</span></a>
+								</c:when>
+								<c:otherwise>
+									<a href="#"><span class="favorite" id="favorite${l.id }">ㅇㅅㅇ</span></a>
+								</c:otherwise>
+							</c:choose>
+							<a href="../word/showlist?wordbookid=${l.id }" >${l.title }</a>
+							</li>
+						</c:forEach>
+					</ol>
+				</c:otherwise>
+			</c:choose>
         </div>
+        <hr />
+       <a href="form"><button id="addWordbook">단어장 추가</button></a>
     </section>
 
     <section class="wrapper style">
@@ -86,6 +113,7 @@
     <script src="/js/breakpoints.min.js"></script>
     <script src="/js/util.js"></script>
     <script src="/js/main.js"></script>
+    <script src="/js/wordbook/favorite.js"></script>
 
 </body>
 

@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -46,7 +47,22 @@ public class WordbookController {
 	WordbookService wordbookService;
 	//단어장 목록 조회 기능
 	@GetMapping("showlist")
-	public String wordbookListShow() {
+	public String wordbookListShow(HttpSession session) {
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			session.setAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+		}
+		else if (loginMember.getCertified() == 0) {
+			session.removeAttribute("loginPlease");
+			session.setAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+		}
+		else {
+			session.removeAttribute("loginPlease");
+			session.removeAttribute("certifyPlease");
+			int loginId = loginMember.getId();
+			List<WordbookDto> list = wordbookService.selectWordbookByOwnerId(loginId);
+			session.setAttribute("list", list);
+		}
 		return "wordbook/wordbookList";
 	}
 	
@@ -63,6 +79,10 @@ public class WordbookController {
 		return "wordbook/wordbookUpdateForm";
 	}
 	
+	/*@PostMapping("favorite")
+	public String toggleFavorite() {
+	}*/
+	
 	@PostMapping("complete")
 	public String wordbookInsert(HttpSession session, Model m, String title, @RequestParam(required = false) String text, @RequestParam(required = false) File file) throws IOException {
 		String clientId = "FaGdiV_h1RX1lMv2w2tW";//애플리케이션 클라이언트 아이디값";
@@ -77,7 +97,7 @@ public class WordbookController {
 		File path = new File("..\\eclipse-workspace\\jsonFiles\\"+ today);
 		File json = new File("..\\eclipse-workspace\\jsonFiles\\" + today + "\\" + now + ".json");
 		path.mkdirs();
-		String jsonText = "{";
+		String jsonText = "[";
 		
 		if(loginMember == null) {
 			return "member/loginPlease";
@@ -117,14 +137,14 @@ public class WordbookController {
 								JSONObject message = (JSONObject) resultJson.get("message");
 								JSONObject result = (JSONObject) message.get("result");
 								if(!textArr[i].equals(result.get("translatedText")) && textArr[i].length() >1) {
-									jsonText += "\""+textArr[i]+"\":\""+result.get("translatedText")+"\",";
+									jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\"},";
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
 						}
 						jsonText = jsonText.substring(0, jsonText.length()-1);
-						jsonText += "}";
+						jsonText += "]";
 						bw.write(jsonText);
 						bw.flush();
 						
@@ -170,14 +190,14 @@ public class WordbookController {
 							JSONObject message = (JSONObject) resultJson.get("message");
 							JSONObject result = (JSONObject) message.get("result");
 							if(!textArr[i].equals(result.get("translatedText")) && textArr[i].length() >1) {
-								jsonText += "\""+textArr[i]+"\":\""+result.get("translatedText")+"\",";
+								jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\"},";
 							}
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
 					jsonText = jsonText.substring(0, jsonText.length()-1);
-					jsonText += "}";
+					jsonText += "]";
 					bw.write(jsonText);
 					bw.flush();
 					
