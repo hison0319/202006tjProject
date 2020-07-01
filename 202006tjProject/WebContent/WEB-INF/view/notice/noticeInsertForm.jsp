@@ -63,7 +63,7 @@
                             <input type="text" name="title" placeholder="+ 제목 (단어)" maxlength="100" />
                         </div>
                         <div class="col-12">
-                            <textarea name="contents"placeholder="내용을 입력해주세요." maxlength="1000" rows="6"></textarea>
+                            <textarea name="contents"placeholder="내용을 입력해주세요." maxlength="1000" rows="6" onselect="selected()"></textarea>
                         </div>
                     </form>
                 </div>
