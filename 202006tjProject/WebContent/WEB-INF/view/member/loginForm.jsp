@@ -83,6 +83,9 @@
 					</div>
 				</div>
 			</form>
+			<input type="hidden" name="googleId"/>
+			<input type="hidden" name="googleName"/>
+			<input type="hidden" name="googleEmail"/>
 		</div>
 	</section>
 

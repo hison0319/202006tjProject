@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import member.dto.MemberDto;
@@ -43,6 +44,20 @@ public class LoginController {
 				System.out.println(loginMember);
 				return "t";
 			}
+		}
+	}
+	
+	@ResponseBody
+	@PostMapping("googlelogin")
+	public String googleLogin(String googleId, String googleName, @RequestParam(required = false)String googleEmail) {
+		System.out.println(googleId);
+		System.out.println(googleName);
+		if(googleEmail!=null) {
+			System.out.println(googleEmail);
+			return "{\"googleId\":\""+googleId+"\",\"googleName\":\""+googleName+"\",\"googleEmail\":\""+googleEmail+"\"}";
+		}
+		else {
+			return "{\"googleId\":\""+googleId+"\",\"googleName\":\""+googleName+"\"}";
 		}
 	}
 	
