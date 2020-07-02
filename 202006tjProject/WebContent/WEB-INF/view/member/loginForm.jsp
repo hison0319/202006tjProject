@@ -19,6 +19,7 @@
 <meta name = "google-signin-client_id"content = "166221413799-su8t7c8tdrpivukd6vi396ikuh1ouch3.apps.googleusercontent.com">
 <link rel="stylesheet" href="/css/login.css" />
 <script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="/js/login/login.js" src="/scripts/amcharts/serial.js?v=<%=System.currentTimeMillis() %>"></script>
 </head>
 
 <body class="is-preload">
@@ -117,7 +118,6 @@
 	<script src="/js/breakpoints.min.js"></script>
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
-	<script src="/js/login/login.js"></script>
 
 </body>
 

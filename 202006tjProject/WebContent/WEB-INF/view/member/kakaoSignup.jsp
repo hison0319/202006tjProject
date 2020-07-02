@@ -15,7 +15,7 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<script src="/js/signup/kakaoSignup.js"></script>
+<script src="/js/signup/kakaoSignup.js" src="/scripts/amcharts/serial.js?v=<%=System.currentTimeMillis() %>"></script>
 <link rel="stylesheet" href="/css/signup.css" />
 </head>
 
@@ -60,9 +60,10 @@
 			<form name="kakaoSignupForm" action="kakaosignup" method="post">
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
-						<input type="text" name="realId" value="${realId}" class="skip" readonly="readonly"/>
-						<input type="text" name="nickName" value="${member.memberId}" readonly="readonly"/>
-						<input type="text" name="kakaoPassword" class="skip" value="${member.password}" maxlength="15">
+						<input type="hidden" name="realId" value="${realId}" class="skip" readonly="readonly"/>
+						<input type="text" name="nickName" value="${nickName}" readonly="readonly"/>
+						<input type="hidden" class="skip" name="memberId" value="tempId1234" readonly="readonly"/>
+						<input type="hidden" class="skip" name="kakaoPassword" value="${kakaoPassword}" maxlength="15">
 						<div class="signup_email">이메일
 						<br>
 							<input type="email" id="email" name="email" value="${member.email}" placeholder="">
@@ -88,7 +89,7 @@
 						</div>
 						<br>
 						<div class="signup_addr">
-							주소 <br> <input type="text" id="address" name="address" class="skip" value="${member.address}"> 
+							주소 <br> <input type="hidden" id="address" name="address" class="skip" value="${member.address}"> 
 							<input type="text" id="sample4_postcode" placeholder="우편번호"> 
 							<div class="check_box">
 								<button type="button" onclick="sample4_execDaumPostcode()" value="">우편번호 찾기</button>

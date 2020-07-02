@@ -2,7 +2,6 @@ package member.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -35,13 +34,13 @@ public class KakaoLoginController {
 
 	@RequestMapping(value = "/kakaologin", produces = "application/json", method = { RequestMethod.GET,
 			RequestMethod.POST })
-	public String kakaoLogin(@RequestParam("code") String code, Model m) {
+	public String kakaoLogin(@RequestParam("code") String code, Model m, HttpSession session) {
 		JsonNode accessToken;
 		JsonNode jsonToken = KakaoAccessToken.getKakaoAccessToken(code);
 		accessToken = jsonToken.get("access_token");
 
 		JsonNode userInfo = KakaoUserInfo.getKakaoUserInfo(accessToken);
-		String id = userInfo.path("id").asText();
+		String id = "!" + userInfo.path("id").asText();
 		String name = null;
 		String email = null;
 
@@ -51,19 +50,27 @@ public class KakaoLoginController {
 		name = properties.path("nickname").asText();
 		email = kakao_account.path("email").asText();
 
-		MemberDto member = new MemberDto();
 		String realId = name + id;
-		String nickName = realId.replace(id, "");
-		String password = new TempCharKey().getKey(50, false);
+		MemberDto memberKakao;
+		try {
+			memberKakao = memberService.selectMemberByMemberIdforApi(id);
+			System.out.println(memberKakao);
+			session.setAttribute("loginMember", memberKakao);
+			return "hosting";
+		} catch (IndexOutOfBoundsException e) {
+			MemberDto member = new MemberDto();
+			String kakaoPassword = new TempCharKey().getKey(50, false);
 
-		member.setMemberId(nickName);
-		member.setEmail(email);
-		member.setPassword(password);
+			member.setEmail(email);
 
-		m.addAttribute("member", member);
-		m.addAttribute("realId", realId);
+			m.addAttribute("member", member);
+			m.addAttribute("realId", realId);
+			m.addAttribute("nickName", name);
+			m.addAttribute("kakaoPassword", kakaoPassword);
+			m.addAttribute("realId", realId);
 
-		return "/member/kakaoSignup";
+			return "/member/kakaoSignup";
+		}
 	}
 
 	// 비동기 식 이메일, 번호 중복 확인
@@ -88,21 +95,23 @@ public class KakaoLoginController {
 	}
 
 	@PostMapping("kakaosignup")
-	public String kakaoSignup(@ModelAttribute("MemberVo") @Valid MemberVO memberVo, BindingResult result, Model m, String realId, String nickName, String kakaoPassword) {
+	public String kakaoSignup(@ModelAttribute("MemberVo") @Valid MemberVO memberVo, BindingResult result, Model m,
+			String realId, String nickName, String kakaoPassword) {
 		MemberDto member = new MemberDto();
 		member.setEmail(memberVo.getEmail());
 		member.setPhone(memberVo.getPhone());
 		member.setAddress(memberVo.getAddress());
-		if(result.hasErrors()) {
+		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
-			for(FieldError fe : errors) {
-				m.addAttribute("e"+fe.getField(), fe.getField());
+			System.out.println(result.toString());
+			for (FieldError fe : errors) {
+				m.addAttribute("e" + fe.getField(), fe.getField());
 				System.out.println(fe.getField());
 			}
-			m.addAttribute("member",member);
-			m.addAttribute("realId",realId);
-			m.addAttribute("nickName",nickName);
-			m.addAttribute("kakaoPassword",kakaoPassword);
+			m.addAttribute("member", member);
+			m.addAttribute("realId", realId);
+			m.addAttribute("nickName", nickName);
+			m.addAttribute("kakaoPassword", kakaoPassword);
 			return "member/kakaoSignup";
 		} else {
 			try {
@@ -110,10 +119,10 @@ public class KakaoLoginController {
 				member.setPassword(kakaoPassword);
 				memberService.insertMember(member);
 			} catch (Exception e) {
-				m.addAttribute("member",member);
-				m.addAttribute("realId",realId);
-				m.addAttribute("nickName",nickName);
-				m.addAttribute("kakaoPassword",kakaoPassword);
+				m.addAttribute("member", member);
+				m.addAttribute("realId", realId);
+				m.addAttribute("nickName", nickName);
+				m.addAttribute("kakaoPassword", kakaoPassword);
 				return "member/kakaoSignup";
 			}
 		}

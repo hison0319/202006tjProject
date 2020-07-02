@@ -2,7 +2,6 @@ package member.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +12,7 @@ import member.mapper.MemberMapper;
 public class MemberService {
 	@Autowired
 	MemberMapper memberMapper;
+
 	// 회원 조회
 	public MemberDto selectMemberById(int id) {
 		return memberMapper.selectMemberById(id);
@@ -32,8 +32,8 @@ public class MemberService {
 	public void updateMember(MemberDto memberDto) {
 		memberMapper.updateMember(memberDto);
 	}
-	
-	//회원 인증 수정
+
+	// 회원 인증 수정
 	public void updateMemberCertify(MemberDto memberDto) {
 		memberMapper.updateMemberCertify(memberDto);
 	}
@@ -42,41 +42,50 @@ public class MemberService {
 	public void deleteMember(int id) {
 		memberMapper.deleteMember(id);
 	}
-	
-	//로그인용 회원 조회
+
+	// 로그인용 회원 조회
 	public MemberDto selectMemberByMemberId(String memberId) {
 		try {
 			return memberMapper.selectMemberByMemberId(memberId);
-		} catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			return null;
 		}
 	}
+
 	public MemberDto selectMemberByMemberIdPw(String memberId, String password) {
 		try {
 			return memberMapper.selectMemberByMemberIdPw(memberId, password);
-		} catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			return null;
 		}
 	}
-	
-	//회원가입 용 이메일, 전화번호 조회
+
+	// 회원가입 용 이메일, 전화번호 조회
 	public String selectMemberByEmail(String email) {
 		try {
 			return memberMapper.selectMemberByEmail(email);
-		} catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			return null;
 		}
 	}
+
 	public String selectMemberByPhone(String phone) {
 		try {
 			return memberMapper.selectMemberByPhone(phone);
-		} catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			return null;
 		}
 	}
-	
-	//이메일로 아이디 찾기
+
+	// 이메일로 아이디 찾기
 	public String selectMemberIdByEmail(String email) {
 		return memberMapper.selectMemberIdByEmail(email);
+	}
+
+	// API 로그인용 아이디찾기
+	public MemberDto selectMemberByMemberIdforApi(String memberId) throws IndexOutOfBoundsException {
+		List<MemberDto> tempList = memberMapper.selectMemberByMemberIdforApi(memberId);
+		MemberDto member = tempList.remove(0);
+		return member;
 	}
 }

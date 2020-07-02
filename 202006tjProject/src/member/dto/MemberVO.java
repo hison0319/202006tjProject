@@ -21,6 +21,15 @@ public class MemberVO {
 	private int certified;
 	public MemberVO() {}
 	
+//	public MemberVO(
+//			@Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$", message = "m") String email,
+//			@Pattern(regexp = "^^\\d{3}\\d{3,4}\\d{4}$", message = "m") String phone,
+//			String address) {
+//		this.email = email;
+//		this.phone = phone;
+//		this.address = address;
+//	}
+	
 	public MemberVO(
 			@NotNull(message = "공백입니다.") @Pattern(regexp = "^[a-z | A-Z]{3,6}[0-9]{3,6}$", message = "m") String memberId,
 			@Pattern(regexp = "^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$", message = "m") String password,

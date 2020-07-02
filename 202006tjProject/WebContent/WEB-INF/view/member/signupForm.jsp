@@ -122,7 +122,7 @@
 
 						<br>
 						<div class="signup_addr">
-							주소 <br> <input type="text" id="address" name="address" class="skip" value="${member.address}"> 
+							주소 <br> <input type="hidden" id="address" name="address" class="skip" value="${member.address}"> 
 							<input type="text" id="sample4_postcode" placeholder="우편번호"> 
 							<div class="check_box">
 								<button type="button" onclick="sample4_execDaumPostcode()" value="">우편번호 찾기</button>

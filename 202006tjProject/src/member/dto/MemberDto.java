@@ -12,6 +12,13 @@ public class MemberDto {
 	private Timestamp regDate;
 	private int certified;
 	public MemberDto() {}
+	
+//	public MemberDto(String email, String phone, String address) {
+//		this.email = email;
+//		this.phone = phone;
+//		this.address = address;
+//	}
+	
 	public MemberDto(String memberId, String password, String email, String phone, String address) {
 		this.memberId = memberId;
 		this.password = password;
