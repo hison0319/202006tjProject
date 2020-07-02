@@ -32,7 +32,6 @@ public class SignupController {
 
 	@PostMapping("/insert")
 	public String insert(@ModelAttribute("MemberVo") @Valid MemberVO memberVo, BindingResult result, Model m) {
-		System.out.println(memberVo);
 		MemberDto member = new MemberDto(memberVo.getMemberId(), memberVo.getPassword(), 
 				memberVo.getEmail(), memberVo.getPhone(), memberVo.getAddress());
 		// 유효성 검사
