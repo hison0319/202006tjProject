@@ -48,7 +48,7 @@ public class WordbookController {
 	@Autowired
 	WordbookService wordbookService;
 	//단어장 목록 조회 기능
-	@GetMapping("showlist")
+	@RequestMapping("showlist")
 	public String wordbookListShow(HttpSession session) {
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 		if (loginMember == null) {
@@ -94,6 +94,23 @@ public class WordbookController {
 			wordbookService.updateWordbook(
 					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
 							0, wordbook.getShared(), wordbook.getTitle(), wordbook.getWordbookAddress()));
+		}
+		return "{\"wordbookId\":\""+wordbookId+"\"}";
+	}
+	
+	@PostMapping("sharing")  //비동기 즐겨찾기
+	@ResponseBody
+	public String toggleSharing(HttpSession session, HttpServletRequest req, int wordbookId) {
+		WordbookDto wordbook = wordbookService.selectWordbookById(wordbookId);
+		if(wordbook.getShared()==0) {
+			wordbookService.updateWordbook(
+					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
+							wordbook.getFavorite(), 1, wordbook.getTitle(), wordbook.getWordbookAddress()));
+		}
+		else {
+			wordbookService.updateWordbook(
+					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
+							wordbook.getFavorite(), 0, wordbook.getTitle(), wordbook.getWordbookAddress()));
 		}
 		return "{\"wordbookId\":\""+wordbookId+"\"}";
 	}

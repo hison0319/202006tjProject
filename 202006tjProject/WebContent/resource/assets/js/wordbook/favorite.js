@@ -1,7 +1,13 @@
-window.onload = function(){
+window.onpageshow = function(event){
+	var historyTraversal = event.persisted || 
+		(typeof window.performance != "undefined" && 
+		window.performance.navigation.type === 2 );
+	if ( historyTraversal ) {
+		window.location.reload();
+	}  //페이지 뒤로가기 시 강제 리로딩
     var favorite = $("[class*=favorite]");
     for(let i = 0; i < favorite.length; i++){
-		$("form").eq(i).on("submit",function(){
+		favorite.eq(i).on("click",function(){
 			var data = $("form").eq(i).serialize();
 			console.log(data);
 	    		$.ajax({
