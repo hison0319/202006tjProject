@@ -15,15 +15,15 @@ function onSignIn(googleUser) {
 	if(googleEmail=!null){
 		google[2].value=profile.getEmail();
 		googleEmail = google[2].value;
-		$.post("googlelogin",{googleId:googleId,googleName:googleName,googleEmail:googleEmail},function(){},'json')
+		$.post("/googlelogin",{googleId:googleId,googleName:googleName,googleEmail:googleEmail},function(){},'json')
 		.done(function(result){
-			alert(JSON.stringify(result));
+			console.log("asds");
 		});
 	}
 	else {
-		$.post("googlelogin",{googleId:googleId,googleName:googleName},function(){},'json')
+		$.post("/googlelogin",{googleId:googleId,googleName:googleName},function(){},'json')
 		.done(function(result){
-			alert(JSON.stringify(result));
+			console.log("QWE");
 			});
 	}
 }

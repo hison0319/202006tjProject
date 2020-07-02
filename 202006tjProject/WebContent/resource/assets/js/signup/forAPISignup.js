@@ -1,5 +1,4 @@
 window.addEventListener("DOMContentLoaded",function(){
-	console.log("a");
 	//정규식
 	var empJ = /\s/g; //공백체크
 	var emailPattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
@@ -33,7 +32,7 @@ window.addEventListener("DOMContentLoaded",function(){
 	      }
 		let formData = $("#email").serialize();
 		$.ajax({
-			url:"/kakaoConfirmEmail",
+			url:"/forAPIConfirmEmail",
 			type:"post",
 			data:formData,
 			success:function(data){
@@ -65,7 +64,7 @@ window.addEventListener("DOMContentLoaded",function(){
 	      }
 		let formData = $("#phone").serialize();
 		$.ajax({
-			url:"/kakaoConfirmPhone",
+			url:"/forAPIConfirmPhone",
 			type:"post",
 			data:formData,
 			success:function(data){
