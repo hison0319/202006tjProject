@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import member.dto.MemberDto;
 import word.dto.WordbookDto;
@@ -79,9 +81,22 @@ public class WordbookController {
 		return "wordbook/wordbookUpdateForm";
 	}
 	
-	/*@PostMapping("favorite")
-	public String toggleFavorite() {
-	}*/
+	@PostMapping("favorite")  //비동기 즐겨찾기
+	@ResponseBody
+	public String toggleFavorite(HttpSession session, HttpServletRequest req, int wordbookId) {
+		WordbookDto wordbook = wordbookService.selectWordbookById(wordbookId);
+		if(wordbook.getFavorite()==0) {
+			wordbookService.updateWordbook(
+					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
+							1, wordbook.getShared(), wordbook.getTitle(), wordbook.getWordbookAddress()));
+		}
+		else {
+			wordbookService.updateWordbook(
+					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
+							0, wordbook.getShared(), wordbook.getTitle(), wordbook.getWordbookAddress()));
+		}
+		return "{\"wordbookId\":\""+wordbookId+"\"}";
+	}
 	
 	@PostMapping("complete")
 	public String wordbookInsert(HttpSession session, Model m, String title, @RequestParam(required = false) String text, @RequestParam(required = false) File file) throws IOException {

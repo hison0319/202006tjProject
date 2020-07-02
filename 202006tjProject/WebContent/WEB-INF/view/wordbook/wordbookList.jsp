@@ -65,14 +65,20 @@
 				</c:when>
 				<c:otherwise>
 					<ol>
-						<c:forEach items="${list }" var="l">
+						<c:forEach items="${list }" var="l" varStatus="i">
 							<li>
 							<c:choose>
 								<c:when test="${l.favorite==0 }">
-									<a href="#"><span class="favorite" id="favorite${l.id }">ㅡㅅㅡ</span></a>
+									<form action="favorite" method="post">
+										<input type="hidden" id="favorite${i.index }" name="wordbookId" value="${l.id }"/>
+										<button class="favorite${i.index }">ㅡㅅㅡ</button>
+									</form>
 								</c:when>
 								<c:otherwise>
-									<a href="#"><span class="favorite" id="favorite${l.id }">ㅇㅅㅇ</span></a>
+									<form action="favorite" method="post">
+										<input type="hidden" id="favorite${i.index }" name="wordbookId" value="${l.id }"/>
+										<button class="favorite${i.index }">ㅇㅅㅇ</button>
+									</form>
 								</c:otherwise>
 							</c:choose>
 							<a href="../word/showlist?wordbookid=${l.id }" >${l.title }</a>

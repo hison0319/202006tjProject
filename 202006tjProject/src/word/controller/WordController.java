@@ -43,6 +43,7 @@ public class WordController {
 		}
 		return "word/wordList";
 	}
+	
 	@PostMapping("getwords")
 	@ResponseBody
 	public String getWordbook(HttpSession session) {
