@@ -56,7 +56,8 @@
 	<section class="wrapper major-pad">
 		<div class="inner">
 			<div class="notice">
-				<span class="writerId">${notice.writerId}</span><span class="regDate">&nbsp;&nbsp; ${notice.regDate}</span>
+			
+				<p><span class="writerId">${notice.writerId}</span><span class="regDate">&nbsp;&nbsp; ${notice.regDate}</span></p>
 				<h3 class="title">${notice.title}</h3>
 				<p class="contents">${notice.contents}</p>
 			</div>

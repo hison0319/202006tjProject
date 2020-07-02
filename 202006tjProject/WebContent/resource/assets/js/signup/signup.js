@@ -3,8 +3,8 @@ window.addEventListener("DOMContentLoaded",function(){
 	var empJ = /\s/g; //공백체크
 	var memberIdPattern = /^[a-z | A-Z]{3,6}[0-9]{3,6}$/;
 	var passwordPattern = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
-	var emailPattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
-	var phonePattern =  /^\d{3}\d{3,4}\d{4}$/;
+	var emailPattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+	var phonePattern =  /^\d{2,3}\d{3,4}\d{4}$/;
 	
 	var memberIdOk = false;
 	var emailOk = false;
@@ -72,7 +72,7 @@ window.addEventListener("DOMContentLoaded",function(){
 		}
 		//아이디의 유효성 검사
 		if (!memberIdPattern.test($("#memberId").val())) {
-			document.querySelector("#idMsg").innerText = "아이디를 올바르게 입력해주세요.";
+			document.querySelector("#idMsg").innerText = "아이디를 형식에 맞게 입력해주세요.";
 			$("#memberId").val("");
 			$("#memberId").focus();
 			return false;
@@ -94,6 +94,22 @@ window.addEventListener("DOMContentLoaded",function(){
 		return false;
 	});
 	
+	$("#pw_check").on("click",function(){
+		//비밀번호 공백확인
+		if ($("#password").val() == "") {
+			document.querySelector("#pwMsg").innerText = "비밀번호를 입력해주세요.";
+			$("#password").focus();
+			return false;
+		}
+		//비밀번호 유효성 검사
+		if (!memberIdPattern.test($("#password").val())) {
+			document.querySelector("#pwMsg").innerText = "비밀번호 형식에 맞게 입력해주세요.";
+			$("#password").val("");
+			$("#password").focus();
+			return false;
+		}
+	});
+	
 	$("#email_check").on("click",function(){
 		//이메일 공백 확인
 	    if ($("#email").val() == "") {
@@ -103,7 +119,7 @@ window.addEventListener("DOMContentLoaded",function(){
 	      }
 	    //이메일 유효성 검사
 	    if (!emailPattern.test($("#email").val())) {
-	    	document.querySelector("#emailMsg").innerText = "이메일형식에 맞게 입력해주세요.";
+	    	document.querySelector("#emailMsg").innerText = "이메일 형식에 맞게 입력해주세요.";
 	       $("#email").val("");
 	       $("#email").focus();
 	       return false;
@@ -149,7 +165,7 @@ window.addEventListener("DOMContentLoaded",function(){
 					phoneOk = true;
 					document.querySelector("#phoneMsg").innerText = "사용 가능 합니다.";
 				} else {
-					document.querySelector("#phoneMsg").innerText = "중복된 폰번호가 있습니다.";
+					document.querySelector("#phoneMsg").innerText = "중복된 전화번호가 있습니다.";
 				}
 			}
 		})
@@ -165,7 +181,7 @@ window.addEventListener("DOMContentLoaded",function(){
 	      }
 	    //아이디의 유효성 검사
 	    if (!memberIdPattern.test($("#memberId").val())) {
-	    	document.querySelector("#idMsg").innerText = "아이디를 올바르게 입력해주세요.";
+	    	document.querySelector("#idMsg").innerText = "아이디 형식에 맞게 입력해주세요.";
 	       $("#memberId").val("");
 	       $("#memberId").focus();
 	       return false;
@@ -205,7 +221,7 @@ window.addEventListener("DOMContentLoaded",function(){
 	      }
 	    //이메일 유효성 검사
 	    if (!emailPattern.test($("#email").val())) {
-	    	document.querySelector("#emailMsg").innerText = "이메일형식에 맞게 입력해주세요.";
+	    	document.querySelector("#emailMsg").innerText = "이메일 형식에 맞게 입력해주세요.";
 	       $("#email").val("");
 	       $("#email").focus();
 	       return false;

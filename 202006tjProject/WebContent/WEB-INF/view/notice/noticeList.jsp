@@ -33,7 +33,7 @@
 				<c:choose>
 					<c:when test="${sessionScope.loginMember == null}">
 						<li style="white-space: nowrap;">
-							<a href="${pageContext.request.contextPath}/login/form" class="button">LogIn</a>
+							<a href="${pageContext.request.contextPath}/login/form" class="button primary">LogIn</a>
 						</li>
 						<li style="white-space: nowrap;">
 							<a href="${pageContext.request.contextPath}/signup/form" class="button">SignUp</a>
