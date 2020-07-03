@@ -17,9 +17,9 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <meta name = "google-signin-client_id"content = "166221413799-su8t7c8tdrpivukd6vi396ikuh1ouch3.apps.googleusercontent.com">
-<link rel="stylesheet" href="/css/login.css" />
 <script src="https://apis.google.com/js/platform.js" async defer></script>
-<script src="/js/login/login.js" src="/scripts/amcharts/serial.js?v=<%=System.currentTimeMillis() %>"></script>
+<script src="/js/login/login.js?v=<%=System.currentTimeMillis() %>"></script>
+<link rel="stylesheet" href="/css/login.css" />
 </head>
 
 <body class="is-preload">
@@ -75,7 +75,9 @@
 									<a href="https://kauth.kakao.com/oauth/authorize?client_id=e4e1b163f0c81274eec3c688bcfe3f54&redirect_uri=http://localhost:8080/kakaologin&response_type=code" class="button primary small fit">
             								카카오 아이디로 로그인</a>
             						</li>
-									<li><div class="g-signin2" data-onsuccess="onSignIn">구글 아이디로 로그인</div></li>
+            						<!-- <li>
+									<a href="#" id="googleLogin" class="button primary small fit">구글 아이디로 로그인</a>
+            						</li> -->
 									<li><a href="${pageContext.request.contextPath}/findid/form" class="button small fit">아이디 찾기</a></li>
                                     <li><a href="${pageContext.request.contextPath}/findpw/form" class="button small fit">비밀번호 찾기</a></li>
 								</ul>
@@ -84,9 +86,10 @@
 					</div>
 				</div>
 			</form>
-			<input type="hidden" name="googleId"/>
+			<!-- <div class="g-signin2" data-onsuccess="onSignIn">구글 아이디로 로그인</div> -->
+			<!-- <input type="hidden" name="googleId"/>
 			<input type="hidden" name="googleName"/>
-			<input type="hidden" name="googleEmail"/>
+			<input type="hidden" name="googleEmail"/> -->
 		</div>
 	</section>
 

@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import member.dto.MemberDto;
+import member.service.KakaoLogout;
 import member.service.MemberService;
 
 @Controller
@@ -19,7 +22,6 @@ import member.service.MemberService;
 public class LoginController {
 	@Autowired
 	MemberService memberService;
-
 	
 	//로그인 창 이동
 	@GetMapping("form")
@@ -47,20 +49,6 @@ public class LoginController {
 		}
 	}
 	
-	@ResponseBody
-	@PostMapping("googlelogin")
-	public String googleLogin(String googleId, String googleName, @RequestParam(required = false)String googleEmail) {
-		System.out.println(googleId);
-		System.out.println(googleName);
-		if(googleEmail!=null) {
-			System.out.println(googleEmail);
-			return "{\"googleId\":\""+googleId+"\",\"googleName\":\""+googleName+"\",\"googleEmail\":\""+googleEmail+"\"}";
-		}
-		else {
-			return "{\"googleId\":\""+googleId+"\",\"googleName\":\""+googleName+"\"}";
-		}
-	}
-	
 	@GetMapping("complete")
 	public String complete() {
 		return "member/loginComplete";
@@ -69,6 +57,10 @@ public class LoginController {
 	@GetMapping("logout")
 	public String logout(HttpSession session) {
 		session.removeAttribute("loginMember");  //세션에서 로그인 정보 삭제
+		if(session.getAttribute("access_token") != null) {
+			JsonNode accessToken = (JsonNode) session.getAttribute("access_token");
+			session.removeAttribute("access_token");
+		}
 		return "member/logout";  //만약 잘못 된 방법으로 로그아웃 접근 시 처리는?(뒤로가기 후 로그아웃 버튼 다시 누르기 등)
 	}
 }

@@ -67,21 +67,27 @@
 					<ol>
 						<c:forEach items="${list }" var="l" varStatus="i">
 							<li>
-							<c:choose>
-								<c:when test="${l.favorite==0 }">
-									<form action="favorite" method="post">
-										<input type="hidden" id="favorite${i.index }" name="wordbookId" value="${l.id }"/>
-										<button class="favorite${i.index }">ㅡㅅㅡ</button>
-									</form>
-								</c:when>
-								<c:otherwise>
-									<form action="favorite" method="post">
-										<input type="hidden" id="favorite${i.index }" name="wordbookId" value="${l.id }"/>
-										<button class="favorite${i.index }">ㅇㅅㅇ</button>
-									</form>
-								</c:otherwise>
-							</c:choose>
-							<a href="../word/showlist?wordbookid=${l.id }" >${l.title }</a>
+								<form action="showlist" method="post">
+									<input type="hidden" id="favorite${i.index }" name="wordbookId" value="${l.id }"/>
+									<c:choose>
+										<c:when test="${l.favorite==0 }">
+											<button class="favorite${i.index }">ㅡㅅㅡ</button>
+										</c:when>
+										<c:otherwise>
+											<button class="favorite${i.index }">ㅇㅅㅇ</button>
+										</c:otherwise>
+									</c:choose>
+									<c:choose>
+										<c:when test="${l.shared==0 }">
+											<button class="sharing${i.index }">공유하기</button>
+										</c:when>
+										<c:otherwise>
+											<button class="getkey${i.index }">키 복사</button>
+											<button class="sharing${i.index }">공유 끝</button>
+										</c:otherwise>
+									</c:choose>
+									<a href="../word/showlist?wordbookid=${l.id }" >${l.title }</a>
+								</form>
 							</li>
 						</c:forEach>
 					</ol>
@@ -120,6 +126,7 @@
     <script src="/js/util.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/wordbook/favorite.js"></script>
+    <script src="/js/wordbook/sharing.js"></script>
 
 </body>
 

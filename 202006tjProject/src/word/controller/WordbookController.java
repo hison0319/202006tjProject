@@ -48,7 +48,7 @@ public class WordbookController {
 	@Autowired
 	WordbookService wordbookService;
 	//단어장 목록 조회 기능
-	@GetMapping("showlist")
+	@RequestMapping("showlist")
 	public String wordbookListShow(HttpSession session) {
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 		if (loginMember == null) {
@@ -98,29 +98,49 @@ public class WordbookController {
 		return "{\"wordbookId\":\""+wordbookId+"\"}";
 	}
 	
-	@PostMapping("complete")
-	public String wordbookInsert(HttpSession session, Model m, String title, @RequestParam(required = false) String text, @RequestParam(required = false) File file) throws IOException {
-		String clientId = "FaGdiV_h1RX1lMv2w2tW";//애플리케이션 클라이언트 아이디값";
-        String clientSecret = "NhiFrOn9g1";//애플리케이션 클라이언트 시크릿값";
-        String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
-        MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-        JSONParser parser = new JSONParser();
-		String regex = "[^-^{A-Z}^{a-z}]+";
-		String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY_MM_dd"));
-		String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("hh_mm_ss"));
-		Path relativePath = Paths.get("");
-		File path = new File("..\\eclipse-workspace\\jsonFiles\\"+ today);
-		File json = new File("..\\eclipse-workspace\\jsonFiles\\" + today + "\\" + now + ".json");
-		path.mkdirs();
-		String jsonText = "[";
-		
-		if(loginMember == null) {
-			return "member/loginPlease";
-		}
-		else if(loginMember.getCertified()==0) {
-			return "account/certifyPlease";
+	@PostMapping("sharing")  //비동기 공유
+	@ResponseBody
+	public String toggleSharing(HttpSession session, HttpServletRequest req, int wordbookId) {
+		WordbookDto wordbook = wordbookService.selectWordbookById(wordbookId);
+		if(wordbook.getShared()==0) {
+			wordbookService.updateWordbook(
+					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
+							wordbook.getFavorite(), 1, wordbook.getTitle(), wordbook.getWordbookAddress()));
 		}
 		else {
+			wordbookService.updateWordbook(
+					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
+							wordbook.getFavorite(), 0, wordbook.getTitle(), wordbook.getWordbookAddress()));
+		}
+		return "{\"wordbookId\":\""+wordbookId+"\"}";
+	}
+	
+	@PostMapping("complete")  //완료
+	public String wordbookInsert(HttpSession session, Model m, String title, @RequestParam(required = false) String text, @RequestParam(required = false) File file) throws IOException {
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		
+		if(loginMember == null) {  //비로그인
+			return "member/loginPlease";
+		}
+		else if(loginMember.getCertified()==0) {  //미인증
+			return "account/certifyPlease";
+		}
+		else {  //정상 작동
+			JSONParser parser = new JSONParser();
+			String regex = "[^-^{A-Z}^{a-z}]+";
+			String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY_MM_dd"));
+			String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH_mm_ss"));
+			Path relativePath = Paths.get("");
+			File path = new File("..\\eclipse-workspace\\jsonFiles\\"+ today);
+			File json = new File("..\\eclipse-workspace\\jsonFiles\\" + today + "\\" + now + ".json");
+			path.mkdirs();
+			String jsonText = "[";
+			String clientId = "FaGdiV_h1RX1lMv2w2tW";//애플리케이션 클라이언트 아이디값";
+			String clientSecret = "NhiFrOn9g1";//애플리케이션 클라이언트 시크릿값";
+			String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
+			Map<String, String> requestHeaders = new HashMap<>();
+			requestHeaders.put("X-Naver-Client-Id", clientId);
+			requestHeaders.put("X-Naver-Client-Secret", clientSecret);
 			if (file != null) {
 				String fileExtension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
 				if (fileExtension.equals("txt")) {
@@ -132,30 +152,35 @@ public class WordbookController {
 							fileText += (s + " ");
 						}
 						fileText = fileText.replaceAll(regex, " ");
-						String[] textArr = fileText.split(" ");
+						String[] textArr = fileText.split("\\s");  //" " 에서 변경
 						String word;
+						int count;
 						String[] responseBody = new String[textArr.length];
 						for (int i = 0; i < textArr.length; i++) {
-							try {
-								word = URLEncoder.encode(textArr[i], "UTF-8");
-							} catch (UnsupportedEncodingException e) {
-								throw new RuntimeException("인코딩 실패", e);
-							}
-							
-							Map<String, String> requestHeaders = new HashMap<>();
-							requestHeaders.put("X-Naver-Client-Id", clientId);
-							requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-							
-							responseBody[i] = post(apiURL, requestHeaders, word);
-							try {
-								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
-								JSONObject message = (JSONObject) resultJson.get("message");
-								JSONObject result = (JSONObject) message.get("result");
-								if(!textArr[i].equals(result.get("translatedText")) && textArr[i].length() >1) {
-									jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\"},";
+							if(textArr[i]!=null && textArr[i].length() >1) {
+								try {
+									word = URLEncoder.encode(textArr[i], "UTF-8");
+								} catch (UnsupportedEncodingException e) {
+									throw new RuntimeException("인코딩 실패", e);
 								}
-							} catch (Exception e) {
-								e.printStackTrace();
+								count=1;
+								for (int j = i+1; j < textArr.length; j++) {
+									if(textArr[j]!=null && textArr[j].equals(textArr[i])) {
+										textArr[j]=null;
+										count++;
+									}
+								}
+								responseBody[i] = post(apiURL, requestHeaders, word);
+								try {
+									JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
+									JSONObject message = (JSONObject) resultJson.get("message");
+									JSONObject result = (JSONObject) message.get("result");
+									if(!textArr[i].equals(result.get("translatedText"))) {
+										jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\",\"count\":"+count+"},";
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						}
 						jsonText = jsonText.substring(0, jsonText.length()-1);
@@ -185,30 +210,35 @@ public class WordbookController {
 			else {
 				try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(json), "MS949"))){
 					text = text.replaceAll(regex, " ");
-					String[] textArr = text.split("\\s");
+					String[] textArr = text.split(" ");
 					String word;
+					int count;
 					String[] responseBody = new String[textArr.length];
 					for (int i = 0; i < textArr.length; i++) {
-						try {
-							word = URLEncoder.encode(textArr[i], "UTF-8");
-						} catch (UnsupportedEncodingException e) {
-							throw new RuntimeException("인코딩 실패", e);
-						}
-						
-						Map<String, String> requestHeaders = new HashMap<>();
-						requestHeaders.put("X-Naver-Client-Id", clientId);
-						requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-						
-						responseBody[i] = post(apiURL, requestHeaders, word);
-						try {
-							JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
-							JSONObject message = (JSONObject) resultJson.get("message");
-							JSONObject result = (JSONObject) message.get("result");
-							if(!textArr[i].equals(result.get("translatedText")) && textArr[i].length() >1) {
-								jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\"},";
+						if(textArr[i]!=null && textArr[i].length() >1) {
+							try {
+								word = URLEncoder.encode(textArr[i], "UTF-8");
+							} catch (UnsupportedEncodingException e) {
+								throw new RuntimeException("인코딩 실패", e);
 							}
-						} catch (Exception e) {
-							e.printStackTrace();
+							count=1;
+							for (int j = i+1; j < textArr.length; j++) {
+								if(textArr[j]!=null && textArr[j].equals(textArr[i])) {
+									textArr[j]=null;
+									count++;
+								}
+							}
+							responseBody[i] = post(apiURL, requestHeaders, word);
+							try {
+								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
+								JSONObject message = (JSONObject) resultJson.get("message");
+								JSONObject result = (JSONObject) message.get("result");
+								if(!textArr[i].equals(result.get("translatedText"))) {
+									jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\",\"count\":"+count+"},";
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
 					}
 					jsonText = jsonText.substring(0, jsonText.length()-1);

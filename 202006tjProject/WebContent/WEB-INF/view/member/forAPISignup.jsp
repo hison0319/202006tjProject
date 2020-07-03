@@ -6,7 +6,7 @@
 <html>
 
 <head>
-<title>kakaoSignup</title>
+<title>ForApiSignup</title>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="robots" content="noindex, nofollow" />
@@ -15,7 +15,7 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<script src="/js/signup/kakaoSignup.js" src="/scripts/amcharts/serial.js?v=<%=System.currentTimeMillis() %>"></script>
+<script src="/js/signup/forAPISignup.js" src="/scripts/amcharts/serial.js?v=<%=System.currentTimeMillis() %>"></script>
 <link rel="stylesheet" href="/css/signup.css" />
 </head>
 
@@ -57,13 +57,13 @@
         <div class="inner">
         	<div class="signup">카카오로 가입</div>
         	<br>
-			<form name="kakaoSignupForm" action="kakaosignup" method="post">
+			<form name="kakaoSignupForm" action="forAPISignup" method="post">
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
 						<input type="hidden" name="realId" value="${realId}" class="skip" readonly="readonly"/>
 						<input type="text" name="nickName" value="${nickName}" readonly="readonly"/>
 						<input type="hidden" class="skip" name="memberId" value="tempId1234" readonly="readonly"/>
-						<input type="hidden" class="skip" name="kakaoPassword" value="${kakaoPassword}" maxlength="15">
+						<input type="hidden" class="skip" name="forAPIPassword" value="${forAPIPassword}" maxlength="15">
 						<div class="signup_email">이메일
 						<br>
 							<input type="email" id="email" name="email" value="${member.email}" placeholder="">
