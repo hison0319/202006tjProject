@@ -44,4 +44,7 @@
 	<select id="selectMemberIdByEmail" resultType="String">
 		select member_id from member where email=#{email}
 	</select>
+	<select id="selectMemberPwByIDEmail" resultType="String">
+		select password from member where member_id=#{memberId} AND email=#{email}
+	</select>
 </mapper>

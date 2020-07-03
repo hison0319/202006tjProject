@@ -280,7 +280,7 @@ h3:after,
 h4:after,
 h5:after,
 h6:after {
-    border-bottom: solid 1px;
+    /*border-bottom: solid 1px;*/
     bottom: 0;
     content: '';
     display: inline-block;

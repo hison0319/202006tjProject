@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import member.dto.MemberDto;
 import member.service.MemberService;
 
 @Controller
@@ -29,16 +28,15 @@ public class FindPwController {
 	//아이디 찾기 기능 구현
 	@ResponseBody
 	@PostMapping("findingpw")
-	public String loginService(HttpSession session, Model m, MemberDto memberDto) {
-		if(memberService.selectMemberByMemberId(memberDto.getEmail())==null) {
-			return null;
+	public String loginService(HttpSession session, Model m, String memberId,String email) {
+		if(memberService.selectMemberPwByIDEmail(memberId,email)==null) {
+			return "";
 		}  //이메일 틀릴 경우
-		else {
-			MemberDto loginMember = memberService.selectMemberByMemberId(memberDto.getMemberId());  //로그인 한 멤버의 id숫자 가져옴
-				session.setAttribute("loginMember", loginMember);
-				System.out.println(loginMember);
-				return "t";
-		}
+		
+		String loginMemberPw = memberService.selectMemberPwByIDEmail(memberId,email);  //로그인 한 멤버의 이메일 가져옴
+		System.out.println(loginMemberPw);
+		return loginMemberPw;
+		
 	}
 	
 	@GetMapping("complete")

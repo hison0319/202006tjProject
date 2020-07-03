@@ -63,10 +63,7 @@
 						<div class="signup_id">
 							아이디 <br> <input type="text" id="memberId" name="memberId"
 								value="${member.memberId}" min="6" max="15"
-								placeholder="띄어쓰기 없이 영/숫자 6-15자">
-							<c:if test="${ememberId != null}">
-								<p style="color: red">아이디 형식에 맞지 않습니다.</p>
-							</c:if>
+								placeholder="6~15자의 영문 대소문자, 숫자 조합" required>
 						</div>
 						<span class="error_next_box" id="idMsg" aria-live="assertive"></span>
 
@@ -77,27 +74,21 @@
 
 						<div class="signup_pw">
 							비밀번호 <br> <input type="password" id="password" name="password" 
-							value="" min="6" max="15" placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합">
-							<c:if test="${epassword != null}">
-								<p style="color: red">비밀번호 형식에 맞지 않습니다.</p>
-							</c:if>
+							value="" min="6" max="15" placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합" required>
 						</div>
 						<span class="error_next_box" id="pwMsg" aria-live="assertive"></span>
 						<br>
 
 						<div class="check_pw">
 							비밀번호 확인 <br> <input type="password" id="passwordCheck"
-								name="passwordConfirm" value="" placeholder="위의 비밀번호를 다시 입력해주세요.">
+								name="passwordConfirm" value="" placeholder="위의 비밀번호를 다시 입력해주세요." required>
 						</div>
 						<span class="error_next_box" id="pwCheckMsg" aria-live="assertive"></span>
 						<br>
 
 						<div class="signup_email">
 							이메일 <br> <input type="email" id="email" name="email"
-								value="${member.email}">
-							<c:if test="${eemail != null}">
-								<p style="color: red">이메일 형식에 맞지 않습니다.</p>
-							</c:if>
+								value="${member.email}" required>
 						</div>
 						<span class="error_next_box" id="emailMsg" aria-live="assertive"></span>
 
@@ -108,10 +99,7 @@
 
 						<div class="signup_phone">
 							휴대폰 번호 <br> <input type="text" id="phone" name="phone" 
-								value="${member.phone}" placeholder="- 제외 숫자만 입력해주세요.">
-							<c:if test="${ephone != null}">
-								<p style="color: red">전화번호 형식에 맞지 않습니다.</p>
-							</c:if>
+								value="${member.phone}" placeholder="- 제외 숫자만 입력해주세요." required>
 						</div>
 						<span class="error_next_box" id="phoneMsg" aria-live="assertive"></span>
 

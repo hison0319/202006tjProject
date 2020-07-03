@@ -1,15 +1,65 @@
 window.addEventListener("DOMContentLoaded",function(){
 	//정규식
 	var empJ = /\s/g; //공백체크
-	var memberIdPattern = /^[a-z | A-Z]{3,6}[0-9]{3,6}$/;
-	var passwordPattern = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
-	var emailPattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-	var phonePattern =  /^\d{2,3}\d{3,4}\d{4}$/;
+	var memberIdPattern = /^[A-Za-z]{2,15}[0-9]{1,15}$/;
+	//숫자 1회 이상, 영문 2개 이상 사용하여 2자리 이상 총 15자리 이하 입력, 특수문자 사용 불가
+	var passwordPattern = /(?=.*\d{1,15})(?=.*[~`!@#$%\^&*()-+=]{1,15})(?=.*[a-zA-Z]{2,50}).{8,15}$/;
+	//숫자, 특수문자 각 1회 이상, 영문 2개 이상 사용하여 8자리 이상 총 15자리 이하 입력
+	var emailPattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+	var phonePattern =  /^\d{3}\d{3,4}\d{4}$/;
 	
 	var memberIdOk = false;
 	var emailOk = false;
 	var phoneOk = false;
 	
+	$("#memberId").on("change",function() {
+		var memberIdOk = false;
+	});
+	$("#email").on("change",function() {
+		var emailOk = false;
+	});
+	$("#phone").on("change",function() {
+		var phoneOk = false;
+	});
+	
+//입력 할 때
+	$("#memberId").on("focusout",function(){
+		//아이디 유효성 검사
+		if (!memberIdPattern.test($("#memberId").val())) {
+			document.querySelector("#idMsg").innerText = "아이디를 형식에 맞게 입력해주세요.\n(숫자 1회 이상, 영문 2회 이상 입력, 특수문자 사용 불가)";
+				return false;
+		}
+	});	
+	$("#password").on("focusout",function(){
+		//비밀번호 유효성 검사
+		if (!passwordPattern.test($("#password").val())) {
+	    	document.querySelector("#pwMsg").innerText = "비밀번호 형식에 맞게 입력해주세요.\n(숫자, 특수문자 각 1회 이상, 영문 2회 이상 입력)";
+	       return false;
+	    }
+	});	
+	$("#passwordCheck").on("focusout",function(){
+		//비밀번호 확인 유효성 검사
+		if (!passwordPattern.test($("#passwordCheck").val())) {
+	    	document.querySelector("#pwCheckMsg").innerText = "비밀번호 형식에 맞게 입력해주세요.";
+	       return false;
+	    }
+	});	
+	$("#email").on("focusout",function(){
+		//이메일 유효성 검사
+		if (!emailPattern.test($("#email").val())) {
+	    	document.querySelector("#emailMsg").innerText = "이메일 형식에 맞게 입력해주세요.";
+	       return false;
+	    }
+	});
+	$("#phone").on("focusout",function(){
+		//전화번호 유효성 검사
+		if (!phonePattern.test($("#phone").val())) {
+			document.querySelector("#phoneMsg").innerText = "전화번호 형식에 맞게 입력해주세요.";
+			return false;
+		}
+	});
+	
+//입력 완료 했을 때
 	$("#memberId").on("keyup", function(){
 		if($("#memberId").val() != ""){
 			document.querySelector("#idMsg").innerText = "사용 가능한 아이디인지 확인받으세요.";
@@ -50,33 +100,22 @@ window.addEventListener("DOMContentLoaded",function(){
 			document.querySelector("#phoneMsg").innerText = "필수 정보입니다.";
 		}
 	});
-	
-	
-	$("#memberId").on("change",function() {
-		var memberIdOk = false;
-	});
-	$("#email").on("change",function() {
-		var emailOk = false;
-	});
-	$("#phone").on("change",function() {
-		var phoneOk = false;
-	});
-	
-	
+		
+//중복 확인 버튼 눌렀을 때
 	$("#id_check").on("click",function(){
-		//아이디 공백확인
+		//아이디 공백확인 
 		if ($("#memberId").val() == "") {
 			document.querySelector("#idMsg").innerText = "아이디를 입력해주세요.";
 			$("#memberId").focus();
 			return false;
 		}
-		//아이디의 유효성 검사
-		if (!memberIdPattern.test($("#memberId").val())) {
-			document.querySelector("#idMsg").innerText = "아이디를 형식에 맞게 입력해주세요.";
-			$("#memberId").val("");
+		//아이디 유효성 검사
+		else if (!memberIdPattern.test($("#memberId").val())) {
+			document.querySelector("#idMsg").innerText = "아이디를 형식에 맞게 입력해주세요.\n(숫자 1회 이상, 영문 2회 이상 입력, 특수문자 사용 불가)";
 			$("#memberId").focus();
 			return false;
 		}
+		//아이디 중복 확인 
 		let formData = $("#memberId").serialize();
 		$.ajax({
 			url:"/signup/confirmMemberId",
@@ -93,23 +132,6 @@ window.addEventListener("DOMContentLoaded",function(){
 		})
 		return false;
 	});
-	
-	$("#pw_check").on("click",function(){
-		//비밀번호 공백확인
-		if ($("#password").val() == "") {
-			document.querySelector("#pwMsg").innerText = "비밀번호를 입력해주세요.";
-			$("#password").focus();
-			return false;
-		}
-		//비밀번호 유효성 검사
-		if (!memberIdPattern.test($("#password").val())) {
-			document.querySelector("#pwMsg").innerText = "비밀번호 형식에 맞게 입력해주세요.";
-			$("#password").val("");
-			$("#password").focus();
-			return false;
-		}
-	});
-	
 	$("#email_check").on("click",function(){
 		//이메일 공백 확인
 	    if ($("#email").val() == "") {
@@ -120,10 +142,10 @@ window.addEventListener("DOMContentLoaded",function(){
 	    //이메일 유효성 검사
 	    if (!emailPattern.test($("#email").val())) {
 	    	document.querySelector("#emailMsg").innerText = "이메일 형식에 맞게 입력해주세요.";
-	       $("#email").val("");
 	       $("#email").focus();
 	       return false;
 	      }
+	    //이메일 중복 확인 
 		let formData = $("#email").serialize();
 		$.ajax({
 			url:"/signup/confirmEmail",
@@ -140,7 +162,6 @@ window.addEventListener("DOMContentLoaded",function(){
 		})
 		return false;
 	});
-	
 	$("#phone_check").on("click",function(){
 		//전화번호 공백 확인
 	    if ($("#phone").val() == "") {
@@ -151,10 +172,10 @@ window.addEventListener("DOMContentLoaded",function(){
 	      //전화번호 유효성 검사
 	      if (!phonePattern.test($("#phone").val())) {
 	    	  document.querySelector("#phoneMsg").innerText = "전화번호 형식에 맞게 입력해주세요.";
-	          $("#phone").val("");
 	          $("#phone").focus();
 	          return false;
 	      }
+	    //전화번호 중복 확인 
 		let formData = $("#phone").serialize();
 		$.ajax({
 			url:"/signup/confirmPhone",
@@ -172,6 +193,7 @@ window.addEventListener("DOMContentLoaded",function(){
 		return false;
 	});
 	
+	//회원가입 버튼 눌렀을 때
 	$("form").on("submit",function(){
 	    //아이디 공백확인
 	    if ($("#memberId").val() == "") {
@@ -181,8 +203,7 @@ window.addEventListener("DOMContentLoaded",function(){
 	      }
 	    //아이디의 유효성 검사
 	    if (!memberIdPattern.test($("#memberId").val())) {
-	    	document.querySelector("#idMsg").innerText = "아이디 형식에 맞게 입력해주세요.";
-	       $("#memberId").val("");
+	    	document.querySelector("#idMsg").innerText = "아이디를 형식에 맞게 입력해주세요.";
 	       $("#memberId").focus();
 	       return false;
 	      }
@@ -195,7 +216,6 @@ window.addEventListener("DOMContentLoaded",function(){
 	    //비밀번호 유효성 검사
 	    if (!passwordPattern.test($("#password").val())) {
 	    	document.querySelector("#pwMsg").innerText = "비밀번호 형식에 맞게 입력해주세요.";
-	       $("#password").val("");
 	       $("#password").focus();
 	       return false;
 	      }
@@ -221,8 +241,7 @@ window.addEventListener("DOMContentLoaded",function(){
 	      }
 	    //이메일 유효성 검사
 	    if (!emailPattern.test($("#email").val())) {
-	    	document.querySelector("#emailMsg").innerText = "이메일 형식에 맞게 입력해주세요.";
-	       $("#email").val("");
+	    	document.querySelector("#emailMsg").innerText = "이메일형식에 맞게 입력해주세요.";
 	       $("#email").focus();
 	       return false;
 	      }
@@ -235,20 +254,23 @@ window.addEventListener("DOMContentLoaded",function(){
 	      //전화번호 유효성 검사
 	      if (!phonePattern.test($("#phone").val())) {
 	    	  document.querySelector("#phoneMsg").innerText = "전화번호 형식에 맞게 입력해주세요.";
-	          $("#phone").val("");
 	          $("#phone").focus();
 	          return false;
 	      }
+//중복 확인 안했을 때
 	    if (!memberIdOk) {
-	    	document.querySelector("#idMsg").innerText = "사용 가능한 아이디인지 확인받으세요.";
+			document.querySelector("#idMsg").innerText = "사용 가능한 아이디인지 확인받으세요.";
+			$("#memberId").focus();
 		  	return false;
 		   }
 	    if (!emailOk) {
-	    	document.querySelector("#emailMsg").innerText = "사용 가능한 이메일인지 확인받으세요.";
+			document.querySelector("#emailMsg").innerText = "사용 가능한 이메일인지 확인받으세요.";
+			$("#email").focus();
 	    	return false;
 	    }
 	    if (!phoneOk) {
-	    	document.querySelector("#phoneMsg").innerText = "사용 가능한 전화번호인지 확인받으세요.";
+			document.querySelector("#phoneMsg").innerText = "사용 가능한 전화번호인지 확인받으세요.";
+			$("#phone").focus();
 	    	return false;
 	    }
 	    var address = $("#sample4_postcode").val()+"/"+$("#sample4_roadAddress").val()+"/"+$("#sample4_jibunAddress").val()+"/"+$("#sample4_detailAddress").val()+"/"+$("#sample4_extraAddress").val();

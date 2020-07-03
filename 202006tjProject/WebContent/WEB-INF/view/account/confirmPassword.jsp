@@ -16,6 +16,7 @@
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="/css/main.css" />
+     <link rel="stylesheet" href="/css/signup.css" />
     <script src="/js/account/confirmPassword.js"></script>
 </head>
 
@@ -56,10 +57,16 @@
     <section class="wrapper major-pad">
         <div class="inner">
             <div class="center_position">
-            	<h3>비밀번호 재확인</h3>
+            	<p><b>비밀번호 재확인</b></p>
             	<form>
-            		<input type="password" name="passwordC" value="" placeholder="비밀번호를 다시 작성해 주세요.">
-            		<input type="submit" value="제출">
+            	<div class="row gtr-uniform">
+					<div class="col-6 col-12-xsmall">
+            			<input type="password" name="password" value="" placeholder="비밀번호를 다시 작성해 주세요.">
+            			<span class="check_pw error_next_box" id="pwMsg" aria-live="assertive"></span>
+						<br>
+            			<input type="submit" class="button primary" value="입력">
+            		</div>
+            	</div>
             	</form>
             </div>
         </div>

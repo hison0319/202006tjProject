@@ -7,10 +7,10 @@ window.addEventListener("DOMContentLoaded",function(){
 			data : formData,
 			success : function(data) {
 				if (data == "") {
-					console.log(data);
-					alert("이메일 오류");
+					document.querySelector("#foundpw").innerText="존재하지 않는 이메일 또는 아이디 입니다.";
+					/*alert("존재하지 않는 이메일 또는 아이디 입니다.");*/
 				} else {
-					location.href = "complete";
+					document.querySelector("#foundpw").innerText=data;
 				}
 			}
 		})

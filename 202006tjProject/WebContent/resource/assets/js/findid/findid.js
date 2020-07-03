@@ -8,8 +8,8 @@ window.addEventListener("DOMContentLoaded",function(){
 			dataType:"text",
 			success : function(data) {
 				if (data == "") {
-					document.querySelector("#foundid").innerText=data;
-					alert("이메일과 일치하는 아이디가 없습니다.");
+					document.querySelector("#foundid").innerText= "이메일과 일치하는 아이디가 없습니다.";
+					/*alert("이메일과 일치하는 아이디가 없습니다.");*/
 				} else {
 					document.querySelector("#foundid").innerText=data;
 				}

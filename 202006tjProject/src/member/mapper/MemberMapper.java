@@ -36,6 +36,9 @@ public interface MemberMapper {
 	//아이디 찾기용 이메일 조회
 	public String selectMemberIdByEmail(@Param("email")String email);
 	
+	//비밀번호 찾기용 아이디 이메일 조회
+	public String selectMemberPwByIDEmail(@Param("memberId")String memberId, @Param("email")String email);
+	
 	//API 로그인용 아이디찾기
 	public List<MemberDto> selectMemberByMemberIdforApi(@Param("memberId")String memberId);
 }

@@ -81,6 +81,11 @@ public class MemberService {
 	public String selectMemberIdByEmail(String email) {
 		return memberMapper.selectMemberIdByEmail(email);
 	}
+	
+	// 아이디, 이메일로 비밀번호 찾기
+	public String selectMemberPwByIDEmail(String memberId, String email) {
+		return memberMapper.selectMemberPwByIDEmail(memberId, email);
+	}
 
 	// API 로그인용 아이디찾기
 	public MemberDto selectMemberByMemberIdforApi(String memberId) throws IndexOutOfBoundsException {

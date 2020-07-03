@@ -59,14 +59,21 @@
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
 						<div class="find_sub">
+							<input type="text" id="memberId" name="memberId" value="" placeholder="ID">
+							<br>
 							<input type="email" id="email" name="email"
 								value="" placeholder="EMAIL">
 						</div>
 						<br>
 						<div class="find_btn_box actions stacked">
-							<input type="submit" style="width: 100%;" value="비밀번호 찾기"
-								class="button primary fit">
+						<ul class="actions stacked">
+								<li><input type="submit" style="width: 100%;" value="비밀번호 찾기" class="button small fit"></li>
+								<li><a href="${pageContext.request.contextPath}/findid/form" class="button small fit">아이디 찾기</a></li>
+								<li><a href="${pageContext.request.contextPath}/login/form" class="button primary fit">로그인</a></li>
+							</ul>
 						</div>
+						<br>
+						<span id="foundpw" aria-live="assertive"></span>
 					</div>
 				</div>
 			</form>

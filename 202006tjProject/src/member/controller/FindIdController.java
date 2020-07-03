@@ -1,10 +1,5 @@
 package member.controller;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +33,9 @@ public class FindIdController {
 			return "";
 		}  //이메일 틀릴 경우
 		
-		String loginMember = memberService.selectMemberIdByEmail(email);  //로그인 한 멤버의 이메일 가져옴
-		System.out.println(loginMember);
-		return loginMember;
+		String loginMemberId = memberService.selectMemberIdByEmail(email);  //로그인 한 멤버의 이메일 가져옴
+		System.out.println(loginMemberId);
+		return loginMemberId;
 		
 	}
 	
