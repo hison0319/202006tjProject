@@ -1,4 +1,18 @@
 $(function(){
+	var sortJSON = function(data, key, type) {
+  if (type == undefined) {
+    type = "asc";
+  }
+  return data.sort(function(a, b) {
+    var x = a[key];
+    var y = b[key];
+    if (type == "desc") {
+      return x > y ? -1 : x < y ? 1 : 0;
+    } else if (type == "asc") {
+      return x < y ? -1 : x > y ? 1 : 0;
+    }
+  });
+};
 	$.ajax({
 		type:"post",
 		url:"getwords",
@@ -18,8 +32,9 @@ $(function(){
 				location.href="../";
 			}
 			else {
+				console.log(sortJSON(data,"count","desc"));
 				for(let i = 0; i < data.length ; i++){
-					$("ul#words").eq(0).append("<li>"+data[i].word + ":" + data[i].trans+"</li>");
+					$("ul#words").eq(0).append("<li>"+data[i].word + ":" + data[i].trans + ":" + data[i].count + "</li>");
 				}
 			}
 		},
