@@ -49,7 +49,7 @@ public class WordbookController {
 	WordbookService wordbookService;
 	//단어장 목록 조회 기능
 	@RequestMapping("showlist")
-	public String wordbookListShow(HttpSession session) {
+	public String wordbookListShow(HttpSession session) {  //세션 모델
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 		if (loginMember == null) {
 			session.setAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
@@ -141,6 +141,9 @@ public class WordbookController {
 			Map<String, String> requestHeaders = new HashMap<>();
 			requestHeaders.put("X-Naver-Client-Id", clientId);
 			requestHeaders.put("X-Naver-Client-Secret", clientSecret);
+			String tempEng;
+			int tempCnt;
+			String tempTrans;
 			if (file != null) {
 				String fileExtension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
 				if (fileExtension.equals("txt")) {
@@ -154,7 +157,7 @@ public class WordbookController {
 						fileText = fileText.replaceAll(regex, " ");
 						String[] textArr = fileText.split("\\s");  //" " 에서 변경
 						String word;
-						int count;
+						int[] count = new int[textArr.length];
 						String[] responseBody = new String[textArr.length];
 						for (int i = 0; i < textArr.length; i++) {
 							if(textArr[i]!=null && textArr[i].length() >1) {
@@ -163,20 +166,42 @@ public class WordbookController {
 								} catch (UnsupportedEncodingException e) {
 									throw new RuntimeException("인코딩 실패", e);
 								}
-								count=1;
+								count[i]=1;
 								for (int j = i+1; j < textArr.length; j++) {
 									if(textArr[j]!=null && textArr[j].equals(textArr[i])) {
 										textArr[j]=null;
-										count++;
+										count[i]++;
 									}
 								}
 								responseBody[i] = post(apiURL, requestHeaders, word);
+							}
+							else {
+								count[i] = 0;
+							}
+						}
+						for (int i = 0; i < textArr.length; i++) {
+							for (int j = 0; j < textArr.length-1-i ; j++) {
+								if(count[j]<count[j+1]) {
+									tempEng=textArr[j];
+									textArr[j]=textArr[j+1];
+									textArr[j+1]=tempEng;
+									tempCnt=count[j];
+									count[j]=count[j+1];
+									count[j+1]=tempCnt;
+									tempTrans=responseBody[j];
+									responseBody[j]=responseBody[j+1];
+									responseBody[j+1]=tempTrans;
+								}
+							}
+						}
+						for(int i = 0; i < textArr.length; i++) {
+							if(textArr[i]!=null && textArr[i].length() >1) {
 								try {
 									JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
 									JSONObject message = (JSONObject) resultJson.get("message");
 									JSONObject result = (JSONObject) message.get("result");
 									if(!textArr[i].equals(result.get("translatedText"))) {
-										jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\",\"count\":"+count+"},";
+										jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\",\"count\":"+count[i]+"},";
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -212,7 +237,7 @@ public class WordbookController {
 					text = text.replaceAll(regex, " ");
 					String[] textArr = text.split(" ");
 					String word;
-					int count;
+					int[] count = new int[textArr.length];
 					String[] responseBody = new String[textArr.length];
 					for (int i = 0; i < textArr.length; i++) {
 						if(textArr[i]!=null && textArr[i].length() >1) {
@@ -221,20 +246,43 @@ public class WordbookController {
 							} catch (UnsupportedEncodingException e) {
 								throw new RuntimeException("인코딩 실패", e);
 							}
-							count=1;
+							count[i]=1;
 							for (int j = i+1; j < textArr.length; j++) {
 								if(textArr[j]!=null && textArr[j].equals(textArr[i])) {
 									textArr[j]=null;
-									count++;
+									count[i]++;
 								}
 							}
 							responseBody[i] = post(apiURL, requestHeaders, word);
+						}
+						else {
+							count[i] = 0;
+						}
+					}
+					
+					for (int i = 0; i < textArr.length; i++) {
+						for (int j = 0; j < textArr.length-1-i ; j++) {
+							if(count[j]<count[j+1]) {
+								tempEng=textArr[j];
+								textArr[j]=textArr[j+1];
+								textArr[j+1]=tempEng;
+								tempCnt=count[j];
+								count[j]=count[j+1];
+								count[j+1]=tempCnt;
+								tempTrans=responseBody[j];
+								responseBody[j]=responseBody[j+1];
+								responseBody[j+1]=tempTrans;
+							}
+						}
+					}
+					for(int i = 0; i < textArr.length; i++) {
+						if(textArr[i]!=null && textArr[i].length() >1) {
 							try {
 								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
 								JSONObject message = (JSONObject) resultJson.get("message");
 								JSONObject result = (JSONObject) message.get("result");
 								if(!textArr[i].equals(result.get("translatedText"))) {
-									jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\",\"count\":"+count+"},";
+									jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\",\"count\":"+count[i]+"},";
 								}
 							} catch (Exception e) {
 								e.printStackTrace();

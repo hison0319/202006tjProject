@@ -1,18 +1,38 @@
-$(function(){
-	var sortJSON = function(data, key, type) {
-  if (type == undefined) {
-    type = "asc";
-  }
-  return data.sort(function(a, b) {
-    var x = a[key];
-    var y = b[key];
-    if (type == "desc") {
-      return x > y ? -1 : x < y ? 1 : 0;
-    } else if (type == "asc") {
-      return x < y ? -1 : x > y ? 1 : 0;
-    }
-  });
-};
+/*var sortJSON = function(data, key, type) {
+	if (type == undefined) {
+		type = "asc";
+	}
+	return data.sort(function(a, b) {
+		var x = a[key];
+		var y = b[key];
+		if (type == "desc") {
+			return x > y ? -1 : x < y ? 1 : 0;
+		} else if (type == "asc") {
+			return x < y ? -1 : x > y ? 1 : 0;
+		}
+	});
+};*/  //카운트 순서대로 배열
+
+/*function getListFilter (data, key, value) {
+if (data.TYPE == "S") {
+
+return data.KK_LIST.filter (function (object) {
+
+return object[key] === value;
+
+});
+
+} else {
+
+alert(data.MESSAGE);
+
+return "";
+
+}
+
+};*/  //값으로 json 접근
+	
+window.addEventListener("DOMContentLoaded", function(){
 	$.ajax({
 		type:"post",
 		url:"getwords",
@@ -32,9 +52,12 @@ $(function(){
 				location.href="../";
 			}
 			else {
-				console.log(sortJSON(data,"count","desc"));
+				//console.log(sortJSON(data,"count","desc"));
 				for(let i = 0; i < data.length ; i++){
-					$("ul#words").eq(0).append("<li>"+data[i].word + ":" + data[i].trans + ":" + data[i].count + "</li>");
+					$("ul#words").eq(0).append("<li><input id='word"+i+"' type='text' disabled='disabled' value='"
+					+data[i].word + "' /><input id='trans"+i+"' type='text' disabled='disabled' value='" 
+					+ data[i].trans + "' /><input id='count"+i+"' type='text' disabled='disabled' value='"
+					+ data[i].count + "' /></li>");
 				}
 			}
 		},

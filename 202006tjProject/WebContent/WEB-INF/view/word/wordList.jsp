@@ -57,8 +57,11 @@
 			<div>단어 게시판</div>
 			<div>중요도 정렬방식(순서, 중요도, 셔플) 검색 삭제 삽입 한줄수정-> 비동기</div>
 			<div>전체수정 -> 동기</div>
-			<ul id="words">
-			</ul>
+			<form action="#" method="post">
+				<ul id="words">
+				</ul>
+				<button id="modify">수정</button>
+			</form>
         </div>
     </section>
 
@@ -89,7 +92,8 @@
     <script src="/js/breakpoints.min.js"></script>
     <script src="/js/util.js"></script>
     <script src="/js/main.js"></script>
-    <script src="/js/word/wordAjax.js"></script>
+    <script src="/js/word/wordAjax.js?v=<%=System.currentTimeMillis()%>"></script>
+    <script src="/js/word/wordUpdate.js?v=<%=System.currentTimeMillis()%>"></script>
 
 </body>
 
