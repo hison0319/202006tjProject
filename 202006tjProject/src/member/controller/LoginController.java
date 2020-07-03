@@ -49,20 +49,6 @@ public class LoginController {
 		}
 	}
 	
-//	@ResponseBody
-//	@PostMapping("googlelogin")
-//	public String googleLogin(String googleId, String googleName, @RequestParam(required = false)String googleEmail) {
-//		System.out.println(googleId);
-//		System.out.println(googleName);
-//		if(googleEmail!=null) {
-//			System.out.println(googleEmail);
-//			return "{\"googleId\":\""+googleId+"\",\"googleName\":\""+googleName+"\",\"googleEmail\":\""+googleEmail+"\"}";
-//		}
-//		else {
-//			return "{\"googleId\":\""+googleId+"\",\"googleName\":\""+googleName+"\"}";
-//		}
-//	}
-	
 	@GetMapping("complete")
 	public String complete() {
 		return "member/loginComplete";
