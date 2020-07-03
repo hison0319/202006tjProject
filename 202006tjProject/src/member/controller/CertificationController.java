@@ -28,7 +28,7 @@ public class CertificationController {
 	public String getCertify(HttpSession session) {
 		MemberDto member = (MemberDto) session.getAttribute("loginMember");
 		try {
-			mailService.create(session, member);
+			mailService.certifySendMail(session, member);
 		} catch (Exception e) {
 			return "f";
 		}

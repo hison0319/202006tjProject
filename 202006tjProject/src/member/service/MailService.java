@@ -16,7 +16,8 @@ public class MailService {
 	JavaMailSender mailSender;
 	@Autowired
 	MemberService memberService;
-	public void create(HttpSession session, MemberDto member) throws Exception{
+	
+	public void certifySendMail(HttpSession session, MemberDto member) throws Exception{
 		String certifyKey = new TempKey().getKey(5); //인증키 생성
 		MailHandler sendMail = new MailHandler(mailSender);
 		session.setAttribute("key", certifyKey); //세션에 인증키 저장
@@ -41,5 +42,23 @@ public class MailService {
 		} else {
 			return false;
 		}
+	}
+	
+	public void findPwSendMail(String memberId, String email) throws Exception{
+		String newPw = new TempKey().getKey(5); //인증키 생성
+		MemberDto member = memberService.selectMemberInfoByIDEmail(memberId, email);
+		System.out.println(member);
+		member.setPassword(newPw);
+		memberService.updateMember(member);
+		MailHandler sendMail = new MailHandler(mailSender);
+		sendMail.setSubject("단어장 패스워드 메일입니다.");
+		sendMail.setText(
+				"<h2>메일인증</h2>"+
+				"<a href='http://localhost:8080/login/form"+
+				"' target='_blenk'>로그인 하러 가기</a>"+"<br>"+
+				"<p>귀하의 비밀 번호는 "+newPw+" 입니다.</p>");
+		sendMail.setFrom("hison0319test@gmail.com","단어장");
+		sendMail.setTo(member.getEmail());
+		sendMail.send();		
 	}
 }

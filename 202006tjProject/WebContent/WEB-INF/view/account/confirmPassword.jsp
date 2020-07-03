@@ -17,7 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="/css/main.css" />
      <link rel="stylesheet" href="/css/signup.css" />
-    <script src="/js/account/confirmPassword.js"></script>
+    <script src="/js/account/confirmPassword.js?v=<%=System.currentTimeMillis() %>"></script>
 </head>
 
 <body class="is-preload">
@@ -61,7 +61,7 @@
             	<form>
             	<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
-            			<input type="password" name="password" value="" placeholder="비밀번호를 다시 작성해 주세요.">
+            			<input type="password" name="passwordC" value="" placeholder="비밀번호를 다시 작성해 주세요.">
             			<span class="check_pw error_next_box" id="pwMsg" aria-live="assertive"></span>
 						<br>
             			<input type="submit" class="button primary" value="입력">

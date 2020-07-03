@@ -41,10 +41,11 @@
 	<delete id="deleteMember">
 		delete from member where id=#{id}
 	</delete>
+	<!-- 아이디, 패스워드 찾기 -->
 	<select id="selectMemberIdByEmail" resultType="String">
 		select member_id from member where email=#{email}
 	</select>
-	<select id="selectMemberPwByIDEmail" resultType="String">
-		select password from member where member_id=#{memberId} AND email=#{email}
+	<select id="selectMemberInfoByIDEmail" resultType="member">
+		select id,member_id,password,email,phone,address,reg_date,certified from member where member_id=#{memberId} AND email=#{email}
 	</select>
 </mapper>

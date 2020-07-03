@@ -100,6 +100,7 @@ public class ForAPILoginController {
 		MemberDto memberKakao;
 		try {
 			memberKakao = memberService.selectMemberByMemberIdforApi(id);
+			memberKakao.setMemberId(name+"(kakao)");
 			session.setAttribute("loginMember", memberKakao);
 			session.setAttribute("access_token", accessToken);
 			return "/hosting";
@@ -138,10 +139,6 @@ public class ForAPILoginController {
 		} else {
 			return "f";
 		}
-	}
-	@GetMapping("")
-	public String getAPISingup() {
-		return "";
 	}
 	
 	@PostMapping("forAPISignup")

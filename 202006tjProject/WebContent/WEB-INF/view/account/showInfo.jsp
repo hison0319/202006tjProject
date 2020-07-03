@@ -15,7 +15,7 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<script src="/js/account/info.js"></script>
+<script src="/js/account/info.js?v=<%=System.currentTimeMillis() %>"></script>
 <link rel="stylesheet" href="/css/main.css" />
 </head>
 
@@ -60,8 +60,9 @@
 				<ul class="alt">
 					<li>내 정보 보기(활성화 시 글씨 진하게)</li>
 					<li>공유목록 보기</li>
-					<li><button type="button" class="button" onclick="btnModify()">내 정보
-				수정하기</button></li>
+					<li><button type="button" class="button" onclick="btnModify('${sessionScope.loginMember.memberId}')">내 정보
+            수정하기</button>.</li>
+
 				</ul>
 			</div>
 		</div>

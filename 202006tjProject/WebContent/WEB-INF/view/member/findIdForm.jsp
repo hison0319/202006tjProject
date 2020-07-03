@@ -66,8 +66,8 @@
 						<div class="find_btn_box actions stacked">
 							<ul class="actions stacked">
 								<li><input type="submit" style="width: 100%;" value="아이디 찾기" class="button small fit"></li>
-								<li><a href="${pageContext.request.contextPath}/findpw/form" class="button small fit">비밀번호 찾기</a></li>
-								<li><a href="${pageContext.request.contextPath}/login/form" class="button primary fit">로그인</a></li>
+								<li><a href="${pageContext.request.contextPath}/findpw/form" class="button small fit">비밀번호 찾기로 이동</a></li>
+								<li><a href="${pageContext.request.contextPath}/login/form" class="button primary fit">로그인으로 이동</a></li>
 							</ul>
 						</div>
 						<br>

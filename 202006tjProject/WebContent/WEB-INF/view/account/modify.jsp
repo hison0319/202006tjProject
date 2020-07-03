@@ -59,8 +59,8 @@
 			<form name="updateForm" action="update" method="post">
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
-						<input type="text" name="id" value="${sessionScope.loginMember.id}" class="skip" readonly="readonly"/>
-						<input type="text" name="memberId" value="${sessionScope.loginMember.memberId}" class="skip" readonly="readonly"/>					
+						<input type="hidden" name="id" value="${sessionScope.loginMember.id}" readonly="readonly"/>
+						<input type="text" name="memberId" value="${sessionScope.loginMember.memberId}" readonly="readonly"/>					
 						<div class="signup_pw">비밀번호
 						<br>
 							<input type="password" id="password" name="password" value="" maxlength="15" placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합">
