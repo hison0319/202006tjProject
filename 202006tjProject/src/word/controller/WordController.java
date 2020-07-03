@@ -51,8 +51,8 @@ public class WordController {
 		int loginId;
 		try{
 			loginMember = (MemberDto) session.getAttribute("loginMember");
-			loginId = loginMember.getId();
-		} catch (NullPointerException e) {
+			loginId = loginMember.getId();  //로그인 아이디 확인
+		} catch (NullPointerException e) {  //비로그인 상태
 			e.printStackTrace();
 			return "{\"nope\":\"loginPlease\"}";
 		}
@@ -94,7 +94,7 @@ public class WordController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} 
-		} catch (NullPointerException e) {
+		} catch (NullPointerException e) {  //존재하지 않는 단어장
 			e.printStackTrace();
 			return "{\"nope\":\"notExist\"}";
 		}
