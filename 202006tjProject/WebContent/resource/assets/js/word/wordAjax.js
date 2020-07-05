@@ -53,12 +53,16 @@ window.addEventListener("DOMContentLoaded", function(){
 			}
 			else {
 				//console.log(sortJSON(data,"count","desc"));
-				for(let i = 0; i < data.length ; i++){
-					$("ul#words").eq(0).append("<li><input id='word"+i+"' type='text' disabled='disabled' value='"
-					+data[i].word + "' /><input id='trans"+i+"' type='text' disabled='disabled' value='" 
-					+ data[i].trans + "' /><input id='count"+i+"' type='text' disabled='disabled' value='"
-					+ data[i].count + "' /></li>");
+				for(let i = data.length-1; i >= 0 ; i--){
+					$("table").eq(0).prepend("<tr><td><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
+					+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
+					+ data[i].trans + "' /></td></tr>");
+					/*$("form").eq(0).prepend("<input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
+					+data[i].word + "' /><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
+					+ data[i].trans + "' /><input name='count' id='count"+i+"' type='number' disabled='disabled' value='"
+					+ data[i].count + "' /><br/>");*/
 				}
+				$.getScript("/js/word/wordUpdate.js?v=<%=System.currentTimeMillis()%>");
 			}
 		},
 		error:function(request,status,error){
