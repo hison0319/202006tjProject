@@ -15,7 +15,6 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<script src="/js/signup/forAPISignup.js" src="/scripts/amcharts/serial.js?v=<%=System.currentTimeMillis() %>"></script>
 <link rel="stylesheet" href="/css/signup.css" />
 </head>
 
@@ -374,7 +373,8 @@
 	<script src="/js/breakpoints.min.js"></script>
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
-
+	<script src="/js/signup/forAPISignup.js?v=<%=System.currentTimeMillis() %>"></script>
+	
 </body>
 
 </html>

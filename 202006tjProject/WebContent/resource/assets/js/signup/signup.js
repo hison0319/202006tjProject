@@ -273,6 +273,7 @@ window.addEventListener("DOMContentLoaded",function(){
 			$("#phone").focus();
 	    	return false;
 	    }
+	    //주소 옮기기
 	    var address = $("#sample4_postcode").val()+"/"+$("#sample4_roadAddress").val()+"/"+$("#sample4_jibunAddress").val()+"/"+$("#sample4_detailAddress").val()+"/"+$("#sample4_extraAddress").val();
 	    $("#address").val(address);
 	});
