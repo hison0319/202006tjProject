@@ -93,9 +93,9 @@
 									<ol>
 										<li>
 											<form action="showlist" method="post">
-											<div>
+											<div style="height:50px;">
 												<a href="#">소유자 :&nbsp;<span class="postId">${l.ownerId }</span></a>
-												<div class="postDate">&nbsp;&nbsp;&nbsp;
+												<div class="postDate" style="height:50px;">&nbsp;&nbsp;&nbsp;
 													<c:choose>
 														<c:when test="${l.uDate==null }">
 															등록일&nbsp;:&nbsp;${l.regDate }
@@ -115,21 +115,21 @@
 											<li style="height:50px;">
 												<c:choose>
 													<c:when test="${l.favorite==0 }">
-														중요&nbsp;<button class="favorite${i.index }"><span class="icon far fa-star" style="color:#cc0"></span></button>
+														중요&nbsp;<button class="favorite${i.index }" style="box-shadow: none; border:none;"><span class="icon far fa-star" style="font-size:1.5em; color:#cc0"></span></button>
 													</c:when>
 													<c:otherwise>
-														중요&nbsp;<button class="favorite${i.index }"><span class="icon far fa-star" style="color:#cc0"></span></button>
+														중요&nbsp;<button class="favorite${i.index }" style="box-shadow: none; border:none;"><span class="icon far fa-star" style="font-size:1.5em; color:#cc0"></span></button>
 													</c:otherwise>
 												</c:choose>
 												</li>
 												<li style="height:50px;">
 												<c:choose>
 													<c:when test="${l.shared==0 }">
-														공유하기&nbsp;<button class="sharing${i.index }"><span class="icon far fa-share-alt"></span></button>
+														공유하기&nbsp;<button class="sharing${i.index }" style="box-shadow: none; border:none;"><span class="icon far fa-share-alt" style="font-size:1.5em;"></span></button>
 													</c:when>
 													<c:otherwise>
-														키복사/&nbsp;공유끝&nbsp;<button class="getkey${i.index }"><span class="icon far fa-creative-commons-share"></span></button>
-														<button class="sharing${i.index }"><span class="icon far fa-share-alt-square"></span></button>
+														키복사/&nbsp;공유끝&nbsp;<button class="getkey${i.index }" style="box-shadow: none; border:none;"><span class="icon fas fa-key" style="font-size:1.5em;"></span></button>
+														<button class="sharing${i.index }" style="box-shadow: none; border:none;"><span class="icon far fa-share-alt-square" style="font-size:2em;"></span></button>
 													</c:otherwise>
 												</c:choose>
 											
