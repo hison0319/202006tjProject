@@ -1,28 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE HTML>
 
 <html>
 
 <head>
-    <title>wordbookList</title>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="keywords" content="단어장" />
-    <meta name="description" content="basic" />
-    <meta name="author" content="HaniSon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="/css/main.css" />
+<title>wordbookList</title>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="keywords" content="단어장" />
+<meta name="description" content="basic" />
+<meta name="author" content="HaniSon" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet"
+	href="/css/main_wordbookList.css?v=<%=System.currentTimeMillis()%>" />
 </head>
 
 <body class="is-preload">
 
-    <!-- Header -->
-    <header id="header">
-        <nav id="nav">
-            <ul>
+	<!-- Header -->
+	<header id="header">
+		<nav id="nav">
+			<ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
 				<li><a href="#">단어장</a></li>
 				<li><a
@@ -30,32 +32,125 @@
 				</li>
 				<c:choose>
 					<c:when test="${sessionScope.loginMember == null}">
-						<li style="white-space: nowrap;">
-							<a href="${pageContext.request.contextPath}/login/form" class="button">LogIn</a>
-						</li>
-						<li style="white-space: nowrap;">
-							<a href="${pageContext.request.contextPath}/signup/form" class="button">SignUp</a>
-						</li>
+						<li style="white-space: nowrap;"><a
+							href="${pageContext.request.contextPath}/login/form"
+							class="button">LogIn</a></li>
+						<li style="white-space: nowrap;"><a
+							href="${pageContext.request.contextPath}/signup/form"
+							class="button">SignUp</a></li>
 					</c:when>
 					<c:when test="${sessionScope.loginMember != null}">
-						<li>
-							<a href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
+						<li><a
+							href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
 						</li>
-						<li style="white-space: nowrap;">
-							<a href="${pageContext.request.contextPath}/login/logout" class="button">LogOut</a>
-						</li>
+						<li style="white-space: nowrap;"><a
+							href="${pageContext.request.contextPath}/login/logout"
+							class="button">LogOut</a></li>
 					</c:when>
 				</c:choose>
 			</ul>
-        </nav>
-    </header>
-    
-    <!-- container -->
-    <section class="wrapper major-pad">
-        <div class="inner">
-			<div>단어장 게시판</div>
-			<div>중요도 공개/비공개 정렬방식 검색 삭제 -> 비동기</div>
-			<div>생성 -> 동기</div>
+		</nav>
+	</header>
+
+	<!-- container -->
+	<section class="wrapper style">
+		<div class="inner">
+			<a href="form">
+				<button class="postWirtingBtn icon fas fa-pencil-alt"
+					id="addWordbook" aria-label="단어장 만들기" data-tip="단어장 만들기">
+					단어장 만들기</button>
+			</a>
+			<div class="postTool">
+
+				<form method="post" action="#" name="searchfrm" class="search">
+					<input type="text" class="inputVal" id="searchKeyword"
+						name="Keyword" placeholder="검색어를 입력" />
+					<button class="searchBtn" aria-label="검색" data-tip="검색">
+						<a href="#" class="fas fa-search"></a>
+					</button>
+				</form>
+
+				<div class="array tool">
+					<select name="arraySelect" id="arraySelect">
+						<option value="1">중요단어장</option>
+						<option value="2">최근수정</option>
+						<option value="3">최근등록</option>
+					</select>
+				</div>
+			</div>
+			<c:choose>
+				<c:when test="${loginPlease != null }">
+					<div>${loginPlease }</div>
+				</c:when>
+				<c:when test="${certifyPlease != null }">
+					<div>${certifyPlease }</div>
+				</c:when>
+				<c:otherwise>
+					<div class="posts">
+						<c:forEach items="${list }" var="l" varStatus="i">
+							<section class="post">
+								<div class="content">
+									<ol>
+										<li>
+											<form action="showlist" method="post">
+											<div>
+												<a href="#">소유자 :&nbsp;<span class="postId">${l.ownerId }</span></a>
+												<div class="postDate">&nbsp;&nbsp;&nbsp;
+													<c:choose>
+														<c:when test="${l.uDate==null }">
+															등록일&nbsp;:&nbsp;${l.regDate }
+														</c:when>
+														<c:otherwise>
+															수정일&nbsp;:&nbsp;${l.uDate }														
+														</c:otherwise>
+													</c:choose>
+												</div>
+												<input type="hidden" id="favorite${i.index }"
+													name="wordbookId" value="${l.id }" />
+											</div>
+											<ul>
+											<li style="font-size:1.2em; font-weight:bold; height:50px;">
+												<a href="../word/showlist?wordbookid=${l.id }">${l.title }</a>
+											</li>
+											<li style="height:50px;">
+												<c:choose>
+													<c:when test="${l.favorite==0 }">
+														중요&nbsp;<button class="favorite${i.index }"><span class="icon far fa-star" style="color:#cc0"></span></button>
+													</c:when>
+													<c:otherwise>
+														중요&nbsp;<button class="favorite${i.index }"><span class="icon far fa-star" style="color:#cc0"></span></button>
+													</c:otherwise>
+												</c:choose>
+												</li>
+												<li style="height:50px;">
+												<c:choose>
+													<c:when test="${l.shared==0 }">
+														공유하기&nbsp;<button class="sharing${i.index }"><span class="icon far fa-share-alt"></span></button>
+													</c:when>
+													<c:otherwise>
+														키복사/&nbsp;공유끝&nbsp;<button class="getkey${i.index }"><span class="icon far fa-creative-commons-share"></span></button>
+														<button class="sharing${i.index }"><span class="icon far fa-share-alt-square"></span></button>
+													</c:otherwise>
+												</c:choose>
+											
+											</li>
+											</ul>
+											</form>
+										</li>
+									</ol>
+								</div>
+							</section>
+						</c:forEach>
+					</div>
+				</c:otherwise>
+			</c:choose>
+		</div>
+
+	</section>
+
+	<section class="wrapper major-pad">
+		<div class="inner">
+			<div>혹시 문제 생길까봐 나둡니다!</div>
 			<c:choose>
 				<c:when test="${loginPlease != null }">
 					<div>${loginPlease }</div>
@@ -68,7 +163,8 @@
 						<c:forEach items="${list }" var="l" varStatus="i">
 							<li>
 								<form action="showlist" method="post">
-									<input type="hidden" id="favorite${i.index }" name="wordbookId" value="${l.id }"/>
+									<input type="hidden" id="favorite${i.index }" name="wordbookId"
+										value="${l.id }" />
 									<c:choose>
 										<c:when test="${l.favorite==0 }">
 											<button class="favorite${i.index }">ㅡㅅㅡ</button>
@@ -86,47 +182,45 @@
 											<button class="sharing${i.index }">공유 끝</button>
 										</c:otherwise>
 									</c:choose>
-									<a href="../word/showlist?wordbookid=${l.id }" >${l.title }</a>
+									<a href="../word/showlist?wordbookid=${l.id }">${l.title }</a>
 								</form>
 							</li>
 						</c:forEach>
 					</ol>
 				</c:otherwise>
 			</c:choose>
-        </div>
-        <hr />
-       <a href="form"><button id="addWordbook">단어장 추가</button></a>
-    </section>
+		</div>
+		<hr />
 
-    <section class="wrapper style">
-        <div class="inner"></div>
-    </section>
+	</section>
 
 
-    <!-- Footer -->
-    <footer id="footer">
-        <div class="inner">
-            <div class="aboutUsSub"><strong>단어장<br /></strong>
-                <p>단어장을 만들어 사용하세요.</p>
-            </div>
-            <p class="copyright">&copy; Untitled eunji yoonseon hani. All rights reserved. </p>
-            <ul class="menu">
-                <li><a href="#">이용약관</a></li>
-                <li><a href="#">사이트 정책</a></li>
-            </ul>
-        </div>
-    </footer>
+	<!-- Footer -->
+	<footer id="footer">
+		<div class="inner">
+			<div class="aboutUsSub">
+				<strong>단어장<br /></strong>
+				<p>단어장을 만들어 사용하세요.</p>
+			</div>
+			<p class="copyright">&copy; Untitled eunji yoonseon hani. All
+				rights reserved.</p>
+			<ul class="menu">
+				<li><a href="#">이용약관</a></li>
+				<li><a href="#">사이트 정책</a></li>
+			</ul>
+		</div>
+	</footer>
 
-    <!-- Scripts -->
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.scrollex.min.js"></script>
-    <script src="/js/jquery.dropotron.min.js"></script>
-    <script src="/js/browser.min.js"></script>
-    <script src="/js/breakpoints.min.js"></script>
-    <script src="/js/util.js"></script>
-    <script src="/js/main.js"></script>
-    <script src="/js/wordbook/favorite.js"></script>
-    <script src="/js/wordbook/sharing.js"></script>
+	<!-- Scripts -->
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/jquery.scrollex.min.js"></script>
+	<script src="/js/jquery.dropotron.min.js"></script>
+	<script src="/js/browser.min.js"></script>
+	<script src="/js/breakpoints.min.js"></script>
+	<script src="/js/util.js"></script>
+	<script src="/js/main.js"></script>
+	<script src="/js/wordbook/favorite.js"></script>
+	<script src="/js/wordbook/sharing.js"></script>
 
 </body>
 
