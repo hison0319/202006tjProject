@@ -6,11 +6,13 @@ public class WordbookDto {
 	private int id;
 	private int ownerId;
 	private int favorite;
-	private int shared;
+	private int guestId;
 	private String title;
 	private Timestamp regDate;
 	private Timestamp uDate;
 	private String wordbookAddress;
+	private String regDateStr;
+	private String uDateStr;
 	public WordbookDto() {}
 	public WordbookDto(int ownerId, int favorite, String title, String wordbookAddress) {
 		this.ownerId = ownerId;
@@ -18,21 +20,21 @@ public class WordbookDto {
 		this.title = title;
 		this.wordbookAddress = wordbookAddress;
 	}
-	public WordbookDto(int id, int ownerId, int favorite, int shared, String title, String wordbookAddress) {
+	public WordbookDto(int id, int ownerId, int favorite, int guestId, String title, String wordbookAddress) {
 		super();
 		this.id = id;
 		this.ownerId = ownerId;
 		this.favorite = favorite;
-		this.shared = shared;
+		this.guestId = guestId;
 		this.title = title;
 		this.wordbookAddress = wordbookAddress;
 	}
-	public WordbookDto(int id, int ownerId, int favorite, int shared, String title, Timestamp regDate, Timestamp uDate,
+	public WordbookDto(int id, int ownerId, int favorite, int guestId, String title, Timestamp regDate, Timestamp uDate,
 			String wordbookAddress) {
 		this.id = id;
 		this.ownerId = ownerId;
 		this.favorite = favorite;
-		this.shared = shared;
+		this.guestId = guestId;
 		this.title = title;
 		this.regDate = regDate;
 		this.uDate = uDate;
@@ -56,11 +58,11 @@ public class WordbookDto {
 	public void setFavorite(int favorite) {
 		this.favorite = favorite;
 	}
-	public int getShared() {
-		return shared;
+	public int getGuestId() {
+		return guestId;
 	}
-	public void setShared(int shared) {
-		this.shared = shared;
+	public void setGuestId(int guestId) {
+		this.guestId = guestId;
 	}
 	public String getTitle() {
 		return title;
@@ -86,10 +88,22 @@ public class WordbookDto {
 	public void setWordbookAddress(String wordbookAddress) {
 		this.wordbookAddress = wordbookAddress;
 	}
+	public String getRegDateStr() {
+		return regDateStr;
+	}
+	public void setRegDateStr(String regDateStr) {
+		this.regDateStr = regDateStr;
+	}
+	public String getuDateStr() {
+		return uDateStr;
+	}
+	public void setuDateStr(String uDateStr) {
+		this.uDateStr = uDateStr;
+	}
 	@Override
 	public String toString() {
-		return "wordbookDto [id=" + id + ", ownerId=" + ownerId + ", favorite=" + favorite + ", shared=" + shared
+		return "WordbookDto [id=" + id + ", ownerId=" + ownerId + ", favorite=" + favorite + ", guestId=" + guestId
 				+ ", title=" + title + ", regDate=" + regDate + ", uDate=" + uDate + ", wordbookAddress="
-				+ wordbookAddress + "]"+"\n";
+				+ wordbookAddress + ", regDateStr=" + regDateStr + ", uDateStr=" + uDateStr + "]\n";
 	}
 }

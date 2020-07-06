@@ -14,7 +14,7 @@
 		select id,title,writer_id,contents,reg_date from notice order by id desc limit #{first}, #{ea}
 	</select>
 	<select id="selectNoticeCount" resultType="int">
-		select count(*) from notice
+		select count(id) from notice
 	</select>
 	<update id="updateNotice" parameterType="notice">
 		update notice set title=#{title}, writer_id=#{writerId}, contents=#{contents} 

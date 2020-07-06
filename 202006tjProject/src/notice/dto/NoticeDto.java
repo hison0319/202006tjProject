@@ -8,6 +8,7 @@ public class NoticeDto {
 	private int writerId;
 	private String contents;
 	private Timestamp regDate;
+	private String regDateStr;
 	public NoticeDto() {}
 	public NoticeDto(String title, int writerId, String contents) {
 		this.title = title;
@@ -50,6 +51,12 @@ public class NoticeDto {
 	}
 	public void setRegDate(Timestamp regDate) {
 		this.regDate = regDate;
+	}
+	public String getRegDateStr() {
+		return regDateStr;
+	}
+	public void setRegDateStr(String regDateStr) {
+		this.regDateStr = regDateStr;
 	}
 	@Override
 	public String toString() {

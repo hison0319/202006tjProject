@@ -72,9 +72,27 @@
 
 				<div class="array tool">
 					<select name="arraySelect" id="arraySelect">
-						<option value="1">중요단어장</option>
-						<option value="2">최근수정</option>
-						<option value="3">최근등록</option>
+						<c:choose>
+							<c:when test="${method ==''}"><option value="1" selected="selected">최근수정</option></c:when>
+							<c:otherwise><option value="1">최근수정</option></c:otherwise>
+						</c:choose>
+						<c:choose>
+							<c:when test="${method =='Favorite'}"><option value="2" selected="selected">중요단어장</option></c:when>
+							<c:otherwise><option value="2" >중요단어장</option></c:otherwise>
+						</c:choose>
+						<c:choose>
+							<c:when test="${method =='Owner'}"><option value="3" selected="selected">소유단어장</option></c:when>
+							<c:otherwise><option value="3" >소유단어장</option></c:otherwise>
+						</c:choose>
+						<c:choose>
+							<c:when test="${method =='Guest'}"><option value="4" selected="selected">공유단어장</option></c:when>
+							<c:otherwise><option value="4" >공유단어장</option></c:otherwise>
+						</c:choose>
+						<!-- 
+						<option value="1" selected="selected">최근수정</option>
+						<option value="2" >중요단어장</option>
+						<option value="3" >소유단어장</option>
+						<option value="4" >공유단어장</option> -->
 					</select>
 				</div>
 			</div>
@@ -85,59 +103,67 @@
 				<c:when test="${certifyPlease != null }">
 					<div>${certifyPlease }</div>
 				</c:when>
+				<c:when test="${listNull != '' }">
+					<h2>${listNull }</h2>
+				</c:when>
 				<c:otherwise>
 					<div class="posts">
 						<c:forEach items="${list }" var="l" varStatus="i">
 							<section class="post">
 								<div class="content">
-									<ol>
-										<li>
-											<form action="showlist" method="post">
-											<div style="height:50px;">
-												<a href="#">소유자 :&nbsp;<span class="postId">${l.ownerId }</span></a>
-												<div class="postDate" style="height:50px;">&nbsp;&nbsp;&nbsp;
-													<c:choose>
-														<c:when test="${l.uDate==null }">
-															등록일&nbsp;:&nbsp;${l.regDate }
-														</c:when>
-														<c:otherwise>
-															수정일&nbsp;:&nbsp;${l.uDate }														
-														</c:otherwise>
-													</c:choose>
-												</div>
-												<input type="hidden" id="favorite${i.index }"
-													name="wordbookId" value="${l.id }" />
+
+									<form action="showlist${method }" method="post">
+										<div style="height: 50px;">
+											<a href="#">소유자 :&nbsp;<span class="postId">${l.ownerId }</span></a>
+											<div class="postDate" style="height: 50px;">
+												&nbsp;&nbsp;&nbsp;수정일&nbsp;:&nbsp;${l.uDateStr }	
 											</div>
-											<ul>
-											<li style="font-size:1.2em; font-weight:bold; height:50px;">
+											<input type="hidden" id="favorite${i.index }"
+												name="wordbookId" value="${l.id }" />
+										</div>
+										<ul>
+											<li
+												style="font-size: 1.2em; font-weight: bold; height: 50px;">
 												<a href="../word/showlist?wordbookid=${l.id }">${l.title }</a>
 											</li>
-											<li style="height:50px;">
-												<c:choose>
+											<li style="height: 50px;"><c:choose>
 													<c:when test="${l.favorite==0 }">
-														중요&nbsp;<button class="favorite${i.index }" style="box-shadow: none; border:none;"><span class="icon far fa-star" style="font-size:1.5em; color:#cc0"></span></button>
+														중요&nbsp;<button class="favorite${i.index }"
+															style="box-shadow: none; border: none;">
+															<span class="icon far fa-star"
+																style="font-size: 1.5em; color: #cc0"></span>
+														</button>
 													</c:when>
 													<c:otherwise>
-														중요&nbsp;<button class="favorite${i.index }" style="box-shadow: none; border:none;"><span class="icon far fa-star" style="font-size:1.5em; color:#cc0"></span></button>
+														중요&nbsp;<button class="favorite${i.index }"
+															style="box-shadow: none; border: none;">
+															<span class="icon far fa-star"
+																style="font-size: 1.5em; color: #cc0"></span>
+														</button>
 													</c:otherwise>
-												</c:choose>
-												</li>
-												<li style="height:50px;">
-												<c:choose>
-													<c:when test="${l.shared==0 }">
-														공유하기&nbsp;<button class="sharing${i.index }" style="box-shadow: none; border:none;"><span class="icon far fa-share-alt" style="font-size:1.5em;"></span></button>
+												</c:choose></li>
+											<li style="height: 50px;"><c:choose>
+													<c:when test="${l.guestId==0 }">
+														공유하기&nbsp;<button class="sharing${i.index }"
+															style="box-shadow: none; border: none;">
+															<span class="icon far fa-share-alt"
+																style="font-size: 1.5em;"></span>
+														</button>
 													</c:when>
 													<c:otherwise>
-														키복사/&nbsp;공유끝&nbsp;<button class="getkey${i.index }" style="box-shadow: none; border:none;"><span class="icon fas fa-key" style="font-size:1.5em;"></span></button>
-														<button class="sharing${i.index }" style="box-shadow: none; border:none;"><span class="icon far fa-share-alt-square" style="font-size:2em;"></span></button>
+														키복사/&nbsp;공유끝&nbsp;<button class="getkey${i.index }"
+															style="box-shadow: none; border: none;">
+															<span class="icon fas fa-key" style="font-size: 1.5em;"></span>
+														</button>
+														<button class="sharing${i.index }"
+															style="box-shadow: none; border: none;">
+															<span class="icon far fa-share-alt-square"
+																style="font-size: 2em;"></span>
+														</button>
 													</c:otherwise>
-												</c:choose>
-											
-											</li>
-											</ul>
-											</form>
-										</li>
-									</ol>
+												</c:choose></li>
+										</ul>
+									</form>
 								</div>
 							</section>
 						</c:forEach>
@@ -145,7 +171,32 @@
 				</c:otherwise>
 			</c:choose>
 		</div>
-
+		<div class="center_position">
+					<ul class="pagination">
+						<c:if test="${pageNum>1}">
+						<li><a href="showlist${method }?pageNumStr=${pageNum-1}" class="button">Prev</a></li>
+						</c:if>
+						<c:if test="${pageNum<=1}">
+						<li><span class="button disabled">Prev</span></li>
+						</c:if>
+						<c:forEach var="pN" items="${pageNumList}" end="4">
+							<c:choose>
+								<c:when test="${pN != pageNum}">
+									<li><a href="showlist${method }?pageNumStr=${pN}" class="page">${pN}</a></li>
+								</c:when>
+								<c:when test="${pN == pageNum}">
+									<li><a href="showlist${method }?pageNumStr=${pN}" class="page active">${pN}</a></li>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+						<c:if test="${pages>pageNum}">
+						<li><a href="showlist${method }?pageNumStr=${pageNum+1}" class="button">Next</a></li>
+						</c:if>
+						<c:if test="${pages<=pageNum}">
+						<li><span class="button disabled">Next</span></li>
+						</c:if>
+					</ul>
+				</div>
 	</section>
 
 	<section class="wrapper major-pad">
@@ -174,7 +225,7 @@
 										</c:otherwise>
 									</c:choose>
 									<c:choose>
-										<c:when test="${l.shared==0 }">
+										<c:when test="${l.guestId==0 }">
 											<button class="sharing${i.index }">공유하기</button>
 										</c:when>
 										<c:otherwise>
@@ -221,6 +272,7 @@
 	<script src="/js/main.js"></script>
 	<script src="/js/wordbook/favorite.js"></script>
 	<script src="/js/wordbook/sharing.js"></script>
+	<script src="/js/wordbook/wordbookList.js?v=<%=System.currentTimeMillis()%>"></script>
 
 </body>
 

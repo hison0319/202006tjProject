@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,96 +48,208 @@ import word.service.WordbookService;
 public class WordbookController {
 	@Autowired
 	WordbookService wordbookService;
-	//단어장 목록 조회 기능
-	@RequestMapping("showlist")
-	public String wordbookListShow(HttpSession session) {  //세션 모델
+
+	// 단어장 목록 조회 기능 /기본조회 owner,guest, 수정일 순
+	@GetMapping("showlist")
+	public String wordbookListShow(HttpSession session, Model m, String pageNumStr) { // 세션 모델
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 		if (loginMember == null) {
-			session.setAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
-		}
-		else if (loginMember.getCertified() == 0) {
-			session.removeAttribute("loginPlease");
-			session.setAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
-		}
-		else {
-			session.removeAttribute("loginPlease");
-			session.removeAttribute("certifyPlease");
+			m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+		} else if (loginMember.getCertified() == 0) {
+			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+		} else {
+			int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
+			int ea = 6;// 페이지에 띄울 갯수 정의(정책)
 			int loginId = loginMember.getId();
-			List<WordbookDto> list = wordbookService.selectWordbookByOwnerId(loginId);
-			session.setAttribute("list", list);
+			// 단어장 총 갯수
+			int totalCnt = wordbookService.selectWordbookCountByOwnerIdOrGuestId(loginId);
+			// 페이지 리스트
+			System.out.println("totalCnt : " + totalCnt);
+			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+			m.addAttribute("pageNumList", pageNumList);
+			m.addAttribute("pageNum", pageNum);
+			m.addAttribute("pages", pages);
+			// 단어장 리스트
+			List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestId(loginId, (pageNum - 1) * 6, ea);
+			// 등록일을 날짜만 표현
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getRegDate() != null)
+					list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
+				if (list.get(i).getuDate() != null)
+					list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
+			}
+			if (list.size() == 0) {
+				m.addAttribute("listNull", "단어장을 만들어 보세요!");
+			} else {
+				m.addAttribute("listNull", "");
+			}
+			m.addAttribute("method","");
+			m.addAttribute("list", list);
+		}
+		return "wordbook/wordbookList";
+	}
+
+	// 단어장 목록 조회 기능 /조회 owner 수정일 순
+	@GetMapping("showlistOwner")
+	public String wordbookListShowOwner(HttpSession session, Model m, String pageNumStr) { // 세션 모델
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+		} else if (loginMember.getCertified() == 0) {
+			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+		} else {
+			int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
+			int ea = 6;// 페이지에 띄울 갯수 정의(정책)
+			int loginId = loginMember.getId();
+			// 단어장 총 갯수
+			int totalCnt = wordbookService.selectWordbookCountByOwnerId(loginId);
+			// 페이지 리스트
+			System.out.println("totalCnt : " + totalCnt);
+			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+			m.addAttribute("pageNumList", pageNumList);
+			m.addAttribute("pageNum", pageNum);
+			m.addAttribute("pages", pages);
+			// 단어장 리스트
+			List<WordbookDto> list = wordbookService.selectWordbookByOwnerId(loginId, (pageNum - 1) * 6, ea);
+			// 등록일을 날짜만 표현
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getRegDate() != null)
+					list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
+				if (list.get(i).getuDate() != null)
+					list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
+			}
+			if (list.size() == 0) {
+				m.addAttribute("listNull", "단어장을 만들어 보세요!");
+			} else {
+				m.addAttribute("listNull", "");
+			}
+			m.addAttribute("method","Owner");
+			m.addAttribute("list", list);
 		}
 		return "wordbook/wordbookList";
 	}
 	
-	//단어장 생성 페이지
+	// 단어장 목록 조회 기능 /조회 guest 수정일 순
+		@GetMapping("showlistGuest")
+		public String wordbookListShowGuest(HttpSession session, Model m, String pageNumStr) { // 세션 모델
+			MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+			if (loginMember == null) {
+				m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+			} else if (loginMember.getCertified() == 0) {
+				m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+			} else {
+				int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
+				int ea = 6;// 페이지에 띄울 갯수 정의(정책)
+				int loginId = loginMember.getId();
+				// 단어장 총 갯수
+				int totalCnt = wordbookService.selectWordbookCountByGuestId(loginId);
+				// 페이지 리스트
+				System.out.println("totalCnt : " + totalCnt);
+				int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+				List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+				m.addAttribute("pageNumList", pageNumList);
+				m.addAttribute("pageNum", pageNum);
+				m.addAttribute("pages", pages);
+				// 단어장 리스트
+				List<WordbookDto> list = wordbookService.selectWordbookByGuestId(loginId, (pageNum - 1) * 6, ea);
+				// 등록일을 날짜만 표현
+				for (int i = 0; i < list.size(); i++) {
+					if (list.get(i).getRegDate() != null)
+						list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
+					if (list.get(i).getuDate() != null)
+						list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
+				}
+				if (list.size() == 0) {
+					m.addAttribute("listNull", "단어장을 만들어 보세요!");
+				} else {
+					m.addAttribute("listNull", "");
+				}
+				m.addAttribute("list", list);
+			}
+			m.addAttribute("method","Guest");
+			return "wordbook/wordbookList";
+		}
+
+	// 페이지 네이션 구현 기능
+	public List<Integer> getPageList(int pageNum, int ea, int pages) {
+		List<Integer> pageNumList = new ArrayList<Integer>();
+		int begin;
+		if (pageNum % 5 == 1) {
+			begin = pageNum;
+		} else if (pageNum % 5 == 0) {
+			begin = pageNum - 4;
+		} else {
+			begin = pageNum - (pageNum % 5 - 1);
+		}
+		for (int i = begin; i <= pages; i++) {
+			pageNumList.add(i);
+		}
+		return pageNumList;
+	}
+
+	// 단어장 생성 페이지
 	@GetMapping("form")
 	public String wordbookForm(HttpSession session) {
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-		if(loginMember == null) {
+		if (loginMember == null) {
 			return "member/loginPlease";
-		}
-		else if(loginMember.getCertified()==0) {
+		} else if (loginMember.getCertified() == 0) {
 			return "account/certifyPlease";
 		}
 		return "wordbook/wordbookUpdateForm";
 	}
-	
-	@PostMapping("favorite")  //비동기 즐겨찾기
+
+	@PostMapping("favorite") // 비동기 즐겨찾기
 	@ResponseBody
 	public String toggleFavorite(HttpSession session, HttpServletRequest req, int wordbookId) {
 		WordbookDto wordbook = wordbookService.selectWordbookById(wordbookId);
-		if(wordbook.getFavorite()==0) {
-			wordbookService.updateWordbook(
-					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
-							1, wordbook.getShared(), wordbook.getTitle(), wordbook.getWordbookAddress()));
+		if (wordbook.getFavorite() == 0) {
+			wordbookService.updateWordbook(new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 1,
+					wordbook.getGuestId(), wordbook.getTitle(), wordbook.getWordbookAddress()));
+		} else {
+			wordbookService.updateWordbook(new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 0,
+					wordbook.getGuestId(), wordbook.getTitle(), wordbook.getWordbookAddress()));
 		}
-		else {
-			wordbookService.updateWordbook(
-					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
-							0, wordbook.getShared(), wordbook.getTitle(), wordbook.getWordbookAddress()));
-		}
-		return "{\"wordbookId\":\""+wordbookId+"\"}";
+		return "{\"wordbookId\":\"" + wordbookId + "\"}";
 	}
-	
-	@PostMapping("sharing")  //비동기 공유
+
+	@PostMapping("sharing") // 비동기 공유
 	@ResponseBody
 	public String toggleSharing(HttpSession session, HttpServletRequest req, int wordbookId) {
 		WordbookDto wordbook = wordbookService.selectWordbookById(wordbookId);
-		if(wordbook.getShared()==0) {
-			wordbookService.updateWordbook(
-					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
-							wordbook.getFavorite(), 1, wordbook.getTitle(), wordbook.getWordbookAddress()));
+		if (wordbook.getGuestId() == 0) {
+			wordbookService.updateWordbook(new WordbookDto(wordbook.getId(), wordbook.getOwnerId(),
+					wordbook.getFavorite(), 1, wordbook.getTitle(), wordbook.getWordbookAddress()));
+		} else {
+			wordbookService.updateWordbook(new WordbookDto(wordbook.getId(), wordbook.getOwnerId(),
+					wordbook.getFavorite(), 0, wordbook.getTitle(), wordbook.getWordbookAddress()));
 		}
-		else {
-			wordbookService.updateWordbook(
-					new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 
-							wordbook.getFavorite(), 0, wordbook.getTitle(), wordbook.getWordbookAddress()));
-		}
-		return "{\"wordbookId\":\""+wordbookId+"\"}";
+		return "{\"wordbookId\":\"" + wordbookId + "\"}";
 	}
-	
-	@PostMapping("complete")  //완료
-	public String wordbookInsert(HttpSession session, Model m, String title, @RequestParam(required = false) String text, @RequestParam(required = false) File file) throws IOException {
+
+	@PostMapping("complete") // 완료
+	public String wordbookInsert(HttpSession session, Model m, String title,
+			@RequestParam(required = false) String text, @RequestParam(required = false) File file) throws IOException {
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-		
-		if(loginMember == null) {  //비로그인
+
+		if (loginMember == null) { // 비로그인
 			return "member/loginPlease";
-		}
-		else if(loginMember.getCertified()==0) {  //미인증
+		} else if (loginMember.getCertified() == 0) { // 미인증
 			return "account/certifyPlease";
-		}
-		else {  //정상 작동
+		} else { // 정상 작동
 			JSONParser parser = new JSONParser();
 			String regex = "[^-^{A-Z}^{a-z}]+";
 			String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY_MM_dd"));
 			String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH_mm_ss"));
 			Path relativePath = Paths.get("");
-			File path = new File("..\\eclipse-workspace\\jsonFiles\\"+ today);
+			File path = new File("..\\eclipse-workspace\\jsonFiles\\" + today);
 			File json = new File("..\\eclipse-workspace\\jsonFiles\\" + today + "\\" + now + ".json");
 			path.mkdirs();
 			String jsonText = "[";
-			String clientId = "FaGdiV_h1RX1lMv2w2tW";//애플리케이션 클라이언트 아이디값";
-			String clientSecret = "NhiFrOn9g1";//애플리케이션 클라이언트 시크릿값";
+			String clientId = "FaGdiV_h1RX1lMv2w2tW";// 애플리케이션 클라이언트 아이디값";
+			String clientSecret = "NhiFrOn9g1";// 애플리케이션 클라이언트 시크릿값";
 			String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
 			Map<String, String> requestHeaders = new HashMap<>();
 			requestHeaders.put("X-Naver-Client-Id", clientId);
@@ -147,78 +260,79 @@ public class WordbookController {
 			if (file != null) {
 				String fileExtension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
 				if (fileExtension.equals("txt")) {
-					try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "MS949"));
-							BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(json), "MS949"))) {
+					try (BufferedReader br = new BufferedReader(
+							new InputStreamReader(new FileInputStream(file), "MS949"));
+							BufferedWriter bw = new BufferedWriter(
+									new OutputStreamWriter(new FileOutputStream(json), "MS949"))) {
 						String s;
 						String fileText = "";
 						while ((s = br.readLine()) != null) {
 							fileText += (s + " ");
 						}
 						fileText = fileText.replaceAll(regex, " ");
-						String[] textArr = fileText.split("\\s");  //" " 에서 변경
+						String[] textArr = fileText.split("\\s"); // " " 에서 변경
 						String word;
 						int[] count = new int[textArr.length];
 						String[] responseBody = new String[textArr.length];
 						for (int i = 0; i < textArr.length; i++) {
-							if(textArr[i]!=null && textArr[i].length() >1) {
+							if (textArr[i] != null && textArr[i].length() > 1) {
 								try {
 									word = URLEncoder.encode(textArr[i], "UTF-8");
 								} catch (UnsupportedEncodingException e) {
 									throw new RuntimeException("인코딩 실패", e);
 								}
-								count[i]=1;
-								for (int j = i+1; j < textArr.length; j++) {
-									if(textArr[j]!=null && textArr[j].equals(textArr[i])) {
-										textArr[j]=null;
+								count[i] = 1;
+								for (int j = i + 1; j < textArr.length; j++) {
+									if (textArr[j] != null && textArr[j].equals(textArr[i])) {
+										textArr[j] = null;
 										count[i]++;
 									}
 								}
 								responseBody[i] = post(apiURL, requestHeaders, word);
-							}
-							else {
+							} else {
 								count[i] = 0;
 							}
 						}
 						for (int i = 0; i < textArr.length; i++) {
-							for (int j = 0; j < textArr.length-1-i ; j++) {
-								if(count[j]<count[j+1]) {
-									tempEng=textArr[j];
-									textArr[j]=textArr[j+1];
-									textArr[j+1]=tempEng;
-									tempCnt=count[j];
-									count[j]=count[j+1];
-									count[j+1]=tempCnt;
-									tempTrans=responseBody[j];
-									responseBody[j]=responseBody[j+1];
-									responseBody[j+1]=tempTrans;
+							for (int j = 0; j < textArr.length - 1 - i; j++) {
+								if (count[j] < count[j + 1]) {
+									tempEng = textArr[j];
+									textArr[j] = textArr[j + 1];
+									textArr[j + 1] = tempEng;
+									tempCnt = count[j];
+									count[j] = count[j + 1];
+									count[j + 1] = tempCnt;
+									tempTrans = responseBody[j];
+									responseBody[j] = responseBody[j + 1];
+									responseBody[j + 1] = tempTrans;
 								}
 							}
 						}
-						for(int i = 0; i < textArr.length; i++) {
-							if(textArr[i]!=null && textArr[i].length() >1) {
+						for (int i = 0; i < textArr.length; i++) {
+							if (textArr[i] != null && textArr[i].length() > 1) {
 								try {
 									JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
 									JSONObject message = (JSONObject) resultJson.get("message");
 									JSONObject result = (JSONObject) message.get("result");
-									if(!textArr[i].equals(result.get("translatedText"))) {
-										jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\",\"count\":"+count[i]+"},";
+									if (!textArr[i].equals(result.get("translatedText"))) {
+										jsonText += "{\"word\":\"" + textArr[i] + "\",\"trans\":\""
+												+ result.get("translatedText") + "\",\"count\":" + count[i] + "},";
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
 							}
 						}
-						jsonText = jsonText.substring(0, jsonText.length()-1);
+						jsonText = jsonText.substring(0, jsonText.length() - 1);
 						jsonText += "]";
 						bw.write(jsonText);
 						bw.flush();
-						
+
 						m.addAttribute("text", jsonText);
-						
-						wordbookService.insertWordbook(
-								new WordbookDto(0, loginMember.getId(), 0, 0, title
-										, relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\"
-												+ today + "\\" + now + ".json"));
+
+						wordbookService.insertWordbook(new WordbookDto(0, loginMember.getId(), 0, 0, title,
+								relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\" + today
+										+ "\\" + now + ".json"));
 						return "wordbook/wordbookUpdateComplete";
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -227,138 +341,138 @@ public class WordbookController {
 						e.printStackTrace();
 						return null;
 					}
-				} else {  //파일 형식이 txt가 아닐 경우
+				} else { // 파일 형식이 txt가 아닐 경우
 					return "error";
 				}
 			}
-			
+
 			else {
-				try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(json), "MS949"))){
+				try (BufferedWriter bw = new BufferedWriter(
+						new OutputStreamWriter(new FileOutputStream(json), "MS949"))) {
 					text = text.replaceAll(regex, " ");
 					String[] textArr = text.split(" ");
 					String word;
 					int[] count = new int[textArr.length];
 					String[] responseBody = new String[textArr.length];
 					for (int i = 0; i < textArr.length; i++) {
-						if(textArr[i]!=null && textArr[i].length() >1) {
+						if (textArr[i] != null && textArr[i].length() > 1) {
 							try {
 								word = URLEncoder.encode(textArr[i], "UTF-8");
 							} catch (UnsupportedEncodingException e) {
 								throw new RuntimeException("인코딩 실패", e);
 							}
-							count[i]=1;
-							for (int j = i+1; j < textArr.length; j++) {
-								if(textArr[j]!=null && textArr[j].equals(textArr[i])) {
-									textArr[j]=null;
+							count[i] = 1;
+							for (int j = i + 1; j < textArr.length; j++) {
+								if (textArr[j] != null && textArr[j].equals(textArr[i])) {
+									textArr[j] = null;
 									count[i]++;
 								}
 							}
 							responseBody[i] = post(apiURL, requestHeaders, word);
-						}
-						else {
+						} else {
 							count[i] = 0;
 						}
 					}
-					
+
 					for (int i = 0; i < textArr.length; i++) {
-						for (int j = 0; j < textArr.length-1-i ; j++) {
-							if(count[j]<count[j+1]) {
-								tempEng=textArr[j];
-								textArr[j]=textArr[j+1];
-								textArr[j+1]=tempEng;
-								tempCnt=count[j];
-								count[j]=count[j+1];
-								count[j+1]=tempCnt;
-								tempTrans=responseBody[j];
-								responseBody[j]=responseBody[j+1];
-								responseBody[j+1]=tempTrans;
+						for (int j = 0; j < textArr.length - 1 - i; j++) {
+							if (count[j] < count[j + 1]) {
+								tempEng = textArr[j];
+								textArr[j] = textArr[j + 1];
+								textArr[j + 1] = tempEng;
+								tempCnt = count[j];
+								count[j] = count[j + 1];
+								count[j + 1] = tempCnt;
+								tempTrans = responseBody[j];
+								responseBody[j] = responseBody[j + 1];
+								responseBody[j + 1] = tempTrans;
 							}
 						}
 					}
-					for(int i = 0; i < textArr.length; i++) {
-						if(textArr[i]!=null && textArr[i].length() >1) {
+					for (int i = 0; i < textArr.length; i++) {
+						if (textArr[i] != null && textArr[i].length() > 1) {
 							try {
 								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
 								JSONObject message = (JSONObject) resultJson.get("message");
 								JSONObject result = (JSONObject) message.get("result");
-								if(!textArr[i].equals(result.get("translatedText"))) {
-									jsonText += "{\"word\":\""+textArr[i]+"\",\"trans\":\""+result.get("translatedText")+"\",\"count\":"+count[i]+"},";
+								if (!textArr[i].equals(result.get("translatedText"))) {
+									jsonText += "{\"word\":\"" + textArr[i] + "\",\"trans\":\""
+											+ result.get("translatedText") + "\",\"count\":" + count[i] + "},";
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
 						}
 					}
-					jsonText = jsonText.substring(0, jsonText.length()-1);
+					jsonText = jsonText.substring(0, jsonText.length() - 1);
 					jsonText += "]";
 					bw.write(jsonText);
 					bw.flush();
-					
+
 					m.addAttribute("text", jsonText);
-					wordbookService.insertWordbook(
-							new WordbookDto(0, loginMember.getId(), 0, 0, title
-									, relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\"
-											+ today + "\\" + now + ".json"));
+					wordbookService.insertWordbook(new WordbookDto(0, loginMember.getId(), 0, 0, title,
+							relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\" + today
+									+ "\\" + now + ".json"));
 					return "wordbook/wordbookUpdateComplete";
-					
+
 				}
 			}
 		}
 	}
-	
-	private static String post(String apiUrl, Map<String, String> requestHeaders, String text){
-        HttpURLConnection con = connect(apiUrl);
-        String postParams = "source=en&target=ko&text=" + text; //원본언어: 한국어 (ko) -> 목적언어: 영어 (en)
-        try {
-            con.setRequestMethod("POST");
-            for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
-                con.setRequestProperty(header.getKey(), header.getValue());
-            }
 
-            con.setDoOutput(true);
-            try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
-                wr.write(postParams.getBytes());
-                wr.flush();
-            }
+	private static String post(String apiUrl, Map<String, String> requestHeaders, String text) {
+		HttpURLConnection con = connect(apiUrl);
+		String postParams = "source=en&target=ko&text=" + text; // 원본언어: 한국어 (ko) -> 목적언어: 영어 (en)
+		try {
+			con.setRequestMethod("POST");
+			for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
+				con.setRequestProperty(header.getKey(), header.getValue());
+			}
 
-            int responseCode = con.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 응답
-                return readBody(con.getInputStream());
-            } else {  // 에러 응답
-                return readBody(con.getErrorStream());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("API 요청과 응답 실패", e);
-        } finally {
-            con.disconnect();
-        }
-    }
+			con.setDoOutput(true);
+			try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
+				wr.write(postParams.getBytes());
+				wr.flush();
+			}
 
-    private static HttpURLConnection connect(String apiUrl){
-        try {
-            URL url = new URL(apiUrl);
-            return (HttpURLConnection)url.openConnection();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("API URL이 잘못되었습니다. : " + apiUrl, e);
-        } catch (IOException e) {
-            throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
-        }
-    }
+			int responseCode = con.getResponseCode();
+			if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 응답
+				return readBody(con.getInputStream());
+			} else { // 에러 응답
+				return readBody(con.getErrorStream());
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("API 요청과 응답 실패", e);
+		} finally {
+			con.disconnect();
+		}
+	}
 
-    private static String readBody(InputStream body){
-        InputStreamReader streamReader = new InputStreamReader(body);
+	private static HttpURLConnection connect(String apiUrl) {
+		try {
+			URL url = new URL(apiUrl);
+			return (HttpURLConnection) url.openConnection();
+		} catch (MalformedURLException e) {
+			throw new RuntimeException("API URL이 잘못되었습니다. : " + apiUrl, e);
+		} catch (IOException e) {
+			throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
+		}
+	}
 
-        try (BufferedReader lineReader = new BufferedReader(streamReader)) {
-            StringBuilder responseBody = new StringBuilder();
+	private static String readBody(InputStream body) {
+		InputStreamReader streamReader = new InputStreamReader(body);
 
-            String line;
-            while ((line = lineReader.readLine()) != null) {
-                responseBody.append(line);
-            }
+		try (BufferedReader lineReader = new BufferedReader(streamReader)) {
+			StringBuilder responseBody = new StringBuilder();
 
-            return responseBody.toString();
-        } catch (IOException e) {
-            throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
-        }
-    }
+			String line;
+			while ((line = lineReader.readLine()) != null) {
+				responseBody.append(line);
+			}
+
+			return responseBody.toString();
+		} catch (IOException e) {
+			throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
+		}
+	}
 }

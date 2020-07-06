@@ -69,7 +69,7 @@
 							<tr>
 								<td>${nL.writerId}</td>
 								<td><a href="show?id=${nL.id}">${nL.title}</a></td>
-								<td>${nL.regDate}</td>
+								<td>${nL.regDateStr}</td>
 							</tr>
 						</c:forEach>
 					</tbody>

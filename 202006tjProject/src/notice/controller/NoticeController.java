@@ -47,6 +47,10 @@ public class NoticeController {
 		m.addAttribute("pageNum", pageNum);
 		m.addAttribute("pages", pages);
 		List<NoticeDto> noticeList = noticeService.selectNoticeList((pageNum - 1) * 5, ea);
+		//regDate 날짜까지만 나오도록 변경
+		for(int i=0; i<noticeList.size(); i++) {
+			if(noticeList.get(i).getRegDate()!=null)noticeList.get(i).setRegDateStr(noticeList.get(i).getRegDate().toString().substring(0, 10));
+		}
 		m.addAttribute("noticeList", noticeList);
 		return "notice/noticeList";
 	}
