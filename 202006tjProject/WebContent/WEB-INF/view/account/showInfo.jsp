@@ -61,7 +61,7 @@
 					<li>내 정보 보기(활성화 시 글씨 진하게)</li>
 					<li>공유목록 보기</li>
 					<li><button type="button" class="button" onclick="btnModify('${sessionScope.loginMember.memberId}')">내 정보
-            수정하기</button>.</li>
+            수정하기</button></li>
 
 				</ul>
 			</div>

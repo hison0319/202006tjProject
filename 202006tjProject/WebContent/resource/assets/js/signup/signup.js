@@ -276,6 +276,28 @@ window.addEventListener("DOMContentLoaded",function(){
 	    //주소 옮기기
 	    var address = $("#sample4_postcode").val()+"/"+$("#sample4_roadAddress").val()+"/"+$("#sample4_jibunAddress").val()+"/"+$("#sample4_detailAddress").val()+"/"+$("#sample4_extraAddress").val();
 	    $("#address").val(address);
+	    
+		});
 	});
-});
+
+//모두 동의
+function allCheck(){
+	let temp = document.querySelectorAll('input[type=checkbox]');
+	
+	for(let i=0; i<temp.length; i++){
+		temp[i].classList.toggle('all-checked');
+		if(temp[i].classList.contains('all-checked')){
+			temp[i].checked = true;
+		} else {
+			temp[i].checked = false;
+		}
+	}
+}
+
+
+
+
+
+
+
 

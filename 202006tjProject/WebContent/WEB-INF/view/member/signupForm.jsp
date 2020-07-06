@@ -16,7 +16,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="stylesheet" href="/css/signup.css" />
-<script src="/js/signup/signup.js"></script>
+
 </head>
 
 <body class="is-preload">
@@ -57,13 +57,14 @@
 		<div class="inner">
 			<div class="signup">회원 가입</div>
 			<br>
-			<form name="signupForm" action="insert" method="post">
+			<form name="signupForm" id="signupForm" action="insert" method="post">
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
 						<div class="signup_id">
 							아이디 <br> <input type="text" id="memberId" name="memberId"
 								value="${member.memberId}" min="6" max="15"
 								placeholder="6~15자의 영문 대소문자, 숫자 조합" required>
+								<c:if test="${ememberId != null}"><p style="color:red">아이디 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<span class="error_next_box" id="idMsg" aria-live="assertive"></span>
 
@@ -75,6 +76,7 @@
 						<div class="signup_pw">
 							비밀번호 <br> <input type="password" id="password" name="password" 
 							value="" min="6" max="15" placeholder="6~15자의 영문 대소문자, 숫자 및 특수문자 조합" required>
+							<c:if test="${epassword != null}"><p style="color:red">비밀번호 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<span class="error_next_box" id="pwMsg" aria-live="assertive"></span>
 						<br>
@@ -82,6 +84,7 @@
 						<div class="check_pw">
 							비밀번호 확인 <br> <input type="password" id="passwordCheck"
 								name="passwordConfirm" value="" placeholder="위의 비밀번호를 다시 입력해주세요." required>
+								<c:if test="${epasswordCheck != null}"><p style="color:red">비밀번호 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<span class="error_next_box" id="pwCheckMsg" aria-live="assertive"></span>
 						<br>
@@ -89,6 +92,7 @@
 						<div class="signup_email">
 							이메일 <br> <input type="email" id="email" name="email"
 								value="${member.email}" required>
+								<c:if test="${eemail != null}"><p style="color:red">이메일 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<span class="error_next_box" id="emailMsg" aria-live="assertive"></span>
 
@@ -100,6 +104,7 @@
 						<div class="signup_phone">
 							휴대폰 번호 <br> <input type="text" id="phone" name="phone" 
 								value="${member.phone}" placeholder="- 제외 숫자만 입력해주세요." required>
+								<c:if test="${ephone != null}"><p style="color:red">전화번호 형식에 맞지 않습니다.</p></c:if>
 						</div>
 						<span class="error_next_box" id="phoneMsg" aria-live="assertive"></span>
 
@@ -116,10 +121,10 @@
 								<button type="button" onclick="sample4_execDaumPostcode()" value="">우편번호 찾기</button>
 							</div>
 							<br> 
-							<input type="text" id="sample4_roadAddress" placeholder="도로명주소"> 
-							<input type="text" id="sample4_jibunAddress" placeholder="지번주소">
+							<input type="text" id="sample4_roadAddress" placeholder="도로명주소" readonly> 
+							<input type="text" id="sample4_jibunAddress" placeholder="지번주소" readonly>
 							<input type="text" id="sample4_detailAddress" placeholder="상세주소">
-							<input type="text" id="sample4_extraAddress" placeholder="참고항목">
+							<input type="text" id="sample4_extraAddress" placeholder="참고항목" readonly>
 						</div>
 						<script
 							src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -199,14 +204,18 @@
 							}
 						</script>
 						<br>
-						
-						   <article id="content" class="cols-d">
-                  <div>
-                     <h1>이용약관</h1>
-
-                     <h4 class="scheme-g">●이용약관 동의</h4>
-                     (필수동의)
-                     <textarea readonly>
+			<ul class="join_box">
+                <li class="checkBox check01">
+                    <ul class="clearfix">
+                        <li>워드북 이용약관, 개인정보 수집 및 이용, 개인정보 취급 위탁 안내에 모두 동의합니다.</li>
+                        <li class="checkAllBtn">
+                            <input type="checkbox" name="chkAll" id="chk" class="chkAll" onclick="allCheck()">
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="checkBox check02">
+                 <textarea name="" id="">
 제1조 (목적)
 이 약관은 워드북(이하"회사"라 표기합니다)가 제공하는 사이버 회원에 대한 서비스 제공 및 이용조건, 회원가입에 관련된 사항 및 절차 그리고 기타 필요한 사항의 규정을 목적으로 합니다.
 제2조 (약관의 효력)
@@ -256,7 +265,6 @@
 워드북 홈페이지에서 구분하는 회원은 다음과 같습니다.
 1. 정회원
 2. 카카오 아이디를 통해 사이버 회원에 회원등록 하신 고객
-3. 구글 아이디를 통해 사이버 회원에 회원등록 하신 고객
 제7조 (서비스의 내용)
 회원에게 워드북의 제반시설 이용 시 이메일을 활용한 정보제공 및 맞춤 서비스 등의 서비스를 제공하며 구체적 서비스내용은 별도로 홈페이지에 게시합니다.
 제8조 (회사의 의무)
@@ -311,54 +319,67 @@
 제18조 (분쟁의 해결)
 1. 회사와 회원은 서비스와 관련해 발생한 분쟁을 원만하게 해결하기 위하여 필요한 모든 노력을 해야 합니다.
 2. 제1항의 규정에도 불구하고, 동 분쟁으로 인해 소송이 제기될 경우, 동 소송은 회사의 본사 소재지를 관할하는 법원의 관할로 합니다.
-                  </textarea>
-                     <p>
-                        <label><input type="checkbox" id="check_1" name="" /> 위의 약관에 동의 합니다.</label><br />
-                     </p>
-                     <br>
-                     <h4 class="scheme-g">●개인정보 수집, 이용 동의</h4>(필수동의)
-                     <textarea readonly>
+       </textarea>
+                    <ul class="clearfix">
+                        <li>이용 약관 동의(필수)</li>
+                        <li class="checkBtn">
+                            <input type="checkbox" name="chk" onclick="check1()">
+                        </li>
+                    </ul> 
+                   
+                </li>
+                
+                <li class="checkBox check03">
+                    <textarea name="" id="">
 [수집하는 개인정보의 항목 및 수집방법]
 이 약관은 워드북(이하"회사"라 표기합니다)가 제공하는 사이버 회원에 대한 서비스 제공 및 이용조건, 회원가입에 관련된 사항 및 절차 그리고 기타 필요한 사항의 규정을 목적으로 합니다.
 1.이 약관은 전기통신사업법 제31조, 동 법 시행규칙 제21조의 2에 따라 공시절차를 거친 후 서비스 화면에 게시하거나 전자우편, 기타의 방법으로 회원에게 통지함으로써 효력을 발생합니다.
 2.회사는 이 약관을 변경할 수 있으며, 변경된 약관은 변경된 사항에 대하여 공지 또는 통지함으로써 효력을 발생합니다.
 * 개인정보의 수집 및 이용목적
 1) 워드북 웹사이트는 다음과 같은 목적을 위하여 개인정보를 수집하고 있습니다.
-가. 성명, 생년월일, ID, 비밀번호, 이동전화번호: 회원제 서비스 이용에 따른 본인 식별 절차에 이용
+가. ID, 비밀번호, 이동전화번호: 회원제 서비스 이용에 따른 본인 식별 절차에 이용
 나. 주소, 유선전화번호, e-mail 주소 : 고지사항 전달, 본인 의사 확인, 불만 처리 등 원활한 의사소통 경로의 확보, 새로운 서비스/신상품/이벤트 정보의 안내, 경품 등 물품 배송에 대한 정확한 배송의 확보
 다. 생년월일, 주소 : 인구통계학적 분석 자료(회원의 연령별, 성별, 지역별 통계분석)
 라. 그 외 선택항목 : 개인맞춤 서비스를 제공하기 위한 자료
 2) 단, 이용자의 기본적 인권 침해의 우려가 있는 민감한 개인정보(인종 및 민족, 사상 및 신조, 출신지 및 본적지, 정치적 성향 및 범죄기록, 건강상태 및 성생활 등)는 수집하지 않습니다.
 * 수집하는 개인정보의 항목
 1) 필수항목
-- 이름, ID(고유번호), Password(비밀번호), E-mail(전자우편) 주소, 핸드폰번호, 주소, 기타 회사가 필요하다고 인정하는 사항
+- 이름, ID(고유번호), Password(비밀번호), E-mail(전자우편) 주소, 기타 회사가 필요하다고 인정하는 사항
 2) 선택항목
-- 회사명, 직업, 취미, 결혼여부, 뉴스레터 수신여부, SMS 수신여부, DM 수령여부
+- 핸드폰번호, 주소
 ※ 개인정보의 보유 및 이용기간
 회원의 개인정보는 다음과 같이 개인정보의 수집 목적 또는 제공받은 목적이 종료되면 파기됩니다. 단, 상법 등 관련법령의 규정에 의하여 다음과 같이 거래 관련 권리 의무 관계의 확인 등을 이유로 일정기간 보유하여야 할 필요가 있을 경우에는 일정기간 보유합니다.
 1) 회원가입정보의 경우 회원탈퇴 또는 회원제명시 사전에 보유목적, 기간, 보유하는 개인정보 항목을 명시하고 동의를 구할 경우 보유 가능
 2) 계약 또는 청약철회 등에 관한 기록 : 5년
 3) 소비자의 불만 또는 분쟁처리에 관한 기록 : 3년
 * 상기 보유 기간은 전자상거래 등에서의 소비자보호에 관한법률 시행령 제 6조 1항에 의거합니다.
-                           </textarea>
-                     <p>
-                        <label><input type="checkbox" id="check_2" name="" /> 위의 약관에 동의 합니다.</label><br />
-                     </p>
-                     <br>
-                     <h4 class="scheme-g">●개인정보 취급위탁 동의</h4>(필수동의)
-                     <textarea readonly>
+       </textarea>
+                    <ul class="clearfix">
+                        <li>개인정보 수집 및 이용에 대한 안내(필수)</li>
+                        <li class="checkBtn">
+                            <input type="checkbox" name="chk" onclick="check2()">
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="checkBox check04">
+                  	<textarea name="" id="">
 [개인정보 취급 위탁 안내]
 이 약관은 워드북(이하"회사"라 표기합니다)가 제공하는 사이버 회원에 대한 서비스 제공 및 이용조건, 회원가입에 관련된 사항 및 절차 그리고 기타 필요한 사항의 규정을 목적으로 합니다.
 1) 워드북 : 웹사이트 관리
 2) 워드북 : 전산시스템 구축 및 유지보수
-                  </textarea>
-                     <p>
-                        <label><input type="checkbox" id="check_3" name="" /> 위의 약관에 동의 합니다.</label><br />
-                     </p>
-                  </div>
-               </article>
+       </textarea>
+                    <ul class="clearfix">
+                        <li>개인정보 위탁 안내(필수)</li>
+                        <li class="checkBtn">
+                            <input type="checkbox" name="chk" onclick="check3()">
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
 						<div class="signup_btn_box actions stacked">
-							<input type="submit" style="width: 100%;" value="회원가입"
+							<input type="submit" style="width: 100%;" value="회원가입" id="join" 
 								class="button primary fit">
 						</div>
 					</div>
@@ -392,7 +413,6 @@
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
 	<script src="/js/signup/signup.js"></script>
-
 </body>
 
 </html>

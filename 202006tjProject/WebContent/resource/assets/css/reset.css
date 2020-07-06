@@ -3,7 +3,10 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600|Raleway:500,700,800");
 
-html,
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900|Noto+Serif+KR:200,300,400,500,600,700,900&display=swap&subset=korean"rel="stylesheet" > html,
+
+
+
 body,
 div,
 span,
@@ -154,7 +157,9 @@ input,
 select,
 textarea {
     -moz-appearance: none;
+    /*
     -webkit-appearance: none;
+    */
     -ms-appearance: none;
     appearance: none;
 }
@@ -280,7 +285,7 @@ h3:after,
 h4:after,
 h5:after,
 h6:after {
-    /*border-bottom: solid 1px;*/
+    border-bottom: solid 1px;
     bottom: 0;
     content: '';
     display: inline-block;
@@ -1982,7 +1987,9 @@ input[type="button"],
 button,
 .button {
     -moz-appearance: none;
+    /*
     -webkit-appearance: none;
+    */
     -ms-appearance: none;
     appearance: none;
     -moz-transition: background-color 0.2s ease-in-out;
@@ -2221,7 +2228,9 @@ input[type="url"],
 select,
 textarea {
     -moz-appearance: none;
+    /*
     -webkit-appearance: none;
+    */
     -ms-appearance: none;
     appearance: none;
     border: none;
@@ -2280,16 +2289,14 @@ textarea {
 
 input[type="checkbox"],
 input[type="radio"] {
-    -moz-appearance: none;
+   /* -moz-appearance: none;
     -webkit-appearance: none;
     -ms-appearance: none;
-    appearance: none;
+    appearance: none;*/
     display: block;
     float: left;
     margin-right: -2em;
-    opacity: 0;
-    width: 1em;
-    z-index: -1;
+    opacity: 100;
 }
 
 input[type="checkbox"] + label,
@@ -2509,7 +2516,7 @@ input[type="radio"]:focus + label:before {
 }
 
 .icon-wrapper .icon:before {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
 }
 
 .icon-wrapper.major {
@@ -2518,11 +2525,11 @@ input[type="radio"]:focus + label:before {
 }
 
 .icon-wrapper.small {
-    font-size: 1.75em;
+    font-size: 0.75em;
 }
 
 .icon-wrapper.small .icon:before {
-    font-size: 2.25rem;
+    font-size: 1.25rem;
 }
 
 
@@ -2815,7 +2822,7 @@ ul.bulleted-icons li .icon-wrapper {
 }
 
 ul.bulleted-icons li .icon-wrapper .icon:before {
-    font-size: 1.5rem;
+    font-size: 1rem;
 }
 
 ul.bulleted-icons li h3 {
@@ -3054,19 +3061,13 @@ table.alt tbody tr td {
 .skip,
 legend,
 label {
-    width: 0px;
-    height: 0px;
+    width: 1px;
+    height: 1px;
     display: inline-block;
     overflow: hidden;
     font-size: 0;
     line-height: 0;
     text-indent: -999px;
-}
-
-.center_position {
-    margin: 0 auto;
-    text-align: center;
-}
-.right_position {
-    float: right;
+    position: absolute;
+    left: -999px;
 }
