@@ -10,12 +10,17 @@
 	<select id="selectMemberById" resultType="member">
 		select id,member_id,password,email,phone,address,reg_date,certified from member where id=#{id}
 	</select>
+	<!-- BINARY -> 대소문자 구분 -->
 	<select id="selectMemberByMemberId" resultType="member">
 		select id,member_id,password,email,phone,address,reg_date,certified from member where BINARY(member_id)=#{memberId}
 	</select>
 	<select id="selectMemberByMemberIdPw" resultType="member">
 		select id,member_id,password,certified from member
 		 where BINARY(member_id)=#{memberId} AND BINARY(password)=#{password}
+	</select>
+	<!-- 카카오, 구글 로그인을 위한 쿼리문 -->
+	<select id="selectMemberByMemberIdforApi" resultType="member">
+	select id,member_id,password,email,phone,address,reg_date,certified from member where member_id like CONCAT('%', #{memberId})
 	</select>
 	<select id="selectMemberByEmail" resultType="String">
 		select email from member where email=#{email}
@@ -36,4 +41,11 @@
 	<delete id="deleteMember">
 		delete from member where id=#{id}
 	</delete>
+	<!-- 아이디, 패스워드 찾기 -->
+	<select id="selectMemberIdByEmail" resultType="String">
+		select member_id from member where email=#{email}
+	</select>
+	<select id="selectMemberInfoByIDEmail" resultType="member">
+		select id,member_id,password,email,phone,address,reg_date,certified from member where member_id=#{memberId} AND email=#{email}
+	</select>
 </mapper>

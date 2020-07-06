@@ -41,15 +41,19 @@ window.addEventListener("DOMContentLoaded", function(){
 			console.log(data);
 			if(data.nope=="notAllowed") {
 				alert("권한이 없습니다.");
-				location.href="../wordbook/showlist";
+				location.replace("wordbook/showlist");
 			}
 			else if(data.nope=="notExist") {
 				alert("존재하지 않는 페이지입니다.");
-				location.href="../wordbook/showlist";
+				location.replace("wordbook/showlist");
 			}
 			else if(data.nope=="loginPlease") {
 				alert("로그인이 필요한 서비스입니다.");
-				location.href="../";
+				location.replace("../");
+			}
+			else if(data.nope == "wrongAccess" ){
+				alert("잘못 된 접근입니다.");
+				location.replace("/");
 			}
 			else {
 				//console.log(sortJSON(data,"count","desc"));
@@ -62,6 +66,7 @@ window.addEventListener("DOMContentLoaded", function(){
 					+ data[i].trans + "' /><input name='count' id='count"+i+"' type='number' disabled='disabled' value='"
 					+ data[i].count + "' /><br/>");*/
 				}
+				$.getScript("/js/word/wordInsert.js?v=<%=System.currentTimeMillis()%>");
 				$.getScript("/js/word/wordUpdate.js?v=<%=System.currentTimeMillis()%>");
 			}
 		},

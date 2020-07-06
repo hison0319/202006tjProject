@@ -8,14 +8,37 @@
 		values(#{ownerId},#{favorite},#{title},#{wordbookAddress})
 	</insert>
 	<select id="selectWordbookById" resultType="wordbook">
-		select id,owner_id,favorite,shared,title,reg_date,u_date,wordbook_address from wordbook where id=#{id}
+		select id,owner_id,favorite,guest_id,title,reg_date,u_date,wordbook_address from wordbook where id=#{id}
+	</select>
+	<!-- for list output -->
+	<select id="selectWordbookByOwnerId" resultType="wordbook">
+		select * from wordbook where owner_id=#{id} group by title order by u_date desc limit #{first}, #{ea};
+	</select>
+	<select id="selectWordbookByGuestId" resultType="wordbook">
+		select * from wordbook where guest_id=#{id} order by u_date desc limit #{first}, #{ea};
+	</select>
+	<select id="selectWordbookByOwnerIdOrGuestId" resultType="wordbook">
+		select * from wordbook where owner_id=#{id} or guest_id=#{id} group by title order by u_date desc limit #{first}, #{ea};
+	</select>
+	<!-- for count check -->
+	<select id="selectWordbookCountByOwnerId" resultType="int">
+		select count(distinct title) from wordbook where owner_id=#{id};
+	</select>
+	<select id="selectWordbookCountByGuestId" resultType="int">
+		select count(id) from wordbook where guest_id=#{id};
+	</select>
+	<select id="selectWordbookCountByOwnerIdOrGuestId" resultType="int">
+		select count(distinct title) from wordbook where owner_id=#{id} or guest_id=#{id};
 	</select>
 	<select id="selectWordbookAll" resultType="wordbook">
-		select id,owner_id,favorite,shared,title,reg_date,u_date,wordbook_address from wordbook
+		select id,owner_id,favorite,guest_id,title,reg_date,u_date,wordbook_address from wordbook
 	</select>
 	<update id="updateWordbook" parameterType="wordbook">
-		update wordbook set owner_id=#{ownerId}, favorite=#{favorite}, shared=#{shared}, 
+		update wordbook set owner_id=#{ownerId}, favorite=#{favorite}, guest_id=#{guestId}, 
 		title=#{title}, wordbook_address=#{wordbookAddress} where id=#{id}
+	</update>
+	<update id="updateWordbookFavorite">
+		update wordbook set favorite=#{favorite} where id=#{id};
 	</update>
 	<delete id="deleteWordbook">
 		delete from wordbook where id=#{id}
