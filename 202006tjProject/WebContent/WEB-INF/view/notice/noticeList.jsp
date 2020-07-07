@@ -67,8 +67,8 @@
 					<tbody>
 						<c:forEach var="nL" items="${noticeList}">
 							<tr>
-								<td>${nL.writerId}</td>
-								<td><a href="show?id=${nL.id}">${nL.title}</a></td>
+								<td>${nL.memberId}</td>
+								<td><a href="show?id=${nL.id}&memberId=${nL.memberId}">${nL.title}</a></td>
 								<td>${nL.regDateStr}</td>
 							</tr>
 						</c:forEach>
@@ -101,7 +101,7 @@
 					</ul>
 				</div>
 				<c:if test="${sessionScope.loginMember.id>=1&&sessionScope.loginMember.id<=20}">
-					<button class="right_position" id="btnInsert">공지 등록</button>			
+					<button class="button" id="btnInsert">공지 등록</button>			
 				</c:if>
 			</div>
 		</div>

@@ -23,4 +23,9 @@
 	<delete id="deleteNotice">
 		delete from notice where id=#{id}
 	</delete>
+	<!-- join통해서 memberId도 가져옴. -->
+	<select id="selectNoticeListJoin" resultType="notice">
+		select notice.id, notice.title, notice.writer_id, notice.contents, notice.reg_date, member.member_id 
+		from notice join member on notice.writer_id = member.id order by id desc limit 0, 5;
+	</select>
 </mapper>

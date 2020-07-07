@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import member.dto.MemberDto;
+import member.service.MemberService;
 import word.dto.WordbookDto;
 import word.service.WordbookService;
 
@@ -48,6 +49,8 @@ import word.service.WordbookService;
 public class WordbookController {
 	@Autowired
 	WordbookService wordbookService;
+	@Autowired
+	MemberService memberService;
 
 	// 단어장 목록 조회 기능 /기본조회 owner,guest, 수정일 순
 	@GetMapping("showlist")
@@ -64,7 +67,6 @@ public class WordbookController {
 			// 단어장 총 갯수
 			int totalCnt = wordbookService.selectWordbookCountByOwnerIdOrGuestId(loginId);
 			// 페이지 리스트
-			System.out.println("totalCnt : " + totalCnt);
 			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
 			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
 			m.addAttribute("pageNumList", pageNumList);
@@ -105,7 +107,6 @@ public class WordbookController {
 			// 단어장 총 갯수
 			int totalCnt = wordbookService.selectWordbookCountByOwnerId(loginId);
 			// 페이지 리스트
-			System.out.println("totalCnt : " + totalCnt);
 			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
 			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
 			m.addAttribute("pageNumList", pageNumList);
@@ -146,7 +147,6 @@ public class WordbookController {
 				// 단어장 총 갯수
 				int totalCnt = wordbookService.selectWordbookCountByGuestId(loginId);
 				// 페이지 리스트
-				System.out.println("totalCnt : " + totalCnt);
 				int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
 				List<Integer> pageNumList = getPageList(pageNum, ea, pages);
 				m.addAttribute("pageNumList", pageNumList);

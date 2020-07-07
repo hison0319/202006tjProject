@@ -27,10 +27,11 @@ public class NoticeController {
 
 	// 공지사항 조회 기능
 	@GetMapping("show")
-	public String noticeShow(Model m, int id) {
+	public String noticeShow(Model m, int id, String memberId) {
 		System.out.println(id);
 		NoticeDto notice = noticeService.selectNoticeById(id);
 		m.addAttribute("notice", notice);
+		m.addAttribute("memberId", memberId);
 		return "notice/notice";
 	}
 
@@ -46,7 +47,7 @@ public class NoticeController {
 		m.addAttribute("pageNumList", pageNumList);
 		m.addAttribute("pageNum", pageNum);
 		m.addAttribute("pages", pages);
-		List<NoticeDto> noticeList = noticeService.selectNoticeList((pageNum - 1) * 5, ea);
+		List<NoticeDto> noticeList = noticeService.selectNoticeListJoin((pageNum - 1) * 5, ea);
 		//regDate 날짜까지만 나오도록 변경
 		for(int i=0; i<noticeList.size(); i++) {
 			if(noticeList.get(i).getRegDate()!=null)noticeList.get(i).setRegDateStr(noticeList.get(i).getRegDate().toString().substring(0, 10));

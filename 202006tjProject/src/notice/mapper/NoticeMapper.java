@@ -24,4 +24,7 @@ public interface NoticeMapper {
 	
 	//공지 총 갯수 조회
 	public int selectNoticeCount();
+	
+	//공지 조회 시 join 활용 멤버아이디 가져옴
+	public List<NoticeDto> selectNoticeListJoin(@Param("first")int first, @Param("ea")int ea);
 }

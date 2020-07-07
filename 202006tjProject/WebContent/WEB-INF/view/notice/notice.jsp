@@ -57,7 +57,7 @@
 		<div class="inner">
 			<div class="notice">
 			
-				<p><span class="writerId">${notice.writerId}</span><span class="regDate">&nbsp;&nbsp; ${notice.regDate}</span></p>
+				<p><span class="writerId">${memberId}</span><span class="regDate">&nbsp;&nbsp; ${notice.regDate}</span></p>
 				<h3 class="title">${notice.title}</h3>
 				<p class="contents">${notice.contents}</p>
 			</div>

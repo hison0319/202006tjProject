@@ -66,9 +66,10 @@
             <div class="posting">
                 <div class="textWindow">
                     <form action="update" name="noticeForm" method="POST">
-                    	<input type="text" name="id" value="${notice.id}" class="skip"/>
+                    	<input type="hidden" name="id" value="${notice.id}"/>
                         <div class="col-6 col-12-xsmall">
-                            <input type="text" name="writerId" value="1" placeholder="아이디(셰션연동 자동업로드)" readonly/>
+                            <input type="hidden" name="writerId" value="${sessionScope.loginMember.id }"  readonly/>
+                            <input type="text" name="memberId" value="${sessionScope.loginMember.memberId }"  readonly/>
                             <input type="text" name="title" value="${notice.title}" maxlength="100"/>
                         </div>
                         <div class="col-12">

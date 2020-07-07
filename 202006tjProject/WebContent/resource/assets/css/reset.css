@@ -3071,3 +3071,8 @@ label {
     position: absolute;
     left: -999px;
 }
+
+.center_position {
+    margin: 0 auto;
+    text-align: center;
+}

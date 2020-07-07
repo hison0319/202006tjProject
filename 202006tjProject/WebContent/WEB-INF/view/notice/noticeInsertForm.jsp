@@ -67,7 +67,8 @@
                 <div class="textWindow">
                     <form action="insert" name="noticeForm" method="POST">
                         <div class="col-6 col-12-xsmall">
-                            <input type="text" name="writerId" value="1" placeholder="아이디(셰션연동 자동업로드)" readonly/>
+                            <input type="hidden" name="writerId" value="${sessionScope.loginMember.id }"  readonly/>
+                            <input type="text" name="memberId" value="${sessionScope.loginMember.memberId }"  readonly/>
                             <input type="text" name="title" placeholder="+ 제목 (단어)" maxlength="100" />
                         </div>
                         <div class="col-12">

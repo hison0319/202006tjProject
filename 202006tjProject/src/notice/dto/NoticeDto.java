@@ -9,6 +9,7 @@ public class NoticeDto {
 	private String contents;
 	private Timestamp regDate;
 	private String regDateStr;
+	private String memberId;
 	public NoticeDto() {}
 	public NoticeDto(String title, int writerId, String contents) {
 		this.title = title;
@@ -21,6 +22,16 @@ public class NoticeDto {
 		this.writerId = writerId;
 		this.contents = contents;
 		this.regDate = regDate;
+	}
+	public NoticeDto(int id, String title, int writerId, String contents, Timestamp regDate, String regDateStr,
+			String memberId) {
+		this.id = id;
+		this.title = title;
+		this.writerId = writerId;
+		this.contents = contents;
+		this.regDate = regDate;
+		this.regDateStr = regDateStr;
+		this.memberId = memberId;
 	}
 	public int getId() {
 		return id;
@@ -57,6 +68,13 @@ public class NoticeDto {
 	}
 	public void setRegDateStr(String regDateStr) {
 		this.regDateStr = regDateStr;
+	}
+	
+	public String getMemberId() {
+		return memberId;
+	}
+	public void setMemberId(String joinMemberId) {
+		this.memberId = joinMemberId;
 	}
 	@Override
 	public String toString() {

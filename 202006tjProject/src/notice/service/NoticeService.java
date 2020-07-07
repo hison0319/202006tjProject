@@ -2,6 +2,7 @@ package notice.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +41,10 @@ public class NoticeService {
 	//공지 총 갯수 조회
 	public int selectNoticeCount() {
 		return noticeMapper.selectNoticeCount();
+	}
+	
+	//공지 조회 시 join 활용 멤버아이디 가져옴
+	public List<NoticeDto> selectNoticeListJoin(int first, int ea) {
+		return noticeMapper.selectNoticeListJoin(first, ea);
 	}
 }
