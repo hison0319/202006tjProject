@@ -111,7 +111,6 @@
 							<section class="post">
 								<div class="content">
 
-									<form action="showlist${method }" method="post">
 										<div style="height: 50px;">
 											<a href="#">소유자 :&nbsp;<span class="postId">${l.memberId }</span></a>
 											<div class="postDate" style="height: 50px;">
@@ -127,16 +126,16 @@
 											</li>
 											<li style="height: 50px;"><c:choose>
 													<c:when test="${l.favorite==0 }">
-														중요&nbsp;<button class="favorite${i.index }"
+														중요&nbsp;<button class="favorite${i.index }" onclick="btnFavorite(${l.id }, ${l.favorite })" 
 															style="box-shadow: none; border: none;">
-															<span class="icon far fa-star"
-																style="font-size: 1.5em; color: #cc0"></span>
+															<span class="icon fas fa-star"
+																style="font-size: 1.5em; color: #ccc"></span>
 														</button>
 													</c:when>
 													<c:otherwise>
-														중요&nbsp;<button class="favorite${i.index }"
+														중요&nbsp;<button class="favorite${i.index }" onclick="btnFavorite(${l.id }, ${l.favorite })" 
 															style="box-shadow: none; border: none;">
-															<span class="icon far fa-star"
+															<span class="icon fas fa-star"
 																style="font-size: 1.5em; color: #cc0"></span>
 														</button>
 													</c:otherwise>
@@ -162,7 +161,6 @@
 													</c:otherwise>
 												</c:choose></li>
 										</ul>
-									</form>
 								</div>
 							</section>
 						</c:forEach>
@@ -269,9 +267,9 @@
 	<script src="/js/breakpoints.min.js"></script>
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
-	<script src="/js/wordbook/favorite.js"></script>
+	<script src="/js/wordbook/favorite.js?v=<%=System.currentTimeMillis()%>"></script>
 	<script src="/js/wordbook/sharing.js"></script>
-	<script src="/js/wordbook/wordbookList.js?v=<%=System.currentTimeMillis()%>"></script>
+	<script src="/js/wordbook/wordbookList.js"></script>
 
 </body>
 

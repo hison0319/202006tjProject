@@ -53,7 +53,7 @@ public class WordbookController {
 	MemberService memberService;
 
 	// 단어장 목록 조회 기능 /기본조회 owner,guest, 수정일 순
-	@GetMapping("showlist")
+	@RequestMapping("showlist")
 	public String wordbookListShow(HttpSession session, Model m, String pageNumStr) { // 세션 모델
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 		if (loginMember == null) {
@@ -436,6 +436,7 @@ public class WordbookController {
 					for (int i = 0; i < textArr.length; i++) {
 						if (textArr[i] != null && textArr[i].length() > 1) {
 							try {
+								System.out.println(responseBody[0]);
 								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
 								JSONObject message = (JSONObject) resultJson.get("message");
 								JSONObject result = (JSONObject) message.get("result");
