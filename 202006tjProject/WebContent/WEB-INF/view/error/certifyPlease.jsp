@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>잘못 된 접근입니다.</title>
+<title>Insert title here</title>
 </head>
 <body>
-	<script src="/js/word/wrongAccess.js"></script>
+	<script src="/js/error/certifyPlease.js"></script>
 </body>
 </html>
