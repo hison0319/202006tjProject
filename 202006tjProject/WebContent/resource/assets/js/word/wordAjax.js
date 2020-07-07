@@ -42,7 +42,7 @@ window.addEventListener("DOMContentLoaded", function(){
 							+ data[i].trans + "' /></td></tr>");
 						}
 						else{
-							$("tr").eq(0).append("<td><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
+							$("tr").eq(0).prepend("<td><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 							+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 							+ data[i].trans + "' /></td>");
 						}
