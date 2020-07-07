@@ -26,7 +26,7 @@
 		<nav id="nav">
 			<ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
-				<li><a href="#">단어장</a></li>
+				<li><a href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
 				</li>
@@ -62,11 +62,10 @@
 			</a>
 			<div class="postTool">
 
-				<form method="post" action="#" name="searchfrm" class="search">
+				<form method="get" action="showlistSearch" name="searchfrm" class="search">
 					<input type="text" class="inputVal" id="searchKeyword"
-						name="Keyword" placeholder="검색어를 입력" />
-					<button class="searchBtn" aria-label="검색" data-tip="검색">
-						<a href="#" class="fas fa-search"></a>
+						name="keyword" placeholder="검색어를 입력" />
+					<button class="searchBtn fas fa-search" aria-label="검색" data-tip="검색">
 					</button>
 				</form>
 
@@ -114,7 +113,7 @@
 
 									<form action="showlist${method }" method="post">
 										<div style="height: 50px;">
-											<a href="#">소유자 :&nbsp;<span class="postId">${l.ownerId }</span></a>
+											<a href="#">소유자 :&nbsp;<span class="postId">${l.memberId }</span></a>
 											<div class="postDate" style="height: 50px;">
 												&nbsp;&nbsp;&nbsp;수정일&nbsp;:&nbsp;${l.uDateStr }	
 											</div>
@@ -174,7 +173,7 @@
 		<div class="center_position">
 					<ul class="pagination">
 						<c:if test="${pageNum>1}">
-						<li><a href="showlist${method }?pageNumStr=${pageNum-1}" class="button">Prev</a></li>
+						<li><a href="showlist${method }?pageNumStr=${pageNum-1}&keyword=${keyword}" class="button">Prev</a></li>
 						</c:if>
 						<c:if test="${pageNum<=1}">
 						<li><span class="button disabled">Prev</span></li>
@@ -182,15 +181,15 @@
 						<c:forEach var="pN" items="${pageNumList}" end="4">
 							<c:choose>
 								<c:when test="${pN != pageNum}">
-									<li><a href="showlist${method }?pageNumStr=${pN}" class="page">${pN}</a></li>
+									<li><a href="showlist${method }?pageNumStr=${pN}&keyword=${keyword}" class="page">${pN}</a></li>
 								</c:when>
 								<c:when test="${pN == pageNum}">
-									<li><a href="showlist${method }?pageNumStr=${pN}" class="page active">${pN}</a></li>
+									<li><a href="showlist${method }?pageNumStr=${pN}&keyword=${keyword}" class="page active">${pN}</a></li>
 								</c:when>
 							</c:choose>
 						</c:forEach>
 						<c:if test="${pages>pageNum}">
-						<li><a href="showlist${method }?pageNumStr=${pageNum+1}" class="button">Next</a></li>
+						<li><a href="showlist${method }?pageNumStr=${pageNum+1}&keyword=${keyword}" class="button">Next</a></li>
 						</c:if>
 						<c:if test="${pages<=pageNum}">
 						<li><span class="button disabled">Next</span></li>

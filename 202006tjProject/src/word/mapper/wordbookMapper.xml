@@ -43,4 +43,27 @@
 	<delete id="deleteWordbook">
 		delete from wordbook where id=#{id}
 	</delete>
+	<!-- for list join output -->
+	<select id="selectWordbookByOwnerIdJoin" resultType="wordbook">
+		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
+		where owner_id=#{id} group by title order by u_date desc limit #{first}, #{ea};
+	</select>
+	<select id="selectWordbookByGuestIdJoin" resultType="wordbook">
+		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
+		where guest_id=#{id} order by u_date desc limit #{first}, #{ea};
+	</select>
+	<select id="selectWordbookByOwnerIdOrGuestIdJoin" resultType="wordbook">
+		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
+		where owner_id=#{id} or guest_id=#{id} group by title order by u_date desc limit #{first}, #{ea};
+	</select>
+	<!-- for search -->
+	<select id="selectWordbookBySearchJoin" resultType="wordbook">
+		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
+		where (owner_id=#{id} or guest_id=#{id}) And (member_id like CONCAT('%', #{keyword}, '%') or title like CONCAT('%', #{keyword}, '%')) 
+		group by title order by u_date desc limit #{first}, #{ea};
+	</select>
+	<select id="selectWordbookCountBySearchJoin" resultType="int">
+		select count(distinct title) from wordbook join member on wordbook.owner_id = member.id 
+		where (owner_id=#{id} or guest_id=#{id}) And (member_id like CONCAT('%', #{keyword}, '%') or title like CONCAT('%', #{keyword}, '%'));
+	</select>
 </mapper>

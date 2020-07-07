@@ -73,7 +73,8 @@ public class WordbookController {
 			m.addAttribute("pageNum", pageNum);
 			m.addAttribute("pages", pages);
 			// 단어장 리스트
-			List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestId(loginId, (pageNum - 1) * 6, ea);
+			List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestIdJoin(loginId, (pageNum - 1) * 6,
+					ea);
 			// 등록일을 날짜만 표현
 			for (int i = 0; i < list.size(); i++) {
 				if (list.get(i).getRegDate() != null)
@@ -86,7 +87,7 @@ public class WordbookController {
 			} else {
 				m.addAttribute("listNull", "");
 			}
-			m.addAttribute("method","");
+			m.addAttribute("method", "");
 			m.addAttribute("list", list);
 		}
 		return "wordbook/wordbookList";
@@ -113,7 +114,7 @@ public class WordbookController {
 			m.addAttribute("pageNum", pageNum);
 			m.addAttribute("pages", pages);
 			// 단어장 리스트
-			List<WordbookDto> list = wordbookService.selectWordbookByOwnerId(loginId, (pageNum - 1) * 6, ea);
+			List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdJoin(loginId, (pageNum - 1) * 6, ea);
 			// 등록일을 날짜만 표현
 			for (int i = 0; i < list.size(); i++) {
 				if (list.get(i).getRegDate() != null)
@@ -126,51 +127,94 @@ public class WordbookController {
 			} else {
 				m.addAttribute("listNull", "");
 			}
-			m.addAttribute("method","Owner");
+			m.addAttribute("method", "Owner");
 			m.addAttribute("list", list);
 		}
 		return "wordbook/wordbookList";
 	}
-	
+
 	// 단어장 목록 조회 기능 /조회 guest 수정일 순
-		@GetMapping("showlistGuest")
-		public String wordbookListShowGuest(HttpSession session, Model m, String pageNumStr) { // 세션 모델
-			MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-			if (loginMember == null) {
-				m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
-			} else if (loginMember.getCertified() == 0) {
-				m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
-			} else {
-				int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
-				int ea = 6;// 페이지에 띄울 갯수 정의(정책)
-				int loginId = loginMember.getId();
-				// 단어장 총 갯수
-				int totalCnt = wordbookService.selectWordbookCountByGuestId(loginId);
-				// 페이지 리스트
-				int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
-				List<Integer> pageNumList = getPageList(pageNum, ea, pages);
-				m.addAttribute("pageNumList", pageNumList);
-				m.addAttribute("pageNum", pageNum);
-				m.addAttribute("pages", pages);
-				// 단어장 리스트
-				List<WordbookDto> list = wordbookService.selectWordbookByGuestId(loginId, (pageNum - 1) * 6, ea);
-				// 등록일을 날짜만 표현
-				for (int i = 0; i < list.size(); i++) {
-					if (list.get(i).getRegDate() != null)
-						list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
-					if (list.get(i).getuDate() != null)
-						list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
-				}
-				if (list.size() == 0) {
-					m.addAttribute("listNull", "단어장을 만들어 보세요!");
-				} else {
-					m.addAttribute("listNull", "");
-				}
-				m.addAttribute("list", list);
+	@GetMapping("showlistGuest")
+	public String wordbookListShowGuest(HttpSession session, Model m, String pageNumStr) { // 세션 모델
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+		} else if (loginMember.getCertified() == 0) {
+			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+		} else {
+			int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
+			int ea = 6;// 페이지에 띄울 갯수 정의(정책)
+			int loginId = loginMember.getId();
+			// 단어장 총 갯수
+			int totalCnt = wordbookService.selectWordbookCountByGuestId(loginId);
+			// 페이지 리스트
+			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+			m.addAttribute("pageNumList", pageNumList);
+			m.addAttribute("pageNum", pageNum);
+			m.addAttribute("pages", pages);
+			// 단어장 리스트
+			List<WordbookDto> list = wordbookService.selectWordbookByGuestIdJoin(loginId, (pageNum - 1) * 6, ea);
+			// 등록일을 날짜만 표현
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getRegDate() != null)
+					list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
+				if (list.get(i).getuDate() != null)
+					list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
 			}
-			m.addAttribute("method","Guest");
-			return "wordbook/wordbookList";
+			if (list.size() == 0) {
+				m.addAttribute("listNull", "단어장을 만들어 보세요!");
+			} else {
+				m.addAttribute("listNull", "");
+			}
+			m.addAttribute("list", list);
 		}
+		m.addAttribute("method", "Guest");
+		return "wordbook/wordbookList";
+	}
+
+	// 단어장 목록 검색 기능 /기본조회 owner,guest, 수정일 순
+	@GetMapping("showlistSearch")
+	public String wordbookListShearch(HttpSession session, Model m, String pageNumStr, String keyword) { // 세션 모델
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+		} else if (loginMember.getCertified() == 0) {
+			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+		} else {
+			int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
+			int ea = 6;// 페이지에 띄울 갯수 정의(정책)
+			int loginId = loginMember.getId();
+			// 단어장 총 갯수
+			int totalCnt = wordbookService.selectWordbookCountBySearchJoin(loginId, keyword);
+			System.out.println(totalCnt);
+			// 페이지 리스트
+			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+			m.addAttribute("pageNumList", pageNumList);
+			m.addAttribute("pageNum", pageNum);
+			m.addAttribute("pages", pages);
+			// 단어장 리스트
+			List<WordbookDto> list = wordbookService.selectWordbookBySearchJoin(loginId, keyword, (pageNum - 1) * 6, ea);
+			System.out.println(list);
+			// 등록일을 날짜만 표현
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getRegDate() != null)
+					list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
+				if (list.get(i).getuDate() != null)
+					list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
+			}
+			if (list.size() == 0) {
+				m.addAttribute("listNull", "단어장을 만들어 보세요!");
+			} else {
+				m.addAttribute("listNull", "");
+			}
+			m.addAttribute("method", "Search");
+			m.addAttribute("keyword",keyword);
+			m.addAttribute("list", list);
+		}
+		return "wordbook/wordbookList";
+	}
 
 	// 페이지 네이션 구현 기능
 	public List<Integer> getPageList(int pageNum, int ea, int pages) {
@@ -231,7 +275,7 @@ public class WordbookController {
 
 	@PostMapping("complete") // 완료
 	public String wordbookInsert(HttpSession session, Model m, String title,
-			@RequestParam(required = false) String text, @RequestParam(required = false) File file) throws IOException {
+			@RequestParam(required = false) String text, @RequestParam(required = false) File file) {
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 
 		if (loginMember == null) { // 비로그인
@@ -261,9 +305,9 @@ public class WordbookController {
 				String fileExtension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
 				if (fileExtension.equals("txt")) {
 					try (BufferedReader br = new BufferedReader(
-							new InputStreamReader(new FileInputStream(file), "MS949"));
+							new InputStreamReader(new FileInputStream(file), "UTF-8"));
 							BufferedWriter bw = new BufferedWriter(
-									new OutputStreamWriter(new FileOutputStream(json), "MS949"))) {
+									new OutputStreamWriter(new FileOutputStream(json), "UTF-8"))) {
 						String s;
 						String fileText = "";
 						while ((s = br.readLine()) != null) {
@@ -342,13 +386,13 @@ public class WordbookController {
 						return null;
 					}
 				} else { // 파일 형식이 txt가 아닐 경우
-					return "error";
+					return "error/wrongFileType";
 				}
 			}
 
 			else {
 				try (BufferedWriter bw = new BufferedWriter(
-						new OutputStreamWriter(new FileOutputStream(json), "MS949"))) {
+						new OutputStreamWriter(new FileOutputStream(json), "UTF-8"))) {
 					text = text.replaceAll(regex, " ");
 					String[] textArr = text.split(" ");
 					String word;
@@ -415,9 +459,19 @@ public class WordbookController {
 									+ "\\" + now + ".json"));
 					return "wordbook/wordbookUpdateComplete";
 
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		}
+		return "wordbook/wordbookUpdateComplete";
 	}
 
 	private static String post(String apiUrl, Map<String, String> requestHeaders, String text) {

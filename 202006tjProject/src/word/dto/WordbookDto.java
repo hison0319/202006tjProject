@@ -13,6 +13,7 @@ public class WordbookDto {
 	private String wordbookAddress;
 	private String regDateStr;
 	private String uDateStr;
+	private String memberId;
 	public WordbookDto() {}
 	public WordbookDto(int ownerId, int favorite, String title, String wordbookAddress) {
 		this.ownerId = ownerId;
@@ -39,6 +40,21 @@ public class WordbookDto {
 		this.regDate = regDate;
 		this.uDate = uDate;
 		this.wordbookAddress = wordbookAddress;
+	}
+	
+	public WordbookDto(int id, int ownerId, int favorite, int guestId, String title, Timestamp regDate, Timestamp uDate,
+			String wordbookAddress, String regDateStr, String uDateStr, String memberId) {
+		this.id = id;
+		this.ownerId = ownerId;
+		this.favorite = favorite;
+		this.guestId = guestId;
+		this.title = title;
+		this.regDate = regDate;
+		this.uDate = uDate;
+		this.wordbookAddress = wordbookAddress;
+		this.regDateStr = regDateStr;
+		this.uDateStr = uDateStr;
+		this.memberId = memberId;
 	}
 	public int getId() {
 		return id;
@@ -99,6 +115,12 @@ public class WordbookDto {
 	}
 	public void setuDateStr(String uDateStr) {
 		this.uDateStr = uDateStr;
+	}
+	public String getMemberId() {
+		return memberId;
+	}
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
 	}
 	@Override
 	public String toString() {
