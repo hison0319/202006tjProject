@@ -110,14 +110,14 @@
 						<c:forEach items="${list }" var="l" varStatus="i">
 							<section class="post">
 								<div class="content">
-
+									<form>
 										<div style="height: 50px;">
 											<a href="#">소유자 :&nbsp;<span class="postId">${l.memberId }</span></a>
 											<div class="postDate" style="height: 50px;">
 												&nbsp;&nbsp;&nbsp;수정일&nbsp;:&nbsp;${l.uDateStr }	
 											</div>
 											<input type="hidden" id="favorite${i.index }"
-												name="wordbookId" value="${l.id }" />
+												name="id" value="${l.id }" />
 										</div>
 										<ul>
 											<li
@@ -126,14 +126,14 @@
 											</li>
 											<li style="height: 50px;"><c:choose>
 													<c:when test="${l.favorite==0 }">
-														중요&nbsp;<button class="favorite${i.index }" onclick="btnFavorite(${l.id }, ${l.favorite })" 
+														중요&nbsp;<button class="favorite${i.index }"
 															style="box-shadow: none; border: none;">
 															<span class="icon fas fa-star"
 																style="font-size: 1.5em; color: #ccc"></span>
 														</button>
 													</c:when>
 													<c:otherwise>
-														중요&nbsp;<button class="favorite${i.index }" onclick="btnFavorite(${l.id }, ${l.favorite })" 
+														중요&nbsp;<button class="favorite${i.index }"
 															style="box-shadow: none; border: none;">
 															<span class="icon fas fa-star"
 																style="font-size: 1.5em; color: #cc0"></span>
@@ -161,6 +161,7 @@
 													</c:otherwise>
 												</c:choose></li>
 										</ul>
+									</form>
 								</div>
 							</section>
 						</c:forEach>

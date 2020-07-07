@@ -39,6 +39,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import member.dto.MemberDto;
 import member.service.MemberService;
 import word.dto.WordbookDto;
@@ -53,7 +55,7 @@ public class WordbookController {
 	MemberService memberService;
 
 	// 단어장 목록 조회 기능 /기본조회 owner,guest, 수정일 순
-	@RequestMapping("showlist")
+	@GetMapping("showlist")
 	public String wordbookListShow(HttpSession session, Model m, String pageNumStr) { // 세션 모델
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 		if (loginMember == null) {
@@ -61,7 +63,7 @@ public class WordbookController {
 		} else if (loginMember.getCertified() == 0) {
 			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
 		} else {
-			int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
+			int pageNum = pageNumStr == null || pageNumStr == "" ? 1 : Integer.parseInt(pageNumStr);
 			int ea = 6;// 페이지에 띄울 갯수 정의(정책)
 			int loginId = loginMember.getId();
 			// 단어장 총 갯수
@@ -238,9 +240,9 @@ public class WordbookController {
 	public String wordbookForm(HttpSession session) {
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 		if (loginMember == null) {
-			return "member/loginPlease";
+			return "error/loginPlease";
 		} else if (loginMember.getCertified() == 0) {
-			return "account/certifyPlease";
+			return "error/certifyPlease";
 		}
 		return "wordbook/wordbookUpdateForm";
 	}
@@ -249,6 +251,7 @@ public class WordbookController {
 	@ResponseBody
 	public String toggleFavorite(HttpSession session, HttpServletRequest req, int wordbookId) {
 		WordbookDto wordbook = wordbookService.selectWordbookById(wordbookId);
+		System.out.println(wordbook);
 		if (wordbook.getFavorite() == 0) {
 			wordbookService.updateWordbook(new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 1,
 					wordbook.getGuestId(), wordbook.getTitle(), wordbook.getWordbookAddress()));
@@ -261,8 +264,9 @@ public class WordbookController {
 
 	@PostMapping("sharing") // 비동기 공유
 	@ResponseBody
-	public String toggleSharing(HttpSession session, HttpServletRequest req, int wordbookId) {
-		WordbookDto wordbook = wordbookService.selectWordbookById(wordbookId);
+	public String toggleSharing(HttpSession session, HttpServletRequest req, WordbookDto wordbookDto) {
+		int id = wordbookDto.getId();
+		WordbookDto wordbook = wordbookService.selectWordbookById(id);
 		if (wordbook.getGuestId() == 0) {
 			wordbookService.updateWordbook(new WordbookDto(wordbook.getId(), wordbook.getOwnerId(),
 					wordbook.getFavorite(), 1, wordbook.getTitle(), wordbook.getWordbookAddress()));
@@ -270,7 +274,7 @@ public class WordbookController {
 			wordbookService.updateWordbook(new WordbookDto(wordbook.getId(), wordbook.getOwnerId(),
 					wordbook.getFavorite(), 0, wordbook.getTitle(), wordbook.getWordbookAddress()));
 		}
-		return "{\"wordbookId\":\"" + wordbookId + "\"}";
+		return "{\"wordbookId\":\"" + id + "\"}";
 	}
 
 	@PostMapping("complete") // 완료
@@ -279,9 +283,9 @@ public class WordbookController {
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 
 		if (loginMember == null) { // 비로그인
-			return "member/loginPlease";
+			return "error/loginPlease";
 		} else if (loginMember.getCertified() == 0) { // 미인증
-			return "account/certifyPlease";
+			return "error/certifyPlease";
 		} else { // 정상 작동
 			JSONParser parser = new JSONParser();
 			String regex = "[^-^{A-Z}^{a-z}]+";
