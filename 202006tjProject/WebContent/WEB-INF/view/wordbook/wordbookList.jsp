@@ -110,7 +110,7 @@
 						<c:forEach items="${list }" var="l" varStatus="i">
 							<section class="post">
 								<div class="content">
-									<form>
+									<form action="showlist${method }?pageNumStr=${pageNum-1}&keyword=${keyword}" method="post">
 										<div style="height: 50px;">
 											<a href="#">소유자 :&nbsp;<span class="postId">${l.memberId }</span></a>
 											<div class="postDate" style="height: 50px;">
@@ -212,7 +212,7 @@
 						<c:forEach items="${list }" var="l" varStatus="i">
 							<li>
 								<form action="showlist" method="post">
-									<input type="hidden" id="favorite${i.index }" name="wordbookId"
+									<input type="hidden" id="favorite${i.index }" name="id"
 										value="${l.id }" />
 									<c:choose>
 										<c:when test="${l.favorite==0 }">

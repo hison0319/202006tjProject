@@ -249,8 +249,10 @@ public class WordbookController {
 
 	@PostMapping("favorite") // 비동기 즐겨찾기
 	@ResponseBody
-	public String toggleFavorite(HttpSession session, HttpServletRequest req, int wordbookId) {
-		WordbookDto wordbook = wordbookService.selectWordbookById(wordbookId);
+	public String toggleFavorite(HttpSession session, HttpServletRequest req, WordbookDto wordbookDto) {
+		System.out.println(wordbookDto);
+		int id = wordbookDto.getId();
+		WordbookDto wordbook = wordbookService.selectWordbookById(id);
 		System.out.println(wordbook);
 		if (wordbook.getFavorite() == 0) {
 			wordbookService.updateWordbook(new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 1,
@@ -259,7 +261,7 @@ public class WordbookController {
 			wordbookService.updateWordbook(new WordbookDto(wordbook.getId(), wordbook.getOwnerId(), 0,
 					wordbook.getGuestId(), wordbook.getTitle(), wordbook.getWordbookAddress()));
 		}
-		return "{\"wordbookId\":\"" + wordbookId + "\"}";
+		return "{\"wordbookId\":\"" + id + "\"}";
 	}
 
 	@PostMapping("sharing") // 비동기 공유
