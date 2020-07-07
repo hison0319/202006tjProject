@@ -1,38 +1,15 @@
-/*var sortJSON = function(data, key, type) {
-	if (type == undefined) {
-		type = "asc";
-	}
-	return data.sort(function(a, b) {
-		var x = a[key];
-		var y = b[key];
-		if (type == "desc") {
-			return x > y ? -1 : x < y ? 1 : 0;
-		} else if (type == "asc") {
-			return x < y ? -1 : x > y ? 1 : 0;
-		}
-	});
-};*/  //카운트 순서대로 배열
-
-/*function getListFilter (data, key, value) {
-if (data.TYPE == "S") {
-
-return data.KK_LIST.filter (function (object) {
-
-return object[key] === value;
-
-});
-
-} else {
-
-alert(data.MESSAGE);
-
-return "";
-
-}
-
-};*/  //값으로 json 접근
+function getParameterByName(name) {
+	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+	results = regex.exec(location.search);
+	return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}  //parameter 받아오기
 	
 window.addEventListener("DOMContentLoaded", function(){
+	document.querySelector("#form").onclick=function(){
+		location.href="/word/form?wordbookid="+getParameterByName("wordbookid");
+		return false;
+	}
 	$.ajax({
 		type:"post",
 		url:"getwords",
@@ -49,7 +26,7 @@ window.addEventListener("DOMContentLoaded", function(){
 			}
 			else if(data.nope=="loginPlease") {
 				alert("로그인이 필요한 서비스입니다.");
-				location.replace("../");
+				location.replace("/login/form");
 			}
 			else if(data.nope == "wrongAccess" ){
 				alert("잘못 된 접근입니다.");
@@ -58,13 +35,35 @@ window.addEventListener("DOMContentLoaded", function(){
 			else {
 				//console.log(sortJSON(data,"count","desc"));
 				for(let i = data.length-1; i >= 0 ; i--){
-					$("table").eq(0).prepend("<tr><td><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
-					+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
-					+ data[i].trans + "' /></td></tr>");
-					/*$("form").eq(0).prepend("<input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
-					+data[i].word + "' /><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
-					+ data[i].trans + "' /><input name='count' id='count"+i+"' type='number' disabled='disabled' value='"
-					+ data[i].count + "' /><br/>");*/
+					if(data.length%2==0){
+						if((data.length-1-i)%2==0){
+							$("table").eq(0).prepend("<tr><td><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
+							+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
+							+ data[i].trans + "' /></td></tr>");
+						}
+						else{
+							$("tr").eq(0).append("<td><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
+							+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
+							+ data[i].trans + "' /></td>");
+						}
+					}
+					else {
+						if(i==data.length-1){
+							$("table").eq(0).prepend("<tr><td><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
+							+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
+							+ data[i].trans + "' /></td></tr>");
+						}
+						else if ((data.length-1-i)%2==1){
+							$("table").eq(0).prepend("<tr><td><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
+							+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
+							+ data[i].trans + "' /></td></tr>");
+						}
+						else {
+							$("tr").eq(0).prepend("<td><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
+							+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
+							+ data[i].trans + "' /></td>");
+						}
+					}
 				}
 				$.getScript("/js/word/wordInsert.js?v=<%=System.currentTimeMillis()%>");
 				$.getScript("/js/word/wordUpdate.js?v=<%=System.currentTimeMillis()%>");

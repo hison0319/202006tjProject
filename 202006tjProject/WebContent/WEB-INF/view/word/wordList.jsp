@@ -58,7 +58,7 @@
 			<div>중요도 정렬방식(순서, 중요도, 셔플) 검색 삭제 삽입 한줄수정-> 비동기</div>
 			<div>전체수정 -> 동기</div>
 			<form action="#" method="post" accept-charset="utf-8">
-				<table><tr><td><button id="insert">추가</button><button id="update">수정</button></td></tr></table>
+				<table><tr><td><button id="insert">추가</button><button id="update">수정</button></td><td><a href="/word/form"><button id="form">장문 추가</button></a></tr></table>
 			</form>
         </div>
     </section>

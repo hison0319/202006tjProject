@@ -25,7 +25,7 @@
         <nav id="nav">
             <ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
-				<li><a href="#">단어장</a></li>
+				<li><a href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
 				</li>
@@ -54,7 +54,8 @@
     <!-- container -->
     <section class="wrapper major-pad">
         <div class="inner">
-			<div>단어 게시판 수정 완료 목록으로 바로이동?</div>
+			<div>단어 게시판 수정 완료</div>
+			<div><a href="${pageContext.request.contextPath}/wordbook/showlist">단어장 목록으로 이동</a></div>
         </div>
     </section>
 

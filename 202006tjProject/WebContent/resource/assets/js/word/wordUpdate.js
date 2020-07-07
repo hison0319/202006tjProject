@@ -1,23 +1,21 @@
-	var words;
+var words;
 var trans;
 var input = document.querySelectorAll("input");
 var wInput = document.querySelectorAll("input[name=word]");
 var tInput = document.querySelectorAll("input[name=trans]");
+var offset = input.length;
 var insertBtn = document.querySelector("#insert");  //추가 버튼
 var updateBtn = document.querySelector("#update");  //수정 버튼
-
-function getParameterByName(name) {
-	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-	results = regex.exec(location.search);
-	return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}  //parameter 받아오기
+var formBtn = document.querySelector("#form");  //장문 추가 버튼
 
 $("#update").eq(0).on("click",function(){
-	if(insertBtn.innerText=="추가 완료"){
-		alert("추가 작업을 마쳐주세요.");
-	}
-	else if(updateBtn.innerText=="수정"){
+	var input = document.querySelectorAll("input");
+	var wInput = document.querySelectorAll("input[name=word]");
+	var tInput = document.querySelectorAll("input[name=trans]");
+	var offset = input.length;
+	if(updateBtn.innerText=="수정"){
+		insertBtn.disabled = "disabled";
+		formBtn.disabled = "disabled";
 		words = new Array();
 		trans = new Array();
 		updateBtn.innerText="수정완료";
@@ -39,6 +37,8 @@ $("#update").eq(0).on("click",function(){
 		}
 	}
 	else {
+		insertBtn.disabled = null;
+		formBtn.disabled = null;
 		updateBtn.innerText="수정";
 		for (let i=0;i<wInput.length;i++){
 			if((words[i]!=null && words[i]!=wInput[i].value) || (trans[i]!=null && trans[i]!=tInput[i].value)){
@@ -60,6 +60,7 @@ $("#update").eq(0).on("click",function(){
 						}
 						else if(data.nope == "wrongAccess"){
 							alert("잘못 된 접근입니다.");
+							location.replace("/");
 						}
 						else if(data.nope == "notExist"){
 							alert("존재하지 않는 페이지입니다.")
@@ -74,6 +75,33 @@ $("#update").eq(0).on("click",function(){
 	         		 }
 				});
 				break;
+			}
+		}
+		wInput = $("input[name=word]:not([disabled='disabled'])");
+		tInput = $("input[name=trans]:not([disabled='disabled'])");
+		var trs = $("tr");
+		for(let i = 0; i<wInput.length;i++){
+			if($.trim(wInput.eq(i).val()) == "" && $.trim(tInput.eq(i).val()) == ""){
+				wInput.eq(i).parent().remove();
+				tInput.eq(i).parent().remove();
+			}
+		}
+		for(let i = 0; i<trs.length;i++){
+			if(trs.eq(i).find("td").length==0){
+				trs.eq(i).remove();
+			}
+		}
+		trs = $("tr");
+		for(let i=0; i<trs.length-2; i++){
+			if(trs.eq(i).find("td").length==2 && trs.eq(i+1).find("td")!=null){
+				trs.eq(i+1).find("td").eq(0).appendTo(trs.eq(i));
+				trs.eq(i+1).find("td").eq(0).appendTo(trs.eq(i));
+			}
+		}
+		trs = $("tr");
+		for(let i = 0; i<trs.length;i++){
+			if(trs.eq(i).find("td").length==0){
+				trs.eq(i).remove();
 			}
 		}
 		input.forEach(function(element){
