@@ -16,7 +16,7 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="stylesheet" href="/css/main.css" />
+<link rel="stylesheet" href="/css/main_home.css" />
 </head>
 
 <body class="is-preload">
@@ -51,7 +51,16 @@
 			</ul>
 		</nav>
 	</header>
-
+	
+	<!-- Banner -->
+	<section id="banner">
+        <article class="visible top" style="background-image: url(&quot;images/bannerImage.jpg&quot;); background-position: center 0px;">
+            <img src="images/bannerImage.jpg" alt="">
+            <div class="inner">
+            </div>
+        </article>
+    </section>
+	
 	<!-- container -->
 	<section class="wrapper major-pad">
 		<div class="inner">

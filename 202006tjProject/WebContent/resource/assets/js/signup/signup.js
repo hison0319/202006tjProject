@@ -5,8 +5,8 @@ window.addEventListener("DOMContentLoaded",function(){
 	//숫자 1회 이상, 영문 2개 이상 사용하여 2자리 이상 총 15자리 이하 입력, 특수문자 사용 불가
 	var passwordPattern = /(?=.*\d{1,15})(?=.*[~`!@#$%\^&*()-+=]{1,15})(?=.*[a-zA-Z]{2,50}).{8,15}$/;
 	//숫자, 특수문자 각 1회 이상, 영문 2개 이상 사용하여 8자리 이상 총 15자리 이하 입력
-	var emailPattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
-	var phonePattern =  /^\d{3}\d{3,4}\d{4}$/;
+	var emailPattern = /^[0-9a-zA-Z]+@[0-9a-zA-Z]+\.[a-zA-z]{2,3}$/;
+	var phonePattern =  /^\d{3}\d{4}\d{4}$/;
 	
 	var memberIdOk = false;
 	var emailOk = false;
@@ -193,7 +193,7 @@ window.addEventListener("DOMContentLoaded",function(){
 		return false;
 	});
 	
-	//회원가입 버튼 눌렀을 때
+//회원가입 버튼 눌렀을 때
 	$("form").on("submit",function(){
 	    //아이디 공백확인
 	    if ($("#memberId").val() == "") {
@@ -273,26 +273,53 @@ window.addEventListener("DOMContentLoaded",function(){
 			$("#phone").focus();
 	    	return false;
 	    }
-	    //주소 옮기기
+//주소 옮기기
 	    var address = $("#sample4_postcode").val()+"/"+$("#sample4_roadAddress").val()+"/"+$("#sample4_jibunAddress").val()+"/"+$("#sample4_detailAddress").val()+"/"+$("#sample4_extraAddress").val();
 	    $("#address").val(address);
-	    
-		});
-	});
+//약관 동의 체크
+	    if($("#check_1").is(":checked") == false){
+	    	alert("모든 약관에 동의 하셔야 다음 단계로 진행 가능합니다.");
+	    	return;
+	    }else if($("#check_2").is(":checked") == false){
+	    	alert("모든 약관에 동의 하셔야 다음 단계로 진행 가능합니다.");
+	    	return;
+	    }else{
+	    	$("#signupForm").submit();
+	    }
+	});	
+});
 
-//모두 동의
-function allCheck(){
-	let temp = document.querySelectorAll('input[type=checkbox]');
-	
-	for(let i=0; i<temp.length; i++){
-		temp[i].classList.toggle('all-checked');
-		if(temp[i].classList.contains('all-checked')){
-			temp[i].checked = true;
-		} else {
-			temp[i].checked = false;
-		}
-	}
-}
+//체크박스 전체 선택
+$(".checkbox_group").on("click", "#check_all", function () {
+	$(this).parents(".checkbox_group").find('input').prop("checked", $(this).is(":checked")); 
+	}); 
+
+// 체크박스 개별 선택 
+$(".checkbox_group").on("click", ".normal", function() {
+	var is_checked = true; 
+	$(".checkbox_group .normal").each(function(){ 
+		is_checked = is_checked && $(this).is(":checked"); 
+		});
+	$("#check_all").prop("checked", is_checked); 
+});
+
+//비밀번호 보이기/숨기기 
+$(document).ready(function(){
+    $('.signup_pw i').on('click',function(){
+        $('input').toggleClass('active');
+        if($('input').hasClass('active')){
+            $(this).attr('class',"fa fa-eye-slash fa-lg")
+            .prev('input').attr('type',"text");
+        }else{
+            $(this).attr('class',"fa fa-eye fa-lg")
+            .prev('input').attr('type','password');
+        }
+    });
+});
+
+
+
+
 
 
 
