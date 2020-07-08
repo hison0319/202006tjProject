@@ -359,6 +359,7 @@ public class WordbookController {
 								}
 							}
 						}
+						int index = 0;
 						for (int i = 0; i < textArr.length; i++) {
 							if (textArr[i] != null && textArr[i].length() > 1) {
 								try {
@@ -366,8 +367,9 @@ public class WordbookController {
 									JSONObject message = (JSONObject) resultJson.get("message");
 									JSONObject result = (JSONObject) message.get("result");
 									if (!textArr[i].equals(result.get("translatedText"))) {
-										jsonText += "{\"word\":\"" + textArr[i] + "\",\"trans\":\""
-												+ result.get("translatedText") + "\",\"count\":" + count[i] + "},";
+										jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
+												+ result.get("translatedText") + "\",\"favorite\":" + 0 + "},";
+										index++;
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -440,16 +442,17 @@ public class WordbookController {
 							}
 						}
 					}
+					int index = 0;
 					for (int i = 0; i < textArr.length; i++) {
 						if (textArr[i] != null && textArr[i].length() > 1) {
 							try {
-								System.out.println(responseBody[0]);
 								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
 								JSONObject message = (JSONObject) resultJson.get("message");
 								JSONObject result = (JSONObject) message.get("result");
 								if (!textArr[i].equals(result.get("translatedText"))) {
-									jsonText += "{\"word\":\"" + textArr[i] + "\",\"trans\":\""
-											+ result.get("translatedText") + "\",\"count\":" + count[i] + "},";
+									jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
+											+ result.get("translatedText") + "\",\"favorite\":" + 0 + "},";
+									index++;
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
