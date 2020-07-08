@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import member.dto.MemberDto;
 import member.service.MemberService;
+import member.service.TempCharKey;
 import member.service.TempKey;
 import word.dto.WordbookDto;
 import word.service.WordbookService;
@@ -265,19 +266,23 @@ public class WordbookController {
 		}
 	}
 
-	@PostMapping("sharingKey") // 비동기 공유키 복사
+	@PostMapping(value="sharingKey", produces="text/plain;charset=UTF-8")
 	@ResponseBody
-	public String toggleSharing(WordbookDto wordbookDto) {
+	public String sharingKey(WordbookDto wordbookDto) {
 		System.out.println("받은 wordbook : "+wordbookDto);
 		int id = wordbookDto.getId();
 		WordbookDto wordbook = wordbookService.selectWordbookById(id);
 		System.out.println("찾은 wordbook : "+wordbook);
-		String sharingKey = new TempKey().getKey(10); //공유키 생성
+		System.out.println("hahahahaah");
+		String sharingKey = new TempCharKey().getKey(10, false);
+//		String sharingKey = new TempKey().getKey(10); //공유키 생성
+		System.out.println("hahahahaah");
+		System.out.println(sharingKey);
+		sharingKey = id+"!"+sharingKey;
 		wordbook.setSharingKey(sharingKey);
 		wordbookService.updateWordbookSharingKey(wordbook); //공유키 수정
 		System.out.println("입력한 wordbook : "+wordbook);
-		
-		return sharingKey;
+		return '"'+sharingKey+'"';
 	}
 
 	@PostMapping("complete") // 완료
@@ -539,5 +544,11 @@ public class WordbookController {
 		} catch (IOException e) {
 			throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
 		}
+	}
+	
+	@PostMapping("sharingKeyInsert")
+	public String insertBySharingKey(String sharingKey) {
+		System.out.println(sharingKey);
+		return "/showlist";
 	}
 }

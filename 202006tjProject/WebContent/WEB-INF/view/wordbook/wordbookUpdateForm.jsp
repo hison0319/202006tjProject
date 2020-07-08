@@ -62,6 +62,10 @@
 				<br />
 				<button id="submit" disabled="disabled">단어장 입력 완료</button>  <!-- 오른쪽이나 중앙 배치? -->
 			</form>
+			<form action="sharingKey" method="post">
+				공유 키: <input type="text" name="sharingKey" id="sharingKey" />
+				<button id="submitSharing" disabled="disabled">공유 단어장 등록</button>
+			</form>
         </div>
     </section>
 
@@ -92,7 +96,7 @@
     <script src="/js/breakpoints.min.js"></script>
     <script src="/js/util.js"></script>
     <script src="/js/main.js"></script>
-    <script src="/js/wordbook/wordbookform.js"></script>
+    <script src="/js/wordbook/wordbookform.js?v=<%=System.currentTimeMillis()%>"></script>
 
 </body>
 

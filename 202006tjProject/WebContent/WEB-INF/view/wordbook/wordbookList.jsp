@@ -15,6 +15,7 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <link rel="stylesheet"
 	href="/css/main_wordbookList.css?v=<%=System.currentTimeMillis()%>" />
 </head>
@@ -121,7 +122,7 @@
 										<ul>
 											<li
 												style="font-size: 1.2em; font-weight: bold; height: 50px;">
-												<a href="../word/showlist?wordbookid=${l.id }">${l.title }</a>
+												<a href="../word/showlist?wordbookid=${l.id }" class="title">${l.title }</a>
 											</li>
 											<li style="height: 50px;"><c:choose>
 													<c:when test="${l.favorite==0 }">
@@ -141,7 +142,7 @@
 												</c:choose></li>
 											<li style="height: 80px;">
 												<c:choose>
-													<c:when test="${l.guestId==1 }">
+													<c:when test="${l.ownerId == sessionScope.loginMember.id }">
 														<button class="showListSharing"
 															style="box-shadow: none; border: none;">공유목록
 															<span class="icon fas fa-clipboard-list"
@@ -189,6 +190,7 @@
 					</div>
 				</c:otherwise>
 			</c:choose>
+			<input type="text" id="tempKey" style="position:absolute; top:0; left:0; width:1px; height:1px; margin:0; padding:0; border:0;"/>
 		</div>
 		<div class="center_position">
 					<ul class="pagination">
@@ -290,7 +292,7 @@
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
 	<script src="/js/wordbook/favorite.js"></script>
-	<script src="/js/wordbook/sharing.js?v=<%=System.currentTimeMillis()%>"></script>
+	<script src="/js/wordbook/sharing.js"></script>
 	<script src="/js/wordbook/wordbookList.js"></script>
 
 </body>
