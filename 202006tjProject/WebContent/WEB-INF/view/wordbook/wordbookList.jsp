@@ -116,8 +116,7 @@
 											<div class="postDate" style="height: 50px;">
 												&nbsp;&nbsp;&nbsp;수정일&nbsp;:&nbsp;${l.uDateStr }	
 											</div>
-											<input type="hidden" id="favorite${i.index }"
-												name="id" value="${l.id }" />
+											<input type="hidden" name="id" value="${l.id }" />
 										</div>
 										<ul>
 											<li
@@ -126,40 +125,62 @@
 											</li>
 											<li style="height: 50px;"><c:choose>
 													<c:when test="${l.favorite==0 }">
-														중요&nbsp;<button class="favorite${i.index }"
+														중요&nbsp;<button class="favorite"
 															style="box-shadow: none; border: none;">
 															<span class="icon fas fa-star"
 																style="font-size: 1.5em; color: #ccc"></span>
 														</button>
 													</c:when>
 													<c:otherwise>
-														중요&nbsp;<button class="favorite${i.index }"
+														중요&nbsp;<button class="favorite"
 															style="box-shadow: none; border: none;">
 															<span class="icon fas fa-star"
 																style="font-size: 1.5em; color: #cc0"></span>
 														</button>
 													</c:otherwise>
 												</c:choose></li>
-											<li style="height: 50px;"><c:choose>
-													<c:when test="${l.guestId==0 }">
-														공유하기&nbsp;<button class="sharing${i.index }"
-															style="box-shadow: none; border: none;">
+											<li style="height: 80px;">
+												<c:choose>
+													<c:when test="${l.guestId==1 }">
+														<button class="showListSharing"
+															style="box-shadow: none; border: none;">공유목록
+															<span class="icon fas fa-clipboard-list"
+																style="font-size: 1.8em;"></span>
+														</button>
+														<button class="getkeySharing"
+															style="box-shadow: none; border: none;">키복사
+															<span class="icon fas fa-key" 
+															style="font-size: 1.5em;"></span>
+														</button>
+														<button class="kakaoSharing"
+															style="box-shadow: none; border: none;">카카오톡으로 키전송
 															<span class="icon far fa-share-alt"
 																style="font-size: 1.5em;"></span>
 														</button>
+														<!-- form에 동일 한 index를 주기위해 skip으로 elements만 생성 -->
+														<button class="deleteSharing skip"
+															style="box-shadow: none; border: none;">
+														</button>
 													</c:when>
 													<c:otherwise>
-														키복사/&nbsp;공유끝&nbsp;<button class="getkey${i.index }"
+														<!-- form에 동일 한 index를 주기위해 skip으로 elements만 생성 -->
+														<button class="showListSharing skip"
 															style="box-shadow: none; border: none;">
-															<span class="icon fas fa-key" style="font-size: 1.5em;"></span>
 														</button>
-														<button class="sharing${i.index }"
+														<button class="getkeySharing skip"
 															style="box-shadow: none; border: none;">
-															<span class="icon far fa-share-alt-square"
-																style="font-size: 2em;"></span>
+														</button>
+														<button class="kakaoSharing skip"
+															style="box-shadow: none; border: none;">
+														</button>
+														<button class="deleteSharing"
+															style="box-shadow: none; border: none;">공유 취소
+															<span class="icon fas fa-trash-alt"
+																style="font-size: 1.5em;"></span>
 														</button>
 													</c:otherwise>
-												</c:choose></li>
+												</c:choose>
+											</li>
 										</ul>
 									</form>
 								</div>
@@ -268,8 +289,8 @@
 	<script src="/js/breakpoints.min.js"></script>
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
-	<script src="/js/wordbook/favorite.js?v=<%=System.currentTimeMillis()%>"></script>
-	<script src="/js/wordbook/sharing.js"></script>
+	<script src="/js/wordbook/favorite.js"></script>
+	<script src="/js/wordbook/sharing.js?v=<%=System.currentTimeMillis()%>"></script>
 	<script src="/js/wordbook/wordbookList.js"></script>
 
 </body>

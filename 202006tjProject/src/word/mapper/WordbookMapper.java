@@ -39,7 +39,13 @@ public interface WordbookMapper {
 
 	// 단어장 수정
 	public void updateWordbook(WordbookDto wordbookDto);
-
+	
+	// 단어장 선호도만 수정(favorite, uDtae)
+	public void updateWordbookFavorite(WordbookDto wordbookDto);
+	
+	// 단어장 공유 키 수정(sharingKey, uDtae)
+	public void updateWordbookSharingKey(WordbookDto wordbookDto);
+	
 	// 단어장 삭제
 	public void deleteWordbook(int id);
 

@@ -2,7 +2,6 @@ package word.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,6 +86,16 @@ public class WordbookService {
 	// 단어장 수정
 	public void updateWordbook(WordbookDto wordbookDto) {
 		wordbookMapper.updateWordbook(wordbookDto);
+	}
+	
+	// 단어장 공유 키 수정(sharingKey, uDtae)
+	public void updateWordbookSharingKey(WordbookDto wordbookDto) {
+		wordbookMapper.updateWordbookSharingKey(wordbookDto);
+	}
+	
+	// 단어장 선호도만 수정(favorite, u_date)
+	public void updateWordbookFavorite(WordbookDto wordbookDto) {
+		wordbookMapper.updateWordbookFavorite(wordbookDto);
 	}
 
 	// 단어장 삭제

@@ -11,6 +11,7 @@ public class WordbookDto {
 	private Timestamp regDate;
 	private Timestamp uDate;
 	private String wordbookAddress;
+	private String sharingKey;
 	private String regDateStr;
 	private String uDateStr;
 	private String memberId;
@@ -31,7 +32,7 @@ public class WordbookDto {
 		this.wordbookAddress = wordbookAddress;
 	}
 	public WordbookDto(int id, int ownerId, int favorite, int guestId, String title, Timestamp regDate, Timestamp uDate,
-			String wordbookAddress) {
+			String wordbookAddress, String sharingKey) {
 		this.id = id;
 		this.ownerId = ownerId;
 		this.favorite = favorite;
@@ -40,6 +41,7 @@ public class WordbookDto {
 		this.regDate = regDate;
 		this.uDate = uDate;
 		this.wordbookAddress = wordbookAddress;
+		this.sharingKey = sharingKey;
 	}
 	
 	public WordbookDto(int id, int ownerId, int favorite, int guestId, String title, Timestamp regDate, Timestamp uDate,
@@ -122,10 +124,19 @@ public class WordbookDto {
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
 	}
+	
+	public String getSharingKey() {
+		return sharingKey;
+	}
+	public void setSharingKey(String sharingKey) {
+		this.sharingKey = sharingKey;
+	}
 	@Override
 	public String toString() {
 		return "WordbookDto [id=" + id + ", ownerId=" + ownerId + ", favorite=" + favorite + ", guestId=" + guestId
 				+ ", title=" + title + ", regDate=" + regDate + ", uDate=" + uDate + ", wordbookAddress="
-				+ wordbookAddress + ", regDateStr=" + regDateStr + ", uDateStr=" + uDateStr + "]\n";
+				+ wordbookAddress + ", sharingKey=" + sharingKey + ", regDateStr=" + regDateStr + ", uDateStr="
+				+ uDateStr + ", memberId=" + memberId + "]\n";
 	}
+	
 }

@@ -13,5 +13,5 @@ $("#arraySelect").on("change",function() {
 });
 
 $(".searchBtn").on("click",function() {
-	console.log(a);
+	console.log("a");
 });
