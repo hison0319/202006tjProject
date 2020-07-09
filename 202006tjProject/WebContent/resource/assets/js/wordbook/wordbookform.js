@@ -53,3 +53,8 @@ sharingInput.onkeyup = function(){
 		sharing.disabled = null;
 	}
 }
+if(sharingInput.value != null) {
+	sharing.disabled = null;
+} else {
+	sharing.disabled = "disabled";
+}

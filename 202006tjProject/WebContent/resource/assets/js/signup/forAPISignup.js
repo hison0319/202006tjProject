@@ -70,9 +70,8 @@ window.addEventListener("DOMContentLoaded",function(){
 			type:"post",
 			data:formData,
 			success:function(data){
-				if(data == "s") {
-					document.querySelector("#emailMsg").innerText = "변경하지 않았습니다.";
-				} else if (data == "t"){
+				if (data == "t"){
+					emailOk = true;
 					document.querySelector("#emailMsg").innerText = "사용 가능 합니다.";
 				} else {
 					document.querySelector("#emailMsg").innerText = "중복된 이메일이 있습니다.";					
@@ -100,9 +99,8 @@ window.addEventListener("DOMContentLoaded",function(){
 			type:"post",
 			data:formData,
 			success:function(data){
-				if(data == "s") {
-					document.querySelector("#phoneMsg").innerText = "변경하지 않았습니다.";
-				} else if (data == "t"){
+				if (data == "t"){
+					phoneOk = true;
 					document.querySelector("#phoneMsg").innerText = "사용 가능 합니다.";
 				} else {
 					document.querySelector("#phoneMsg").innerText = "중복된 전화번호가 있습니다.";				
@@ -154,7 +152,7 @@ window.addEventListener("DOMContentLoaded",function(){
 	   $("#address").val(address);
 	   
 	   console.log($("#address").val());
-	   return false;
+
 	   
 	 //약관 동의 체크
 	    if($("#check_1").is(":checked") == false){

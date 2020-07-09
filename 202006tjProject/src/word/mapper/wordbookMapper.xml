@@ -4,11 +4,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="word.mapper.WordbookMapper">
 	<insert id="insertWordbook" parameterType="wordbook" keyProperty="id">
-		insert into wordbook(owner_id,favorite,title,wordbook_address) 
-		values(#{ownerId},#{favorite},#{title},#{wordbookAddress})
+		insert into wordbook(owner_id,guest_id,favorite,title,wordbook_address) 
+		values(#{ownerId},#{guestId},#{favorite},#{title},#{wordbookAddress})
 	</insert>
 	<select id="selectWordbookById" resultType="wordbook">
-		select id,owner_id,favorite,guest_id,title,reg_date,u_date,wordbook_address from wordbook where id=#{id}
+		select * from wordbook where id=#{id}
 	</select>
 	<!-- for list output -->
 	<select id="selectWordbookByOwnerId" resultType="wordbook">
@@ -30,6 +30,9 @@
 	<select id="selectWordbookCountByOwnerIdOrGuestId" resultType="int">
 		select count(distinct title) from wordbook where owner_id=#{id} or guest_id=#{id};
 	</select>
+	<select id="selectWordbookCountByOwnerIdOrGuestIdFavorite" resultType="int">
+		select count(distinct title) from wordbook where (owner_id=#{id} or guest_id=#{id}) and favorite = 1;
+	</select>
 	<select id="selectWordbookAll" resultType="wordbook">
 		select id,owner_id,favorite,guest_id,title,reg_date,u_date,wordbook_address from wordbook
 	</select>
@@ -49,17 +52,25 @@
 		delete from wordbook where id=#{id}
 	</delete>
 	<!-- for list join output -->
+	<!-- 소유만 -->
 	<select id="selectWordbookByOwnerIdJoin" resultType="wordbook">
 		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
 		where owner_id=#{id} group by title order by u_date desc limit #{first}, #{ea};
 	</select>
+	<!-- 공유만 -->
 	<select id="selectWordbookByGuestIdJoin" resultType="wordbook">
 		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
 		where guest_id=#{id} order by u_date desc limit #{first}, #{ea};
 	</select>
+	<!-- 전체 -->
 	<select id="selectWordbookByOwnerIdOrGuestIdJoin" resultType="wordbook">
 		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
 		where owner_id=#{id} or guest_id=#{id} group by title order by u_date desc limit #{first}, #{ea};
+	</select>
+	<!-- 전체에서 중요 -->
+	<select id="selectWordbookByOwnerIdOrGuestIdFavoriteJoin" resultType="wordbook">
+		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
+		where (owner_id=#{id} or guest_id=#{id}) And favorite = 1 group by title order by u_date desc limit #{first}, #{ea};
 	</select>
 	<!-- for search -->
 	<select id="selectWordbookBySearchJoin" resultType="wordbook">

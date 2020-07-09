@@ -47,6 +47,11 @@ public class WordbookService {
 	public List<WordbookDto> selectWordbookByOwnerIdOrGuestIdJoin(int id, int first, int ea) {
 		return wordbookMapper.selectWordbookByOwnerIdOrGuestIdJoin(id, first, ea);
 	}
+	
+	//사용자 단어장 조인 조회(소유, 공유, 중요)
+	public List<WordbookDto> selectWordbookByOwnerIdOrGuestIdFavoriteJoin(int id, int first, int ea) {
+		return wordbookMapper.selectWordbookByOwnerIdOrGuestIdFavoriteJoin(id, first, ea);
+	}
 
 	// 단어장 검색(조인, 소유, 공유, 최신순)
 	public List<WordbookDto> selectWordbookBySearchJoin(int id, String keyword, int first, int ea) {
@@ -72,6 +77,11 @@ public class WordbookService {
 	public int selectWordbookCountByOwnerIdOrGuestId(int id) throws NullPointerException {
 		return wordbookMapper.selectWordbookCountByOwnerIdOrGuestId(id);
 	}
+	
+	// 단어장 리스트 갯수 조회(for ownerId, guestId)
+	public int selectWordbookCountByOwnerIdOrGuestIdFavorite(int id) {
+		return wordbookMapper.selectWordbookCountByOwnerIdOrGuestIdFavorite(id);
+	};
 
 	// 단어장 추가
 	public void insertWordbook(WordbookDto wordbookDto) {

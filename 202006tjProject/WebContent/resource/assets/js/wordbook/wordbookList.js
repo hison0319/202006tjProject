@@ -2,7 +2,7 @@ $("#arraySelect").on("change",function() {
 	let method = $("#arraySelect option:selected").val()
 	console.log(method);
 	if(method == 2) {
-		location.replace("/wordbook/showlist");
+		location.replace("/wordbook/showlistFavorite");
 	} else if(method == 3) {
 		location.replace("/wordbook/showlistOwner");
 	} else if(method == 4) {

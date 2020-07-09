@@ -216,6 +216,48 @@ public class WordbookController {
 		}
 		return "wordbook/wordbookList";
 	}
+	
+	// 단어장 목록 조회 기능 /중요 owner,guest, 수정일 순
+		@GetMapping("showlistFavorite")
+		public String wordbookListShowFavorite(HttpSession session, Model m, String pageNumStr) { // 세션 모델
+			MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+			if (loginMember == null) {
+				m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+			} else if (loginMember.getCertified() == 0) {
+				m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+			} else {
+				System.out.println("hjahahahahah");
+				int pageNum = pageNumStr == null || pageNumStr == "" ? 1 : Integer.parseInt(pageNumStr);
+				int ea = 6;// 페이지에 띄울 갯수 정의(정책)
+				int loginId = loginMember.getId();
+				// 단어장 총 갯수
+				int totalCnt = wordbookService.selectWordbookCountByOwnerIdOrGuestIdFavorite(loginId);
+				// 페이지 리스트
+				int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+				List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+				m.addAttribute("pageNumList", pageNumList);
+				m.addAttribute("pageNum", pageNum);
+				m.addAttribute("pages", pages);
+				// 단어장 리스트
+				List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestIdFavoriteJoin(loginId, (pageNum - 1) * 6,
+						ea);
+				// 등록일을 날짜만 표현
+				for (int i = 0; i < list.size(); i++) {
+					if (list.get(i).getRegDate() != null)
+						list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
+					if (list.get(i).getuDate() != null)
+						list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
+				}
+				if (list.size() == 0) {
+					m.addAttribute("listNull", "단어장을 만들어 보세요!");
+				} else {
+					m.addAttribute("listNull", "");
+				}
+				m.addAttribute("method", "Favorite");
+				m.addAttribute("list", list);
+			}
+			return "wordbook/wordbookList";
+		}
 
 	// 페이지 네이션 구현 기능
 	public List<Integer> getPageList(int pageNum, int ea, int pages) {
@@ -245,6 +287,59 @@ public class WordbookController {
 		}
 		return "wordbook/wordbookUpdateForm";
 	}
+	
+	@GetMapping("sharingKeyForm")
+	public String insertBySharingKey(HttpSession session, Model m, String sharingKey, String memberId, String title) {
+		m.addAttribute("sharingKey",sharingKey);
+		m.addAttribute("memberId",memberId);
+		m.addAttribute("title",title);
+		return "wordbook/showSharingKey";
+	}
+	
+	@PostMapping("sharingKeyForm")
+	public String completeBySharingKey(HttpSession session, Model m, String sharingKey) {
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		System.out.println("loginMember : "+loginMember);
+		System.out.println("loginMember.getId : "+loginMember.getId());
+		String idStr = sharingKey.substring(0, sharingKey.indexOf("!"));
+		System.out.println("sharingKey : "+sharingKey);
+		System.out.println("idStr : "+idStr);
+		int id = Integer.parseInt(idStr);
+		WordbookDto ownerWordbook = wordbookService.selectWordbookById(id);
+		System.out.println("ownerWordbook : "+ownerWordbook);
+		if (ownerWordbook.getSharingKey().equals(sharingKey)) {
+			System.out.println("t");
+			WordbookDto guestWordbook = new WordbookDto();
+			guestWordbook.setOwnerId(ownerWordbook.getOwnerId());
+			guestWordbook.setGuestId(loginMember.getId());
+			guestWordbook.setTitle(ownerWordbook.getTitle());
+			guestWordbook.setWordbookAddress(ownerWordbook.getWordbookAddress());
+			wordbookService.insertWordbook(guestWordbook);
+			System.out.println("insert : "+wordbookService.selectWordbookById(guestWordbook.getId()));
+		} else {
+			System.out.println("f");
+		}
+		return "wordbook/wordbookUpdateComplete";
+	}
+	
+	@PostMapping(value="sharingKey", produces="text/plain;charset=UTF-8")
+	@ResponseBody
+	public String sharingKey(WordbookDto wordbookDto) {
+		System.out.println("받은 wordbook : "+wordbookDto);
+		int id = wordbookDto.getId();
+		WordbookDto wordbook = wordbookService.selectWordbookById(id);
+		System.out.println("찾은 wordbook : "+wordbook);
+		System.out.println("hahahahaah");
+		String sharingKey = new TempCharKey().getKey(10, false);
+//		String sharingKey = new TempKey().getKey(10); //공유키 생성
+		System.out.println("hahahahaah");
+		System.out.println(sharingKey);
+		sharingKey = id+"!"+sharingKey;
+		wordbook.setSharingKey(sharingKey);
+		wordbookService.updateWordbookSharingKey(wordbook); //공유키 수정
+		System.out.println("입력한 wordbook : "+wordbook);
+		return '"'+sharingKey+'"';
+	}
 
 	@PostMapping("favorite") // 비동기 즐겨찾기
 	@ResponseBody
@@ -264,25 +359,6 @@ public class WordbookController {
 			System.out.println("입력한 wordbook : "+wordbookService.selectWordbookById(wordbook.getId()));
 			return "0";
 		}
-	}
-
-	@PostMapping(value="sharingKey", produces="text/plain;charset=UTF-8")
-	@ResponseBody
-	public String sharingKey(WordbookDto wordbookDto) {
-		System.out.println("받은 wordbook : "+wordbookDto);
-		int id = wordbookDto.getId();
-		WordbookDto wordbook = wordbookService.selectWordbookById(id);
-		System.out.println("찾은 wordbook : "+wordbook);
-		System.out.println("hahahahaah");
-		String sharingKey = new TempCharKey().getKey(10, false);
-//		String sharingKey = new TempKey().getKey(10); //공유키 생성
-		System.out.println("hahahahaah");
-		System.out.println(sharingKey);
-		sharingKey = id+"!"+sharingKey;
-		wordbook.setSharingKey(sharingKey);
-		wordbookService.updateWordbookSharingKey(wordbook); //공유키 수정
-		System.out.println("입력한 wordbook : "+wordbook);
-		return '"'+sharingKey+'"';
 	}
 
 	@PostMapping("complete") // 완료
@@ -546,9 +622,4 @@ public class WordbookController {
 		}
 	}
 	
-	@PostMapping("sharingKeyInsert")
-	public String insertBySharingKey(String sharingKey) {
-		System.out.println(sharingKey);
-		return "/showlist";
-	}
 }

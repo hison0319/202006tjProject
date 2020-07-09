@@ -30,6 +30,9 @@ public interface WordbookMapper {
 
 	// 단어장 리스트 갯수 조회(for ownerId, guestId)
 	public int selectWordbookCountByOwnerIdOrGuestId(@Param("id") int id);
+	
+	// 단어장 리스트 갯수 조회(for ownerId, guestId)
+	public int selectWordbookCountByOwnerIdOrGuestIdFavorite(@Param("id") int id);
 
 	// 단어장 추가
 	public void insertWordbook(WordbookDto wordbookDto);
@@ -61,9 +64,14 @@ public interface WordbookMapper {
 	public List<WordbookDto> selectWordbookByOwnerIdOrGuestIdJoin(@Param("id") int id, @Param("first") int first,
 			@Param("ea") int ea);
 	
+	//사용자 단어장 조인 조회(소유, 공유, 중요)
+	public List<WordbookDto> selectWordbookByOwnerIdOrGuestIdFavoriteJoin(@Param("id") int id, @Param("first") int first,
+			@Param("ea") int ea);
+	
 	// 단어장 검색(조인, 소유, 공유, 최신순)
 	public List<WordbookDto> selectWordbookBySearchJoin(@Param("id") int id, @Param("keyword") String keyword, 
 			@Param("first") int first, @Param("ea") int ea);
+	
 	// 단어장 리스트 갯수 조회(for search)
 	public int selectWordbookCountBySearchJoin(@Param("id") int id, @Param("keyword") String keyword);
 }

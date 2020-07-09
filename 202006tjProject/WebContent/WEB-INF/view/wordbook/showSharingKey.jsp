@@ -6,7 +6,7 @@
 <html>
 
 <head>
-    <title>wordbookUpdateForm</title>
+    <title>wordbookUpdateComplete</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="robots" content="noindex, nofollow" />
@@ -24,7 +24,7 @@
         <nav id="nav">
             <ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
-				<li><a href="#">단어장</a></li>
+				<li><a href="/wordbook/showlist">단어장</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
 				</li>
@@ -53,19 +53,13 @@
     <!-- container -->
     <section class="wrapper major-pad">
         <div class="inner">
-			<form action="complete" method="post">
-				단어장 이름: <input type="text" required="required" name="title" id="title" />
-				텍스트 파일 업로드<br /><br />
-				<input type="file" accept=".txt" name="file" id="file"/> <hr />
-				직접 입력 <br />
-				<textarea name="text" id="text" cols="30" rows="10" style="resize:none" ></textarea>
-				<br />
-				<button id="submit" disabled="disabled">단어장 입력 완료</button>  <!-- 오른쪽이나 중앙 배치? -->
-			</form>
-			<form action="sharingKeyForm" method="post">
-				공유 키: <input type="text" name="sharingKey" id="sharingKey" value="${sharingKey }" />
-				<button id="submitSharing" disabled="disabled">공유 단어장 등록</button>
-			</form>
+        <div class="position_center">
+        	<h2>${memberId}님께서 ${title}단어장의 공유키를 보냈습니다!</h2>
+        	<h3>공유키는 아래와 같습니다.</h3>
+			<input type="text" id="sharingKey" readonly="readonly" value="${sharingKey }">
+			<button type="button" id="copyBtn">공유키 복사하기</button>
+			<h5>로그인 후 이용해주세요.</h5>
+        </div>
         </div>
     </section>
 
@@ -96,7 +90,7 @@
     <script src="/js/breakpoints.min.js"></script>
     <script src="/js/util.js"></script>
     <script src="/js/main.js"></script>
-    <script src="/js/wordbook/wordbookform.js?v=<%=System.currentTimeMillis()%>"></script>
+    <script src="/js/wordbook/showSharingKey.js?v=<%=System.currentTimeMillis()%>"></script>
 
 </body>
 

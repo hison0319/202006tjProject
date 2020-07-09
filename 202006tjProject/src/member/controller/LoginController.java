@@ -43,7 +43,7 @@ public class LoginController {
 			else {
 				MemberDto loginMember = memberService.selectMemberByMemberId(memberDto.getMemberId());  //로그인 한 멤버의 id숫자 가져옴
 				session.setAttribute("loginMember", loginMember);
-				System.out.println(loginMember);
+				System.out.println("loginMember : "+loginMember);
 				return "t";
 			}
 		}
