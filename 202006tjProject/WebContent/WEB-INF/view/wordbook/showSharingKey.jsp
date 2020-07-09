@@ -90,7 +90,7 @@
     <script src="/js/breakpoints.min.js"></script>
     <script src="/js/util.js"></script>
     <script src="/js/main.js"></script>
-    <script src="/js/wordbook/showSharingKey.js?v=<%=System.currentTimeMillis()%>"></script>
+    <script src="/js/wordbook/showSharingKey.js"></script>
 
 </body>
 

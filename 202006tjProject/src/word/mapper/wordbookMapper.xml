@@ -33,6 +33,9 @@
 	<select id="selectWordbookCountByOwnerIdOrGuestIdFavorite" resultType="int">
 		select count(distinct title) from wordbook where (owner_id=#{id} or guest_id=#{id}) and favorite = 1;
 	</select>
+	<select id="selectWordbookCountSharing" resultType="int">
+		select count(distinct title) from wordbook where owner_id=#{id} and guest_id!=0;
+	</select>
 	<select id="selectWordbookAll" resultType="wordbook">
 		select id,owner_id,favorite,guest_id,title,reg_date,u_date,wordbook_address from wordbook
 	</select>
@@ -71,6 +74,11 @@
 	<select id="selectWordbookByOwnerIdOrGuestIdFavoriteJoin" resultType="wordbook">
 		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
 		where (owner_id=#{id} or guest_id=#{id}) And favorite = 1 group by title order by u_date desc limit #{first}, #{ea};
+	</select>
+	<!-- 공유해준 단어장 조회 -->
+	<select id="selectWordbookSharingJoin" resultType="wordbook">
+		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
+		where owner_id=#{id} and guest_id!=0 group by title order by u_date desc limit #{first}, #{ea};
 	</select>
 	<!-- for search -->
 	<select id="selectWordbookBySearchJoin" resultType="wordbook">

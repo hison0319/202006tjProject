@@ -87,6 +87,23 @@ for (let i = 0; i < deleteSharing.length; i++) {
 			"click",
 			function() {
 				console.log("deleteSharing "+i);
+				var data = $("form").eq(i+1).serialize();
+				$.ajax({
+					url : "deleteSharing",
+					type : "post",
+					data : data,
+					dataType : "json",
+					success : function() {
+						alert("삭제완료");
+						location.reload();
+					},
+					error : function(request, status, error) {
+						console.log("code:" + request.status + "\n" + "message:"
+								+ request.responseText + "\n" + "error:"
+								+ error);
+						alert("error");
+					}
+				});
 				return false;
 			});
 };

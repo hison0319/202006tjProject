@@ -10,7 +10,6 @@ var star = $("[class*=star]");
 for (let i = 0; i < favorite.length; i++) {
 	//favorite버튼은 i번부터 시작. 0번부터 적용.
 	//위의 SearchForm으로 인해 form은 i+1번, form부터 ajax적용.
-	console.log("ccc");
 	favorite.eq(i).on(
 			"click",
 			function() {
@@ -21,7 +20,6 @@ for (let i = 0; i < favorite.length; i++) {
 					data : data,
 					dataType : "json",
 					success : function(data) {
-						console.log(data);
 						if(data == 1) {
 							star.eq(i).css('color', '#cc0');							
 						} else {

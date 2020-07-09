@@ -15,7 +15,7 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<script src="/js/account/info.js?v=<%=System.currentTimeMillis() %>"></script>
+<script src="/js/account/info.js"></script>
 <link rel="stylesheet" href="/css/main.css" />
 </head>
 
@@ -58,8 +58,8 @@
 			<div class="col-6 col-12-medium">
 				<h5 class="alt">Alternate</h5>
 				<ul class="alt">
-					<li>내 정보 보기(활성화 시 글씨 진하게)</li>
-					<li>공유목록 보기</li>
+					<li><a href="${pageContext.request.contextPath}/account/showInfo"><b>내 정보 보기</b></a></li>
+					<li><a href="${pageContext.request.contextPath}/account/showSharingList">공유목록 보기</a></li>
 					<li><button type="button" class="button" onclick="btnModify('${sessionScope.loginMember.memberId}')">내 정보
             수정하기</button></li>
 

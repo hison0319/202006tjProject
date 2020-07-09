@@ -47,17 +47,22 @@ public class WordbookService {
 	public List<WordbookDto> selectWordbookByOwnerIdOrGuestIdJoin(int id, int first, int ea) {
 		return wordbookMapper.selectWordbookByOwnerIdOrGuestIdJoin(id, first, ea);
 	}
-	
-	//사용자 단어장 조인 조회(소유, 공유, 중요)
+
+	// 사용자 단어장 조인 조회(소유, 공유, 중요)
 	public List<WordbookDto> selectWordbookByOwnerIdOrGuestIdFavoriteJoin(int id, int first, int ea) {
 		return wordbookMapper.selectWordbookByOwnerIdOrGuestIdFavoriteJoin(id, first, ea);
+	}
+
+	// 공유해준 단어장 조인 조회
+	public List<WordbookDto> selectWordbookSharingJoin(int id, int first, int ea) {
+		return wordbookMapper.selectWordbookSharingJoin(id, first, ea);
 	}
 
 	// 단어장 검색(조인, 소유, 공유, 최신순)
 	public List<WordbookDto> selectWordbookBySearchJoin(int id, String keyword, int first, int ea) {
 		return wordbookMapper.selectWordbookBySearchJoin(id, keyword, first, ea);
 	}
-	
+
 	// 단어장 리스트 갯수 조회(for search)
 	public int selectWordbookCountBySearchJoin(int id, String keyword) {
 		return wordbookMapper.selectWordbookCountBySearchJoin(id, keyword);
@@ -77,11 +82,16 @@ public class WordbookService {
 	public int selectWordbookCountByOwnerIdOrGuestId(int id) throws NullPointerException {
 		return wordbookMapper.selectWordbookCountByOwnerIdOrGuestId(id);
 	}
-	
-	// 단어장 리스트 갯수 조회(for ownerId, guestId)
+
+	// 단어장 리스트 갯수 조회(for ownerId, guestId, favorite)
 	public int selectWordbookCountByOwnerIdOrGuestIdFavorite(int id) {
 		return wordbookMapper.selectWordbookCountByOwnerIdOrGuestIdFavorite(id);
 	};
+
+	// 공유해준 단어장 리스트 갯수 조회
+	public int selectWordbookCountSharing(int id) {
+		return wordbookMapper.selectWordbookCountSharing(id);
+	}
 
 	// 단어장 추가
 	public void insertWordbook(WordbookDto wordbookDto) {
@@ -97,12 +107,12 @@ public class WordbookService {
 	public void updateWordbook(WordbookDto wordbookDto) {
 		wordbookMapper.updateWordbook(wordbookDto);
 	}
-	
+
 	// 단어장 공유 키 수정(sharingKey, uDtae)
 	public void updateWordbookSharingKey(WordbookDto wordbookDto) {
 		wordbookMapper.updateWordbookSharingKey(wordbookDto);
 	}
-	
+
 	// 단어장 선호도만 수정(favorite, u_date)
 	public void updateWordbookFavorite(WordbookDto wordbookDto) {
 		wordbookMapper.updateWordbookFavorite(wordbookDto);

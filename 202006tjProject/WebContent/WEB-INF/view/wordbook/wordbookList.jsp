@@ -292,7 +292,7 @@
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
 	<script src="/js/wordbook/favorite.js"></script>
-	<script src="/js/wordbook/sharing.js"></script>
+	<script src="/js/wordbook/sharing.js?v=<%=System.currentTimeMillis()%>"></script>
 	<script src="/js/wordbook/wordbookList.js"></script>
 
 </body>

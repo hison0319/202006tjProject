@@ -30,10 +30,13 @@ public interface WordbookMapper {
 
 	// 단어장 리스트 갯수 조회(for ownerId, guestId)
 	public int selectWordbookCountByOwnerIdOrGuestId(@Param("id") int id);
-	
-	// 단어장 리스트 갯수 조회(for ownerId, guestId)
-	public int selectWordbookCountByOwnerIdOrGuestIdFavorite(@Param("id") int id);
 
+	// 단어장 리스트 갯수 조회(for ownerId, guestId, favorite)
+	public int selectWordbookCountByOwnerIdOrGuestIdFavorite(@Param("id") int id);
+	
+	// 공유해준 단어장 리스트 갯수 조회
+	public int selectWordbookCountSharing(@Param("id") int id);
+	
 	// 단어장 추가
 	public void insertWordbook(WordbookDto wordbookDto);
 
@@ -42,13 +45,13 @@ public interface WordbookMapper {
 
 	// 단어장 수정
 	public void updateWordbook(WordbookDto wordbookDto);
-	
+
 	// 단어장 선호도만 수정(favorite, uDtae)
 	public void updateWordbookFavorite(WordbookDto wordbookDto);
-	
+
 	// 단어장 공유 키 수정(sharingKey, uDtae)
 	public void updateWordbookSharingKey(WordbookDto wordbookDto);
-	
+
 	// 단어장 삭제
 	public void deleteWordbook(int id);
 
@@ -63,15 +66,19 @@ public interface WordbookMapper {
 	// 사용자 단어장 조인 조회(소유, 공유)
 	public List<WordbookDto> selectWordbookByOwnerIdOrGuestIdJoin(@Param("id") int id, @Param("first") int first,
 			@Param("ea") int ea);
-	
-	//사용자 단어장 조인 조회(소유, 공유, 중요)
-	public List<WordbookDto> selectWordbookByOwnerIdOrGuestIdFavoriteJoin(@Param("id") int id, @Param("first") int first,
+
+	// 공유해준 단어장 조인 조회
+	public List<WordbookDto> selectWordbookSharingJoin(@Param("id") int id, @Param("first") int first,
 			@Param("ea") int ea);
-	
-	// 단어장 검색(조인, 소유, 공유, 최신순)
-	public List<WordbookDto> selectWordbookBySearchJoin(@Param("id") int id, @Param("keyword") String keyword, 
+
+	// 사용자 단어장 조인 조회(소유, 공유, 중요)
+	public List<WordbookDto> selectWordbookByOwnerIdOrGuestIdFavoriteJoin(@Param("id") int id,
 			@Param("first") int first, @Param("ea") int ea);
-	
+
+	// 단어장 검색(조인, 소유, 공유, 최신순)
+	public List<WordbookDto> selectWordbookBySearchJoin(@Param("id") int id, @Param("keyword") String keyword,
+			@Param("first") int first, @Param("ea") int ea);
+
 	// 단어장 리스트 갯수 조회(for search)
 	public int selectWordbookCountBySearchJoin(@Param("id") int id, @Param("keyword") String keyword);
 }
