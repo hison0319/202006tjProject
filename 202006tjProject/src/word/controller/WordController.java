@@ -16,10 +16,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +37,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import member.dto.MemberDto;
 import word.dto.SharingDto;
-import word.dto.WordbookDto;
 import word.service.SharingService;
 import word.service.WordbookService;
 
@@ -51,7 +46,8 @@ public class WordController {
 	@Autowired
 	WordbookService wordbookService;
 	@Autowired
-	SharingService sharingService;  //테
+	SharingService sharingService;
+	
 	//단어 목록 조회 기능
 	@RequestMapping("showlist")
 	public String wordListShow(HttpSession session, String wordbookid) {
@@ -63,7 +59,6 @@ public class WordController {
 			if(wordbookid ==null) {
 				throw new NumberFormatException();
 			}
-			session.setAttribute("wordbookid", wordbookid);
 		} catch (NumberFormatException | IllegalStateException e) {
 			return "error/wrongAccess";  //잘못된 접근(주소로 직접 접근 등)
 		} catch (NullPointerException e) {
@@ -72,9 +67,9 @@ public class WordController {
 		return "word/wordList";
 	}
 	
-	@PostMapping("getwords")
+	@RequestMapping("getwords")
 	@ResponseBody
-	public String getWordbook(HttpSession session) {
+	public String getWordbook(HttpSession session, String wordbookid) {
 		MemberDto loginMember = null;
 		int loginId;
 		try{
@@ -88,7 +83,7 @@ public class WordController {
 		}
 		boolean isOK = false;
 		try {
-			int wordbookId = Integer.parseInt((String) session.getAttribute("wordbookid"));
+			int wordbookId = Integer.parseInt(wordbookid);
 			if(loginId<=20) {  //관리자 아이디일 경우
 				isOK = true;
 			}
@@ -129,6 +124,7 @@ public class WordController {
 			System.out.println("출력 NPE");
 			return "{\"nope\":\"notExist\"}";
 		} catch (NumberFormatException | IllegalStateException e) {
+			e.printStackTrace();
 			System.out.println("출력 NFE, ISE");
 			return "{\"nope\":\"wrongAccess\"}";  //잘못된 접근(주소로 직접 접근 등)
 		}
@@ -181,9 +177,12 @@ public class WordController {
 					JSONArray jsonArray = (JSONArray)jParser.parse(br);
 					String origStr = jsonArray.toString();
 					origStr = origStr.replace(']', ',');
+					int index = jsonArray.size();
 					for (int i = 0; i < word.length; i++) {
 						if(!word[i].isBlank() || !trans[i].isBlank()) {
-							origStr += "{\"word\":\""+word[i]+"\",\"trans\":\""+trans[i]+"\"},";
+							origStr += "{\"index\":" + index + ",\"word\":\"" + word[i] + "\",\"trans\":\""
+									+ trans[i] + "\",\"favorite\":" + 0 + "},";
+							index++;
 						}
 					}
 					origStr = origStr.substring(0,origStr.length()-1);
@@ -251,6 +250,7 @@ public class WordController {
 									new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 						
 						JSONArray jsonArray = (JSONArray)jParser.parse(obr);  //기존 파일 사용가능 형태로 변환
+						int index = jsonArray.size();  //추가하는 단어의 index 시작 값
 						String jsonText = jsonArray.toString();  //기존 파일 내용 String
 						jsonText = jsonText.replace(']', ',');  //json 끝의 ]를 ,로 변경
 						String s;  //readLine() 메서드를 위한 임시 String
@@ -307,8 +307,9 @@ public class WordController {
 									JSONObject message = (JSONObject) resultJson.get("message");  //json의 key(message)로 값 반환
 									JSONObject result = (JSONObject) message.get("result");  //json의 key(result)로 값 반환
 									if (!textArr[i].equals(result.get("translatedText"))) {
-										jsonText += "{\"word\":\"" + textArr[i] + "\",\"trans\":\""
-												+ result.get("translatedText") + "\",\"count\":" + count[i] + "},";  //json 형식에 맞춰 json파일에 담을 String 추가
+										jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
+												+ result.get("translatedText") + "\",\"favorite\":" + 0 + "},";
+										index++;
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -342,6 +343,7 @@ public class WordController {
 				try (BufferedReader obr = new BufferedReader(
 							new InputStreamReader(new FileInputStream(origFile), "UTF-8"))) {
 					JSONArray jsonArray = (JSONArray)jParser.parse(obr);  //기존 파일 사용가능 형태로 변환
+					int index = jsonArray.size();  //추가하는 단어의 index 시작 값
 					String jsonText = jsonArray.toString();  //기존 파일 내용 String
 					jsonText = jsonText.replace(']', ',');  //json 끝의 ]를 ,로 변경
 					text = text.replaceAll(regex, " ");
@@ -393,8 +395,9 @@ public class WordController {
 								JSONObject message = (JSONObject) resultJson.get("message");
 								JSONObject result = (JSONObject) message.get("result");
 								if (!textArr[i].equals(result.get("translatedText"))) {
-									jsonText += "{\"word\":\"" + textArr[i] + "\",\"trans\":\""
-											+ result.get("translatedText") + "\",\"count\":" + count[i] + "},";
+									jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
+											+ result.get("translatedText") + "\",\"favorite\":" + 0 + "},";
+									index++;
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -431,7 +434,7 @@ public class WordController {
 	//단어 개별 수정 기능
 	@PostMapping("update")
 	@ResponseBody
-	public String wordUpdate(HttpSession session, String wordbookid, String[] word, String[] trans) {
+	public String wordUpdate(HttpSession session, String wordbookid, int[] index, String[] word, String[] trans, int[] favorite) {
 		MemberDto loginMember = null;
 		int loginId;
 		try{
@@ -457,7 +460,8 @@ public class WordController {
 				String str = "[";
 				for (int i = 0; i < word.length; i++) {
 					if(!word[i].isBlank() || !trans[i].isBlank()) {
-						str += "{\"word\":\""+word[i]+"\",\"trans\":\""+trans[i]+"\"},";
+						str += "{\"index\":" + index[i] + ",\"word\":\"" + word[i] + "\",\"trans\":\""
+								+ trans[i] + "\",\"favorite\":" + favorite[i] + "},";
 					}
 				}
 				str = str.substring(0,str.length()-1);
