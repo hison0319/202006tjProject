@@ -24,6 +24,9 @@ for (let i = 0; i < showSharingList.length; i++) {
 								deleteSharing.eq(j).on(
 										"click",
 										function() {
+											if(!confirm("정말 공유를 삭제하시겠습니까?")) {
+												return false;
+											}
 											console.log("deleteSharing "+j);
 											console.log("wordbookId : "+data[j].id);
 											var idData = $.parseJSON( '{ "id": "'+data[j].id+'" }' );

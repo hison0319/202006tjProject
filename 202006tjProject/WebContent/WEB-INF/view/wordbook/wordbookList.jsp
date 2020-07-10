@@ -17,7 +17,7 @@
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <link rel="stylesheet"
-	href="/css/main_wordbookList.css?v=<%=System.currentTimeMillis()%>" />
+	href="/css/main_wordbookList.css" />
 </head>
 
 <body class="is-preload">
@@ -267,7 +267,7 @@
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
 	<script src="/js/wordbook/favorite.js"></script>
-	<script src="/js/wordbook/sharing.js?v=<%=System.currentTimeMillis()%>"></script>
+	<script src="/js/wordbook/sharing.js"></script>
 	<script src="/js/wordbook/wordbookList.js"></script>
 
 </body>
