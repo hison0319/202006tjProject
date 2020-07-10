@@ -242,53 +242,6 @@
 		</div>
 	</section>
 
-	<section class="wrapper major-pad">
-		<div class="inner">
-			<div>혹시 문제 생길까봐 나둡니다!</div>
-			<c:choose>
-				<c:when test="${loginPlease != null }">
-					<div>${loginPlease }</div>
-				</c:when>
-				<c:when test="${certifyPlease != null }">
-					<div>${certifyPlease }</div>
-				</c:when>
-				<c:otherwise>
-					<ol>
-						<c:forEach items="${list }" var="l" varStatus="i">
-							<li>
-								<form action="showlist" method="post">
-									<input type="hidden" id="favorite${i.index }" name="id"
-										value="${l.id }" />
-									<c:choose>
-										<c:when test="${l.favorite==0 }">
-											<button class="favorite${i.index }">ㅡㅅㅡ</button>
-										</c:when>
-										<c:otherwise>
-											<button class="favorite${i.index }">ㅇㅅㅇ</button>
-										</c:otherwise>
-									</c:choose>
-									<c:choose>
-										<c:when test="${l.guestId==0 }">
-											<button class="sharing${i.index }">공유하기</button>
-										</c:when>
-										<c:otherwise>
-											<button class="getkey${i.index }">키 복사</button>
-											<button class="sharing${i.index }">공유 끝</button>
-										</c:otherwise>
-									</c:choose>
-									<a href="../word/showlist?wordbookid=${l.id }">${l.title }</a>
-								</form>
-							</li>
-						</c:forEach>
-					</ol>
-				</c:otherwise>
-			</c:choose>
-		</div>
-		<hr />
-
-	</section>
-
-
 	<!-- Footer -->
 	<footer id="footer">
 		<div class="inner">
