@@ -17,7 +17,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <meta name = "google-signin-client_id"content = "166221413799-su8t7c8tdrpivukd6vi396ikuh1ouch3.apps.googleusercontent.com">
-<script src="https://apis.google.com/js/platform.js" async defer></script>
+<!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
 <script src="/js/login/login.js?v=<%=System.currentTimeMillis() %>"></script>
 <link rel="stylesheet" href="/css/login.css" />
 </head>
@@ -29,7 +29,7 @@
         <nav id="nav">
             <ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
-				<li><a href="#">단어장</a></li>
+				<li><a href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
 				</li>

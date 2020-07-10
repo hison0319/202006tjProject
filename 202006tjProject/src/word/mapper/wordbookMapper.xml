@@ -20,6 +20,17 @@
 	<select id="selectWordbookByOwnerIdOrGuestId" resultType="wordbook">
 		select * from wordbook where owner_id=#{id} or guest_id=#{id} group by title order by u_date desc limit #{first}, #{ea};
 	</select>
+	<!-- for sharing check -->
+	<select id="selectWordbookByGuestIdCheck" resultType="wordbook">
+		select * from wordbook where guest_id=#{id};
+	</select>
+	<select id="selectSharingCheckGroupByTitle" resultType="Integer">
+      	select count(guest_id), title from wordbook where owner_id=#{id} and guest_id!=0 group by title order by title limit #{first}, #{ea};
+    </select>
+    <select id="selectSharingMemberCheckByTitle" resultType="wordbook">
+      	select wordbook.id, wordbook.title, wordbook.guest_id, member.member_id from wordbook 
+      	join member on wordbook.guest_id = member.id where title=#{title} and owner_id=#{id} and guest_id!=0;
+    </select>
 	<!-- for count check -->
 	<select id="selectWordbookCountByOwnerId" resultType="int">
 		select count(distinct title) from wordbook where owner_id=#{id};
@@ -78,7 +89,7 @@
 	<!-- 공유해준 단어장 조회 -->
 	<select id="selectWordbookSharingJoin" resultType="wordbook">
 		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
-		where owner_id=#{id} and guest_id!=0 group by title order by u_date desc limit #{first}, #{ea};
+		where owner_id=#{id} and guest_id!=0 group by title order by title limit #{first}, #{ea};
 	</select>
 	<!-- for search -->
 	<select id="selectWordbookBySearchJoin" resultType="wordbook">

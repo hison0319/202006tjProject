@@ -183,6 +183,8 @@ public class AccountController {
 		m.addAttribute("pageNumList", pageNumList);
 		m.addAttribute("pageNum", pageNum);
 		m.addAttribute("pages", pages);
+		// 공유 인원 리스트
+		List<Integer> sharingNumlist = wordbookService.selectSharingCheckGroupByTitle(loginId, (pageNum - 1) * 5, ea);
 		// 단어장 리스트
 		List<WordbookDto> wordbooklist = wordbookService.selectWordbookSharingJoin(loginId, (pageNum - 1) * 5, ea);
 		// 등록일을 날짜만 표현
@@ -195,6 +197,7 @@ public class AccountController {
 		} else {
 			m.addAttribute("listNull", "");
 		}
+		m.addAttribute("sharingNumlist", sharingNumlist);
 		m.addAttribute("wordbooklist", wordbooklist);
 		return "account/shareList";
 	}
@@ -215,11 +218,25 @@ public class AccountController {
 		}
 		return pageNumList;
 	}
-
+	
 	// 공유한 회원목록 조회기능
-	public String sharingMemberListShow() {
-		return "";
+	@PostMapping("showSharingMemberList")
+	@ResponseBody
+	public List<WordbookDto> sharingMemberListShow(HttpSession session, String title) {
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		List<WordbookDto> sharingWordbookMemberList = wordbookService.selectSharingMemberCheckByTitle(loginMember.getId(), title);
+		System.out.println(sharingWordbookMemberList);
+		return sharingWordbookMemberList;
 	}
-
-	// 공유한 회원 정보 조회 기능-비동기?
+	
+	//공유한 회원 삭제
+	@PostMapping("deleteSharingMember")
+	@ResponseBody
+	public String deleteSharingMember(String id) {
+		//exception처리
+		System.out.println(id);
+		int wordbookId = Integer.parseInt(id);
+		wordbookService.deleteWordbook(wordbookId);
+		return '"'+"t"+'"';
+	}
 }

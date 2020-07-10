@@ -27,7 +27,7 @@
         <nav id="nav">
             <ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
-				<li><a href="#">단어장</a></li>
+				<li><a href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
 				</li>

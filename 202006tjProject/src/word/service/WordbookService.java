@@ -57,6 +57,11 @@ public class WordbookService {
 	public List<WordbookDto> selectWordbookSharingJoin(int id, int first, int ea) {
 		return wordbookMapper.selectWordbookSharingJoin(id, first, ea);
 	}
+	
+	// 공유 단어장 조회(공유 체크)
+	public List<WordbookDto> selectWordbookByGuestIdCheck(int id) {
+		return wordbookMapper.selectWordbookByGuestIdCheck(id);
+	}
 
 	// 단어장 검색(조인, 소유, 공유, 최신순)
 	public List<WordbookDto> selectWordbookBySearchJoin(int id, String keyword, int first, int ea) {
@@ -91,6 +96,16 @@ public class WordbookService {
 	// 공유해준 단어장 리스트 갯수 조회
 	public int selectWordbookCountSharing(int id) {
 		return wordbookMapper.selectWordbookCountSharing(id);
+	}
+	
+	// 소유자 단어장 제목 별 공유 인원 명수 체크
+	public List<Integer> selectSharingCheckGroupByTitle(int id, int first, int ea) {
+		return wordbookMapper.selectSharingCheckGroupByTitle(id, first, ea);
+	}
+		
+	// 소유자 단어장 제목 별 공유 멤버 체크
+	public List<WordbookDto> selectSharingMemberCheckByTitle(int id, String title) {
+		return wordbookMapper.selectSharingMemberCheckByTitle(id, title);
 	}
 
 	// 단어장 추가

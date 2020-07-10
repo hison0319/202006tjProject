@@ -27,7 +27,8 @@
 		<nav id="nav">
 			<ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
-				<li><a href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
+				<li><a
+					href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
 				</li>
@@ -63,30 +64,47 @@
 			</a>
 			<div class="postTool">
 
-				<form method="get" action="showlistSearch" name="searchfrm" class="search">
+				<form method="get" action="showlistSearch" name="searchfrm"
+					class="search">
 					<input type="text" class="inputVal" id="searchKeyword"
 						name="keyword" placeholder="검색어를 입력" />
-					<button class="searchBtn fas fa-search" aria-label="검색" data-tip="검색">
-					</button>
+					<button class="searchBtn fas fa-search" aria-label="검색"
+						data-tip="검색"></button>
 				</form>
 
 				<div class="array tool">
 					<select name="arraySelect" id="arraySelect">
 						<c:choose>
-							<c:when test="${method ==''}"><option value="1" selected="selected">최근수정</option></c:when>
-							<c:otherwise><option value="1">최근수정</option></c:otherwise>
+							<c:when test="${method ==''}">
+								<option value="1" selected="selected">최근수정</option>
+							</c:when>
+							<c:otherwise>
+								<option value="1">최근수정</option>
+							</c:otherwise>
 						</c:choose>
 						<c:choose>
-							<c:when test="${method =='Favorite'}"><option value="2" selected="selected">중요단어장</option></c:when>
-							<c:otherwise><option value="2" >중요단어장</option></c:otherwise>
+							<c:when test="${method =='Favorite'}">
+								<option value="2" selected="selected">중요단어장</option>
+							</c:when>
+							<c:otherwise>
+								<option value="2">중요단어장</option>
+							</c:otherwise>
 						</c:choose>
 						<c:choose>
-							<c:when test="${method =='Owner'}"><option value="3" selected="selected">소유단어장</option></c:when>
-							<c:otherwise><option value="3" >소유단어장</option></c:otherwise>
+							<c:when test="${method =='Owner'}">
+								<option value="3" selected="selected">소유단어장</option>
+							</c:when>
+							<c:otherwise>
+								<option value="3">소유단어장</option>
+							</c:otherwise>
 						</c:choose>
 						<c:choose>
-							<c:when test="${method =='Guest'}"><option value="4" selected="selected">공유단어장</option></c:when>
-							<c:otherwise><option value="4" >공유단어장</option></c:otherwise>
+							<c:when test="${method =='Guest'}">
+								<option value="4" selected="selected">공유단어장</option>
+							</c:when>
+							<c:otherwise>
+								<option value="4">공유단어장</option>
+							</c:otherwise>
 						</c:choose>
 						<!-- 
 						<option value="1" selected="selected">최근수정</option>
@@ -111,12 +129,13 @@
 						<c:forEach items="${list }" var="l" varStatus="i">
 							<section class="post">
 								<div class="content">
-									<form action="showlist${method }?pageNumStr=${pageNum-1}&keyword=${keyword}" method="post">
+									<form
+										action="showlist${method }?pageNumStr=${pageNum-1}&keyword=${keyword}"
+										method="post">
 										<div style="height: 50px;">
 											<a href="#">소유자 :&nbsp;<span class="postId">${l.memberId }</span></a>
 											<div class="postDate" style="height: 50px;">
-												&nbsp;&nbsp;&nbsp;수정일&nbsp;:&nbsp;${l.uDateStr }	
-											</div>
+												&nbsp;&nbsp;&nbsp;수정일&nbsp;:&nbsp;${l.uDateStr }</div>
 											<input type="hidden" name="id" value="${l.id }" />
 										</div>
 										<ul>
@@ -140,48 +159,42 @@
 														</button>
 													</c:otherwise>
 												</c:choose></li>
-											<li style="height: 80px;">
-												<c:choose>
+											<li style="height: 80px;"><c:choose>
 													<c:when test="${l.ownerId == sessionScope.loginMember.id }">
 														<button class="showListSharing"
-															style="box-shadow: none; border: none;">공유목록
-															<span class="icon fas fa-clipboard-list"
+															style="box-shadow: none; border: none;">
+															공유목록 <span class="icon fas fa-clipboard-list"
 																style="font-size: 1.8em;"></span>
 														</button>
 														<button class="getkeySharing"
-															style="box-shadow: none; border: none;">키복사
-															<span class="icon fas fa-key" 
-															style="font-size: 1.5em;"></span>
+															style="box-shadow: none; border: none;">
+															키복사 <span class="icon fas fa-key"
+																style="font-size: 1.5em;"></span>
 														</button>
 														<button class="kakaoSharing"
-															style="box-shadow: none; border: none;">카카오톡으로 키전송
-															<span class="icon far fa-share-alt"
+															style="box-shadow: none; border: none;">
+															카카오톡으로 키전송 <span class="icon far fa-share-alt"
 																style="font-size: 1.5em;"></span>
 														</button>
 														<!-- form에 동일 한 index를 주기위해 skip으로 elements만 생성 -->
 														<button class="deleteSharing skip"
-															style="box-shadow: none; border: none;">
-														</button>
+															style="box-shadow: none; border: none;"></button>
 													</c:when>
 													<c:otherwise>
 														<!-- form에 동일 한 index를 주기위해 skip으로 elements만 생성 -->
 														<button class="showListSharing skip"
-															style="box-shadow: none; border: none;">
-														</button>
+															style="box-shadow: none; border: none;"></button>
 														<button class="getkeySharing skip"
-															style="box-shadow: none; border: none;">
-														</button>
+															style="box-shadow: none; border: none;"></button>
 														<button class="kakaoSharing skip"
-															style="box-shadow: none; border: none;">
-														</button>
+															style="box-shadow: none; border: none;"></button>
 														<button class="deleteSharing"
-															style="box-shadow: none; border: none;">공유 취소
-															<span class="icon fas fa-trash-alt"
+															style="box-shadow: none; border: none;">
+															공유 취소 <span class="icon fas fa-trash-alt"
 																style="font-size: 1.5em;"></span>
 														</button>
 													</c:otherwise>
-												</c:choose>
-											</li>
+												</c:choose></li>
 										</ul>
 									</form>
 								</div>
@@ -190,34 +203,43 @@
 					</div>
 				</c:otherwise>
 			</c:choose>
-			<input type="text" id="tempKey" style="position:absolute; top:0; left:0; width:1px; height:1px; margin:0; padding:0; border:0;"/>
+			<input type="text" id="tempKey"
+				style="position: absolute; top: 0; left: 0; width: 1px; height: 1px; margin: 0; padding: 0; border: 0;" />
 		</div>
 		<div class="center_position">
-					<ul class="pagination">
-						<c:if test="${pageNum>1}">
-						<li><a href="showlist${method }?pageNumStr=${pageNum-1}&keyword=${keyword}" class="button">Prev</a></li>
-						</c:if>
-						<c:if test="${pageNum<=1}">
-						<li><span class="button disabled">Prev</span></li>
-						</c:if>
-						<c:forEach var="pN" items="${pageNumList}" end="4">
-							<c:choose>
-								<c:when test="${pN != pageNum}">
-									<li><a href="showlist${method }?pageNumStr=${pN}&keyword=${keyword}" class="page">${pN}</a></li>
-								</c:when>
-								<c:when test="${pN == pageNum}">
-									<li><a href="showlist${method }?pageNumStr=${pN}&keyword=${keyword}" class="page active">${pN}</a></li>
-								</c:when>
-							</c:choose>
-						</c:forEach>
-						<c:if test="${pages>pageNum}">
-						<li><a href="showlist${method }?pageNumStr=${pageNum+1}&keyword=${keyword}" class="button">Next</a></li>
-						</c:if>
-						<c:if test="${pages<=pageNum}">
-						<li><span class="button disabled">Next</span></li>
-						</c:if>
-					</ul>
-				</div>
+			<ul class="pagination">
+				<c:if test="${pageNum>1}">
+					<li><a
+						href="showlist${method }?pageNumStr=${pageNum-1}&keyword=${keyword}"
+						class="button">Prev</a></li>
+				</c:if>
+				<c:if test="${pageNum<=1}">
+					<li><span class="button disabled">Prev</span></li>
+				</c:if>
+				<c:forEach var="pN" items="${pageNumList}" end="4">
+					<c:choose>
+						<c:when test="${pN != pageNum}">
+							<li><a
+								href="showlist${method }?pageNumStr=${pN}&keyword=${keyword}"
+								class="page">${pN}</a></li>
+						</c:when>
+						<c:when test="${pN == pageNum}">
+							<li><a
+								href="showlist${method }?pageNumStr=${pN}&keyword=${keyword}"
+								class="page active">${pN}</a></li>
+						</c:when>
+					</c:choose>
+				</c:forEach>
+				<c:if test="${pages>pageNum}">
+					<li><a
+						href="showlist${method }?pageNumStr=${pageNum+1}&keyword=${keyword}"
+						class="button">Next</a></li>
+				</c:if>
+				<c:if test="${pages<=pageNum}">
+					<li><span class="button disabled">Next</span></li>
+				</c:if>
+			</ul>
+		</div>
 	</section>
 
 	<section class="wrapper major-pad">

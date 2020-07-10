@@ -297,20 +297,36 @@ public class WordbookController {
 	
 	@PostMapping("sharingKeyForm")
 	public String completeBySharingKey(HttpSession session, Model m, String sharingKey) {
-		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-		String idStr = sharingKey.substring(0, sharingKey.indexOf("!"));
-		int id = Integer.parseInt(idStr);
-		WordbookDto ownerWordbook = wordbookService.selectWordbookById(id);
-		if (ownerWordbook.getSharingKey().equals(sharingKey) && loginMember.getId() != ownerWordbook.getOwnerId()) {
-			WordbookDto guestWordbook = new WordbookDto();
-			guestWordbook.setOwnerId(ownerWordbook.getOwnerId());
-			guestWordbook.setGuestId(loginMember.getId());
-			guestWordbook.setTitle(ownerWordbook.getTitle());
-			guestWordbook.setWordbookAddress(ownerWordbook.getWordbookAddress());
-			wordbookService.insertWordbook(guestWordbook);
-		} else {
+		try {
+			MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+			String idStr = sharingKey.substring(0, sharingKey.indexOf("!"));
+			int wordbookId = Integer.parseInt(idStr);
+			WordbookDto ownerWordbook = wordbookService.selectWordbookById(wordbookId);			
+			List<WordbookDto> guestWordbookList = wordbookService.selectWordbookByGuestIdCheck(loginMember.getId());
+			//공유키 확인
+			if (ownerWordbook.getSharingKey().equals(sharingKey)) {
+				//이미 공유한 단어장이 있는지 확인
+				for (int i=0; i<guestWordbookList.size(); i++) {
+					if (guestWordbookList.get(i).getTitle().equals(ownerWordbook.getTitle())) {
+						m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
+						return "wordbook/wordbookUpdatefail";
+					}
+				}			
+				WordbookDto guestWordbook = new WordbookDto();
+				guestWordbook.setOwnerId(ownerWordbook.getOwnerId());
+				guestWordbook.setGuestId(loginMember.getId());
+				guestWordbook.setTitle(ownerWordbook.getTitle());
+				guestWordbook.setWordbookAddress(ownerWordbook.getWordbookAddress());
+				wordbookService.insertWordbook(guestWordbook);
+			} else {
+				m.addAttribute("errorMessage","공유키가 맞지 않습니다.");
+				return "wordbook/wordbookUpdatefail";
+			}
+			return "wordbook/wordbookUpdateComplete";
+		} catch (Exception e) {
+			m.addAttribute("errorMessage","유효한 공유키가 아닙니다.");
+			return "wordbook/wordbookUpdatefail";
 		}
-		return "wordbook/wordbookUpdateComplete";
 	}
 	
 	@PostMapping(value="sharingKey", produces="text/plain;charset=UTF-8")

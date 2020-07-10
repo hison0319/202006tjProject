@@ -1,4 +1,3 @@
-console.log("aaaa");
 Kakao.init('0e4fcd913762bd2a1016dc2dc2798451');
 var showListSharing = $("[class*=showListSharing]");
 var getkeySharing = $("[class*=getkeySharing]");
@@ -7,11 +6,10 @@ var deleteSharing = $("[class*=deleteSharing]");
 var memberId = $("[class*=postId]");
 var title = $("[class*=title]");
 for (let i = 0; i < showListSharing.length; i++) {
-	console.log("bbb");
 	showListSharing.eq(i).on(
 			"click",
 			function() {
-				console.log("showList "+i);
+				location.href = "/account/showSharingList";
 				return false;
 			});
 };
@@ -19,7 +17,6 @@ for (let i = 0; i < getkeySharing.length; i++) {
 	getkeySharing.eq(i).on(
 			"click",
 			function() {
-				console.log("getkeySharing "+i);
 				var data = $("form").eq(i+1).serialize();
 				console.log(data);
 				$.ajax({
@@ -53,7 +50,6 @@ for (let i = 0; i < kakaoSharing.length; i++) {
 	kakaoSharing.eq(i).on(
 			"click",
 			function() {
-				console.log("kakaoSharing "+i);
 				let memberIdForSend = memberId.eq(i).text();
 				let titleForSend = title.eq(i).text();
 				var data = $("form").eq(i+1).serialize();
@@ -86,7 +82,9 @@ for (let i = 0; i < deleteSharing.length; i++) {
 	deleteSharing.eq(i).on(
 			"click",
 			function() {
-				console.log("deleteSharing "+i);
+				if(!confirm("정말 공유를 취소하시겠습니까?")) {
+					return false;
+				}
 				var data = $("form").eq(i+1).serialize();
 				$.ajax({
 					url : "deleteSharing",
@@ -94,7 +92,7 @@ for (let i = 0; i < deleteSharing.length; i++) {
 					data : data,
 					dataType : "json",
 					success : function() {
-						alert("삭제완료");
+						alert("공유 취소 완료.");
 						location.reload();
 					},
 					error : function(request, status, error) {

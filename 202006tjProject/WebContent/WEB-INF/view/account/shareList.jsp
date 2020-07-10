@@ -28,7 +28,7 @@
 		<nav id="nav">
 			<ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
-				<li><a href="#">단어장</a></li>
+				<li><a href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
 				</li>
@@ -82,15 +82,50 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="wL" items="${wordbooklist}">
-						<tr>
+				<c:set var="sL" value="${sharingNumlist }"></c:set>
+					<c:forEach var="wL" items="${wordbooklist}" varStatus="i">
+						<tr class="tr">
 							<td>${wL.uDateStr}</td>
-							<td><a href="#">${wL.title}</a></td>
-							<td>0명</td>
+							<td><button class="showSharingList" style="box-shadow: none; border: none;">${wL.title}</button></td>
+							<td>${sL[i.index] } 명</td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
+		</div>
+		<div class="center_position">
+			<ul class="pagination">
+				<c:if test="${pageNum>1}">
+					<li><a
+						href="showSharingList?pageNumStr=${pageNum-1}"
+						class="button">Prev</a></li>
+				</c:if>
+				<c:if test="${pageNum<=1}">
+					<li><span class="button disabled">Prev</span></li>
+				</c:if>
+				<c:forEach var="pN" items="${pageNumList}" end="4">
+					<c:choose>
+						<c:when test="${pN != pageNum}">
+							<li><a
+								href="showSharingList?pageNumStr=${pN}"
+								class="page">${pN}</a></li>
+						</c:when>
+						<c:when test="${pN == pageNum}">
+							<li><a
+								href="showSharingList?pageNumStr=${pN}"
+								class="page active">${pN}</a></li>
+						</c:when>
+					</c:choose>
+				</c:forEach>
+				<c:if test="${pages>pageNum}">
+					<li><a
+						href="showSharingList?pageNumStr=${pageNum+1}"
+						class="button">Next</a></li>
+				</c:if>
+				<c:if test="${pages<=pageNum}">
+					<li><span class="button disabled">Next</span></li>
+				</c:if>
+			</ul>
 		</div>
 	</section>
 
@@ -119,6 +154,7 @@
 	<script src="/js/breakpoints.min.js"></script>
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
+	<script src="/js/account/showSharingMembers.js"></script>
 
 </body>
 
