@@ -16,6 +16,7 @@
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/word_list.css" />
 </head>
 
 <body class="is-preload">
@@ -67,9 +68,12 @@
 					<option value="2" >오름차순</option>
 				</select>
 			</div>
+			<div class="wordTable">
 			<form action="#" method="post" accept-charset="utf-8">
-				<table><tr><td><button id="insert">추가</button><button id="update">수정</button></td><td><a href="/word/form"><button id="form">장문 추가</button></a></tr></table>
+				<table>
+				<tr><td><button id="insert">추가</button><button id="update">수정</button></td><td><a href="/word/form"><button id="form">장문 추가</button></a></tr></table>
 			</form>
+			</div>
         </div>
     </section>
 

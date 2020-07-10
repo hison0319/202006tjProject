@@ -105,3 +105,18 @@ window.addEventListener("DOMContentLoaded", function(){
 	$.getScript("/js/word/wordInsert.js?v=<%=System.currentTimeMillis()%>");
 	$.getScript("/js/word/wordUpdate.js?v=<%=System.currentTimeMillis()%>");
 });
+
+var windowWidth;
+$( window ).resize(function() {
+	windowWidth = $(window).width();
+	   if(windowWidth <= 480 ){
+		   console.log(windowWidth);
+	   } else {
+		   console.log(windowWidth);
+	   }
+	});
+
+
+
+
+

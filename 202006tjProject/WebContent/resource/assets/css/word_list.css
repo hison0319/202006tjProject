@@ -1,0 +1,5 @@
+@charset "UTF-8";
+@import url(main.css);
+
+wordTable {overflow-x: auto;}
+table {width: 100%; min-width: 500px;}
