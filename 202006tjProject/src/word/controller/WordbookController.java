@@ -569,7 +569,31 @@ public class WordbookController {
 		}
 		return "wordbook/wordbookUpdateComplete";
 	}
-
+	
+	@RequestMapping("delete")  //단어장 삭제
+	public String deleteWordbook(HttpSession session, String wordbookid) {
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			return "error/loginPlease";
+		} else if (loginMember.getCertified() == 0) {
+			return "error/certifyPlease";
+		} else {
+			try{
+				int wordbookId = Integer.parseInt(wordbookid);
+				String wordbookAddress = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();
+				File file = new File(wordbookAddress);
+				if(!file.delete()) {
+					return "error/wrongAccess";
+				}
+				wordbookService.deleteWordbook(wordbookId);
+			} catch(NumberFormatException | IllegalStateException | NullPointerException e) {
+				return "error/wrongAccess";
+			}
+		}
+		return "wordbook/wordbookDeleteComplete";
+	}
+	
+	
 	private static String post(String apiUrl, Map<String, String> requestHeaders, String text) {
 		HttpURLConnection con = connect(apiUrl);
 		String postParams = "source=en&target=ko&text=" + text; // 원본언어: 한국어 (ko) -> 목적언어: 영어 (en)

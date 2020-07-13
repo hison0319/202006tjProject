@@ -287,7 +287,7 @@ public class WordController {
 						String tempTrans;
 						for (int i = 0; i < textArr.length; i++) {
 							for (int j = 0; j < textArr.length - 1 - i; j++) {
-								if (count[j] < count[j + 1]) {
+								if (count[j] > count[j + 1]) {
 									tempEng = textArr[j];
 									textArr[j] = textArr[j + 1];
 									textArr[j + 1] = tempEng;
@@ -375,7 +375,7 @@ public class WordController {
 					String tempTrans;
 					for (int i = 0; i < textArr.length; i++) {
 						for (int j = 0; j < textArr.length - 1 - i; j++) {
-							if (count[j] < count[j + 1]) {
+							if (count[j] > count[j + 1]) {
 								tempEng = textArr[j];
 								textArr[j] = textArr[j + 1];
 								textArr[j + 1] = tempEng;
@@ -455,12 +455,34 @@ public class WordController {
 				return "{\"nope\":\"notExist\"}";
 			}
 			String address = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();
-				File origFile = new File(address);
+			int tempIndex;
+			String tempWord;
+			String tempTrans;
+			int tempFavorite;
+			for (int i = 0; i < word.length; i++) {
+				for (int j = 0; j < word.length - 1 - i; j++) {
+					if (index[j] > index[j + 1]) {
+						tempIndex = index[j];
+						index[j] = index[j + 1];
+						index[j + 1] = tempIndex;
+						tempWord = word[j];
+						word[j] = word[j + 1];
+						word[j + 1] = tempWord;
+						tempTrans = trans[j];
+						trans[j] = trans[j + 1];
+						trans[j + 1] = tempTrans;
+						tempFavorite = favorite[j];
+						favorite[j] = favorite[j + 1];
+						favorite[j + 1] = tempFavorite;
+					}
+				}
+			}
+			File origFile = new File(address);
 			try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(origFile), "UTF-8"))){
 				String str = "[";
 				for (int i = 0; i < word.length; i++) {
 					if(!word[i].isBlank() || !trans[i].isBlank()) {
-						str += "{\"index\":" + index[i] + ",\"word\":\"" + word[i] + "\",\"trans\":\""
+						str += "{\"index\":" + i + ",\"word\":\"" + word[i] + "\",\"trans\":\""
 								+ trans[i] + "\",\"favorite\":" + favorite[i] + "},";
 					}
 				}
@@ -478,6 +500,7 @@ public class WordController {
 			}
 		} catch (NullPointerException e) {  //비로그인 시
 			System.out.println("업데이트 NPE 2");
+			e.printStackTrace();
 			return "{\"nope\":\"loginPlease\"}";
 		} catch (NumberFormatException | IllegalStateException e) {
 			return "{\"nope\":\"wrongAccess\"}";  //잘못된 접근(주소로 직접 접근 등)

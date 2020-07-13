@@ -3,3 +3,13 @@
 
 wordTable {overflow-x: auto;}
 table {width: 100%; min-width: 500px;}
+
+td{
+	word-break:break-all;
+}
+
+td > button.favorite{
+	box-shadow: none;
+	border: none;
+}
+

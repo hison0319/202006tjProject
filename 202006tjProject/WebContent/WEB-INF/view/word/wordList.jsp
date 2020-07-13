@@ -15,7 +15,6 @@
     <meta name="description" content="basic" />
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="/css/main.css" />
     <link rel="stylesheet" href="/css/word_list.css" />
 </head>
 
@@ -64,16 +63,15 @@
 					<option value="2" >중요 단어 - 오름차순</option>
 					<option value="3" >최근 수정</option>
 					<option value="4" >오름차순</option> -->
-					<option value="1"  selected="selected">입력 순서</option>
-					<option value="2" >오름차순</option>
+					<option value="1" selected="selected">중요 단어 - 입력 순서</option>
+					<option value="2">중요 단어 - 오름차순</option>
+					<option value="3">입력 순서</option>
+					<option value="4" >오름차순</option>
 				</select>
 			</div>
-			<div class="wordTable">
 			<form action="#" method="post" accept-charset="utf-8">
-				<table>
-				<tr><td><button id="insert">추가</button><button id="update">수정</button></td><td><a href="/word/form"><button id="form">장문 추가</button></a></tr></table>
+				<table><tr><td><button id="insert">추가</button><button id="update">수정</button></td><td><button id="form" type="button">장문 추가</button><td></td><td><button id="deleting" type="button">단어장 삭제</button></td></tr></table>
 			</form>
-			</div>
         </div>
     </section>
 
