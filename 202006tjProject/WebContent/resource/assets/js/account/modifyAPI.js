@@ -151,3 +151,11 @@ window.addEventListener("DOMContentLoaded",function(){
       }
    });
 });
+//회원 탈퇴하기 눌렀을 때
+function deleteCheck(id) {
+	var conf = confirm("정말 탈퇴하시겠습니까?");
+	console.log(id);
+	if(conf) {
+		location.replace("delete?id="+id);
+	}
+}

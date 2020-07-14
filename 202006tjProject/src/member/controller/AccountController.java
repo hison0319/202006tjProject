@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import member.dto.MemberDto;
 import member.dto.MemberVO;
 import member.dto.MemberVOForAPI;
@@ -238,5 +240,17 @@ public class AccountController {
 		int wordbookId = Integer.parseInt(id);
 		wordbookService.deleteWordbook(wordbookId);
 		return '"'+"t"+'"';
+	}
+	
+	//회원 탈퇴
+	@GetMapping("/delete")
+	public String memberDelete(int id, HttpSession session) {
+		memberService.deleteMember(id);
+		session.removeAttribute("loginMember");  //세션에서 로그인 정보 삭제
+		if(session.getAttribute("access_token") != null) {
+			JsonNode accessToken = (JsonNode) session.getAttribute("access_token");
+			session.removeAttribute("access_token");
+		}
+		return "/account/memberDeleteComplete";
 	}
 }

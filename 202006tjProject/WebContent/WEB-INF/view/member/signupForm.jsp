@@ -295,7 +295,7 @@
 	<script src="/js/breakpoints.min.js"></script>
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
-	<script src="/js/signup/signup.js?5"></script>
+	<script src="/js/signup/signup.js?v=<%=System.currentTimeMillis() %>"></script>
 </body>
 
 </html>

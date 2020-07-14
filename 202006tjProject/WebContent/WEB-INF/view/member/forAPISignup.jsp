@@ -178,7 +178,7 @@
 						</script>
 						<br>
 						
-						   <div class="checkbox_group">
+		<div class="checkbox_group">
 			<ul class="join_box">
                 <li class="checkBox">
                     <ul class="clearfix">

@@ -38,6 +38,7 @@
 	<update id="updateMemberCertify" parameterType="member">
 		update member set certified=#{certified} where id=#{id}
 	</update>
+	<!-- 회원 탈퇴 -->
 	<delete id="deleteMember">
 		delete from member where id=#{id}
 	</delete>

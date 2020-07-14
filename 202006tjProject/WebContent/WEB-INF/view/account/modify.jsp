@@ -199,7 +199,7 @@
 						<div class="signup_sub center_position">
 							<ul class="actions stacked">
 								<li><input type="submit" value="회원정보 수정" class="button primary"></li>
-								<li><button class="button" onclick="">회원 탈퇴</button></li>	
+								<li><button class="button" type="button" onclick="deleteCheck(${sessionScope.loginMember.id})">회원 탈퇴하기</button></li>
 							</ul>
 						</div>
 					</div>
