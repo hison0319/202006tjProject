@@ -85,41 +85,44 @@ function toggleStartLine(){
 		}
 	})
 }
-$("#insert").eq(0).on("click",function(){
+$("#insert").eq(0).on("click",function(callback){
 	if(insertBtn.innerText=="추가"){
-		updateBtn.disabled = "disabled";
-		formBtn.disabled = "disabled";
-		selectBar.disabled = "disabled";
-		insertBtn.innerText="추가완료";
-		wInput = document.querySelectorAll("input[name=word]");
-		index = wInput.length;
-		console.log("인덱스: " + index);
-		if(windowWidth>=480){
-			if(document.querySelectorAll("input").length%8==0){
+		getData(function(){
+			updateBtn.disabled = "disabled";
+			formBtn.disabled = "disabled";
+			selectBar.disabled = "disabled";
+			insertBtn.innerText="추가완료";
+			wInput = document.querySelectorAll("input[name=word]");
+			index = wInput.length;
+			console.log("인덱스: " + index);
+			if(windowWidth>=480){
+					console.log("ㅇㅅㅇ");
+				if(document.querySelectorAll("input").length%8==0){
+					table.children().last().before("<tr><td><input name='index' type='hidden' value='"+index+"'/><input type = 'text' name='word' onkeyup='toggleAddLine("+index+")'/></td><td><input type = 'text' name='trans' onkeyup='toggleAddLine("+index+")'/><input name='favorite' type='hidden' value='"+0+"'/></td></tr>");
+				}
+				else{  //같은 줄에 빈 칸 추가
+					table.children().last().prev().append("<td><input name='index' type='hidden' value='"+index+"'/><input type = 'text' name='word' onkeyup='toggleAddLine("+index+")'/></td><td><input type = 'text' name='trans' onkeyup='toggleAddLine("+index+")'/><input name='favorite' type='hidden' value='"+0+"'/></td>");
+				}
+				insertLength=$("input[name=word]:not([disabled='disabled'])").length;  //단어의 수
+			}
+			else{
 				table.children().last().before("<tr><td><input name='index' type='hidden' value='"+index+"'/><input type = 'text' name='word' onkeyup='toggleAddLine("+index+")'/></td><td><input type = 'text' name='trans' onkeyup='toggleAddLine("+index+")'/><input name='favorite' type='hidden' value='"+0+"'/></td></tr>");
+				insertLength=$("input[name=word]:not([disabled='disabled'])").length;
 			}
-			else{  //같은 줄에 빈 칸 추가
-				table.children().last().prev().append("<td><input name='index' type='hidden' value='"+index+"'/><input type = 'text' name='word' onkeyup='toggleAddLine("+index+")'/></td><td><input type = 'text' name='trans' onkeyup='toggleAddLine("+index+")'/><input name='favorite' type='hidden' value='"+0+"'/></td>");
+			toggleStartLine(index);
+			index++;
+			for(let i=0; i<document.querySelectorAll("input[name=index]").length;i++){
+				iInputVal[i]=document.querySelectorAll("input[name=index]")[i].value;
+				wInputVal[i]=document.querySelectorAll("input[name=word]")[i].value;
+				tInputVal[i]=document.querySelectorAll("input[name=trans]")[i].value;
+				fInputVal[i]=document.querySelectorAll("input[name=favorite]")[i].value;
 			}
-			insertLength=$("input[name=word]:not([disabled='disabled'])").length;  //단어의 수
-		}
-		else{
-			table.children().last().before("<tr><td><input name='index' type='hidden' value='"+index+"'/><input type = 'text' name='word' onkeyup='toggleAddLine("+index+")'/></td><td><input type = 'text' name='trans' onkeyup='toggleAddLine("+index+")'/><input name='favorite' type='hidden' value='"+0+"'/></td></tr>");
+			
 			insertLength=$("input[name=word]:not([disabled='disabled'])").length;
-		}
-		toggleStartLine(index);
-		index++;
-		for(let i=0; i<document.querySelectorAll("input[name=index]").length;i++){
-			iInputVal[i]=document.querySelectorAll("input[name=index]")[i].value;
-			wInputVal[i]=document.querySelectorAll("input[name=word]")[i].value;
-			tInputVal[i]=document.querySelectorAll("input[name=trans]")[i].value;
-			fInputVal[i]=document.querySelectorAll("input[name=favorite]")[i].value;
-		}
-		
-		insertLength=$("input[name=word]:not([disabled='disabled'])").length;
-		input = document.querySelectorAll("input");
-		var addedWord=$("input[name=word]").last()[0];
-		var addedTrans=$("input[name=trans]").last()[0];
+			input = document.querySelectorAll("input");
+			var addedWord=$("input[name=word]").last()[0];
+			var addedTrans=$("input[name=trans]").last()[0];
+		});
 	}
 	else {
 		updateBtn.disabled = null;
@@ -200,10 +203,11 @@ $("#insert").eq(0).on("click",function(){
 				}
 			}
 		}
-		/*document.querySelectorAll("input").forEach(function(element){
-			element.onkeyup = " ";
-			element.disabled = "disabled";
-		})*/
+		$("input").each(function(){
+			$(this).removeAttr("onkeyup");
+			$(this).attr("disabled", "disabled");
+		})
+		setList();
 	}
 	for(let i=0; i<document.querySelectorAll("input[name=index]").length; i++){
 			iInputVal[i]=document.querySelectorAll("input[name=index]")[i].value;
@@ -211,6 +215,5 @@ $("#insert").eq(0).on("click",function(){
 			tInputVal[i]=document.querySelectorAll("input[name=trans]")[i].value;
 			fInputVal[i]=document.querySelectorAll("input[name=favorite]")[i].value;
 		}
-		console.log("추가-" +wInputVal);
 	return false;
 });

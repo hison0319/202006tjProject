@@ -15,7 +15,7 @@
     <meta name="description" content="basic" />
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="/css/word_list.css" />
+    <link rel="stylesheet" href="/css/word_list.css?v=<%=System.currentTimeMillis()%>" />
 </head>
 
 <body class="is-preload">
@@ -70,7 +70,7 @@
 				</select>
 			</div>
 			<form action="#" method="post" accept-charset="utf-8">
-				<table><tr><td><button id="insert">추가</button><button id="update">수정</button></td><td><button id="form" type="button">장문 추가</button><td></td><td><button id="deleting" type="button">단어장 삭제</button></td></tr></table>
+				<table><tr><td><button id="insert">추가</button><button id="update" type="button">수정</button></td><td><button id="form" type="button">장문 추가</button><td></td><td><button id="deleting" type="button">단어장 삭제</button></td></tr></table>
 			</form>
         </div>
     </section>

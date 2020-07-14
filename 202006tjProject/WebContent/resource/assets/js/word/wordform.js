@@ -1,4 +1,3 @@
-window.onload=function(){
 		let button = document.querySelector("#submit");
 		let file = document.querySelector("#file");
 		let text = document.querySelector("#text");
@@ -46,5 +45,4 @@ window.onload=function(){
 				}
 			}
 		}
-	}
 

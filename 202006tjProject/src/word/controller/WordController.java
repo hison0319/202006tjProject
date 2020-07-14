@@ -248,12 +248,25 @@ public class WordController {
 								new InputStreamReader(new FileInputStream(origFile), "UTF-8"));
 							BufferedReader br = new BufferedReader(
 									new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
-						
 						JSONArray jsonArray = (JSONArray)jParser.parse(obr);  //기존 파일 사용가능 형태로 변환
+						
+						Long[] origIndex = new Long[jsonArray.size()];
+						String[] origWord = new String[jsonArray.size()];
+						String[] origTrans = new String[jsonArray.size()];
+						Long[] origFavorite = new Long[jsonArray.size()];
+						int x = 0;
+						for (Object o : jsonArray) {
+							JSONObject wordObj = (JSONObject) o;
+							origIndex[x] = (Long) wordObj.get("index");
+							origWord[x] = (String) wordObj.get("word");
+							origTrans[x] = (String) wordObj.get("trans");
+							origFavorite[x] = (Long) wordObj.get("favorite");
+							x++;
+						}
 						int index = jsonArray.size();  //추가하는 단어의 index 시작 값
-						String jsonText = jsonArray.toString();  //기존 파일 내용 String
+						/*String jsonText = jsonArray.toString();  //기존 파일 내용 String
 						jsonText = jsonText.replace(']', ',');  //json 끝의 ]를 ,로 변경
-						String s;  //readLine() 메서드를 위한 임시 String
+						*/						String s;  //readLine() 메서드를 위한 임시 String
 						String fileText = "";  //업로드한 파일의 내용을 담을 String
 						while ((s = br.readLine()) != null) {  //남은 내용이 있으면 실행
 							fileText += (s + " ");
@@ -285,6 +298,7 @@ public class WordController {
 						String tempEng;
 						int tempCnt;
 						String tempTrans;
+						String[] transArr = new String[textArr.length];
 						for (int i = 0; i < textArr.length; i++) {
 							for (int j = 0; j < textArr.length - 1 - i; j++) {
 								if (count[j] > count[j + 1]) {
@@ -300,20 +314,45 @@ public class WordController {
 								}
 							}
 						}
+						String jsonText="[";
+						boolean isContaining;
 						for (int i = 0; i < textArr.length; i++) {
 							if (textArr[i] != null && textArr[i].length() > 1) {
 								try {
+									isContaining=false;
 									JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);  //json으로 변환
 									JSONObject message = (JSONObject) resultJson.get("message");  //json의 key(message)로 값 반환
 									JSONObject result = (JSONObject) message.get("result");  //json의 key(result)로 값 반환
-									if (!textArr[i].equals(result.get("translatedText"))) {
-										jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
-												+ result.get("translatedText") + "\",\"favorite\":" + 0 + "},";
-										index++;
+									transArr[i] = (String) result.get("translatedText");
+									for(int j=0; j<origWord.length; j++) {
+										if(textArr[i].equals(origWord[j])) {
+											textArr[i]=null;
+											for(String t : origTrans[j].split(", ")) {
+												if(t.equals(transArr[i])) {
+													isContaining=true;
+													break;
+												}
+											}
+											if(!isContaining) {
+												origTrans[j] += ", " + transArr[i];
+											}
+											break;
+										}
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
+							}
+						}
+						for (int i = 0; i < origWord.length; i++) {
+							jsonText += "{\"index\":" + origIndex[i] + ",\"word\":\"" + origWord[i] + "\",\"trans\":\""
+									+ origTrans[i] + "\",\"favorite\":" + origFavorite[i] + "},";
+						}
+						for (int i = 0; i < textArr.length; i++) {
+							if (textArr[i]!=null && !textArr[i].equals(transArr[i])) {
+								jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
+										+ transArr[i] + "\",\"favorite\":" + 0 + "},";
+								index++;
 							}
 						}
 						jsonText = jsonText.substring(0, jsonText.length() - 1);
@@ -339,16 +378,29 @@ public class WordController {
 				}
 			}
 
-			else {
+			else {  //직접 입력
 				try (BufferedReader obr = new BufferedReader(
 							new InputStreamReader(new FileInputStream(origFile), "UTF-8"))) {
 					JSONArray jsonArray = (JSONArray)jParser.parse(obr);  //기존 파일 사용가능 형태로 변환
 					int index = jsonArray.size();  //추가하는 단어의 index 시작 값
-					String jsonText = jsonArray.toString();  //기존 파일 내용 String
-					jsonText = jsonText.replace(']', ',');  //json 끝의 ]를 ,로 변경
+					/*String jsonText = jsonArray.toString();  //기존 파일 내용 String
+					jsonText = jsonText.replace(']', ','); */ //json 끝의 ]를 ,로 변경
 					text = text.replaceAll(regex, " ");
 					String[] textArr = text.split(" ");
 					String word;
+					Long[] origIndex = new Long[jsonArray.size()];
+					String[] origWord = new String[jsonArray.size()];
+					String[] origTrans = new String[jsonArray.size()];
+					Long[] origFavorite = new Long[jsonArray.size()];
+					int x = 0;
+					for (Object o : jsonArray) {
+						JSONObject wordObj = (JSONObject) o;
+						origIndex[x] = (Long) wordObj.get("index");
+						origWord[x] = (String) wordObj.get("word");
+						origTrans[x] = (String) wordObj.get("trans");
+						origFavorite[x] = (Long) wordObj.get("favorite");
+						x++;
+					}
 					int[] count = new int[textArr.length];
 					String[] responseBody = new String[textArr.length];
 					for (int i = 0; i < textArr.length; i++) {
@@ -370,6 +422,7 @@ public class WordController {
 							count[i] = 0;
 						}
 					}
+					String[] transArr = new String[textArr.length];
 					String tempEng;
 					int tempCnt;
 					String tempTrans;
@@ -388,20 +441,45 @@ public class WordController {
 							}
 						}
 					}
+					String jsonText="[";
+					boolean isContaining;
 					for (int i = 0; i < textArr.length; i++) {
 						if (textArr[i] != null && textArr[i].length() > 1) {
 							try {
-								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
-								JSONObject message = (JSONObject) resultJson.get("message");
-								JSONObject result = (JSONObject) message.get("result");
-								if (!textArr[i].equals(result.get("translatedText"))) {
-									jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
-											+ result.get("translatedText") + "\",\"favorite\":" + 0 + "},";
-									index++;
+								isContaining=false;
+								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);  //json으로 변환
+								JSONObject message = (JSONObject) resultJson.get("message");  //json의 key(message)로 값 반환
+								JSONObject result = (JSONObject) message.get("result");  //json의 key(result)로 값 반환
+								transArr[i] = (String) result.get("translatedText");
+								for(int j=0; j<origWord.length; j++) {
+									if(textArr[i].equals(origWord[j])) {
+										textArr[i]=null;
+										for(String t : origTrans[j].split(", ")) {
+											if(t.equals(transArr[i])) {
+												isContaining=true;
+												break;
+											}
+										}
+										if(!isContaining) {
+											origTrans[j] += ", " + transArr[i];
+										}
+										break;
+									}
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
+						}
+					}
+					for (int i = 0; i < origWord.length; i++) {
+						jsonText += "{\"index\":" + origIndex[i] + ",\"word\":\"" + origWord[i] + "\",\"trans\":\""
+								+ origTrans[i] + "\",\"favorite\":" + origFavorite[i] + "},";
+					}
+					for (int i = 0; i < textArr.length; i++) {
+						if (textArr[i]!=null && !textArr[i].equals(transArr[i])) {
+							jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
+									+ transArr[i] + "\",\"favorite\":" + 0 + "},";
+							index++;
 						}
 					}
 					jsonText = jsonText.substring(0, jsonText.length() - 1);

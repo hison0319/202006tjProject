@@ -105,6 +105,62 @@ function clearText(i){
 	$(i).parent().prev().children("input[name=word]").val("");
 }
 
+function sendData(callback){
+	let formData = $("form").eq(0).serialize();
+	$.ajax({
+		type:"post",
+		url:"update?wordbookid="+getParameterByName("wordbookid"),
+		dataType:"json",
+		data:formData,
+		success:function(data){
+			if(data.nope == "loginPlease"){
+				alert("로그인이 필요한 페이지입니다.");
+				location.replace("/login/form");
+			}
+			else if(data.nope == "certifyPlease"){
+				alert("인증이 필요한 페이지입니다.");
+				location.replace("/certify/form");
+			}
+			else if(data.nope == "wrongAccess"){
+				alert("잘못 된 접근입니다.");
+				location.replace("/");
+			}
+			else if(data.nope == "notExist"){
+				alert("존재하지 않는 페이지입니다.")
+				location.replace("/");
+			}
+			else{
+				alert("수정 완료");
+				wInput = document.querySelectorAll("input[name=word]");
+				var dupWords = new Array();
+				var x=0;
+				wInput.forEach(function(element, index){
+				if(element.style.background=="rgba(0, 0, 255, 0.56)"){
+					element.style.color="white";
+				}
+				else{
+					element.style.color="black";
+				}
+				if(index<wInput.length-1){
+					for(let i=index+1; i<wInput.length; i++){
+						if(element.value == wInput[i].value){
+							dupWords[x]=element.value;
+							x++;
+							break;
+						}
+					}
+				}
+			});
+		}
+		if(callback){
+			callback(dupWords, x, data);
+		}
+	},
+	error:function(request,status,error){
+           		alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+       		 }
+	});
+}
 
 $("#update").eq(0).on("click",function(){
 	 input = document.querySelectorAll("input");
@@ -115,6 +171,12 @@ $("#update").eq(0).on("click",function(){
 		insertBtn.disabled = "disabled";
 		formBtn.disabled = "disabled";
 		selectBar.disabled = "disabled";
+		wInput.forEach(function(element){
+			element.style.width="80%";
+		})
+		tInput.forEach(function(element){
+			element.style.width="80%";
+		})
 		words = new Array();
 		trans = new Array();
 		updateBtn.innerText="수정완료";
@@ -128,16 +190,6 @@ $("#update").eq(0).on("click",function(){
 		tInput.forEach(function(element, index){
 			element.onfocus=transModified(index);
 		})
-		
-		/*$(window).resize(function(){
-			windowWidth = $(window).width();
-			if(tempWidth==1 && windowWidth<480) {
-				modifying();
-			}
-			else if(tempWidth==0 && windowWidth>=480){
-				modifying();
-			}
-		});*/
 	}
 	else {
 		insertBtn.disabled = null;
@@ -150,68 +202,52 @@ $("#update").eq(0).on("click",function(){
 		windowWidth = $(window).width();
 		trs=$("tr:not(:last)");
 		trs.children().children().remove("button");
-				wInput = $("input[name=word]");
-				tInput = $("input[name=trans]");
-				for(let i = 0; i<wInput.length;i++){
-					if($.trim(wInput.eq(i).val()) == "" && $.trim(tInput.eq(i).val()) == ""){  //빈 칸들 삭제
-					iInput = document.querySelectorAll("input[name=index]");
-					standard = iInput[i-deleted].value;
-						for (let j = 0; j<iInput.length;j++){
-							if(Number(iInput[j].value)>Number(standard)){
-								iInput[j].value--;
-							}
-						}
-						deleted++;
-						wInput.eq(i).parent().remove();
-						tInput.eq(i).parent().remove();
+			wInput = $("input[name=word]");
+			tInput = $("input[name=trans]");
+			for(let i = 0; i<wInput.length;i++){
+				if($.trim(wInput.eq(i).val()) == "" && $.trim(tInput.eq(i).val()) == ""){  //빈 칸들 삭제
+				iInput = document.querySelectorAll("input[name=index]");
+				standard = iInput[i-deleted].value;
+				for (let j = 0; j<iInput.length;j++){
+					if(Number(iInput[j].value)>Number(standard)){
+						iInput[j].value--;
 					}
 				}
-				complete();
-				let formData = $("form").eq(0).serialize();
-				$.ajax({
-					type:"post",
-					url:"update?wordbookid="+getParameterByName("wordbookid"),
-					dataType:"json",
-					data:formData,
-					success:function(data){
-						if(data.nope == "loginPlease"){
-							alert("로그인이 필요한 페이지입니다.");
-							location.replace("/login/form");
-						}
-						else if(data.nope == "certifyPlease"){
-							alert("인증이 필요한 페이지입니다.");
-							location.replace("/certify/form");
-						}
-						else if(data.nope == "wrongAccess"){
-							alert("잘못 된 접근입니다.");
-							location.replace("/");
-						}
-						else if(data.nope == "notExist"){
-							alert("존재하지 않는 페이지입니다.")
-							location.replace("/");
-						}
-						else{
-							alert("수정 완료");
-						}
-					},
-					error:function(request,status,error){
-	             		alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-	         		 }
-				});
-				iInputVal = new Array();
-				wInputVal = new Array();
-				tInputVal = new Array();
-				fInputVal = new Array();
-				for(let i=0; i<document.querySelectorAll("input[name=index]").length; i++){
-					iInputVal[i]=document.querySelectorAll("input[name=index]")[i].value;
-					wInputVal[i]=document.querySelectorAll("input[name=word]")[i].value;
-					tInputVal[i]=document.querySelectorAll("input[name=trans]")[i].value;
-					fInputVal[i]=document.querySelectorAll("input[name=favorite]")[i].value;
-				}
-		$("input").each(function(){
-			$(this).removeAttr("onfocus");
-			$(this).attr("disabled", "disabled");
+				deleted++;
+				wInput.eq(i).parent().remove();
+				tInput.eq(i).parent().remove();
+			}
+		}
+		complete();
+		sendData(function(dupWords, x, data){
+			if(x!=0){
+				alert("중복 단어가 있습니다.");
+			}
+			iInputVal = new Array();
+			wInputVal = new Array();
+			tInputVal = new Array();
+			fInputVal = new Array();
+			for(let i=0; i<document.querySelectorAll("input[name=index]").length; i++){
+				iInputVal[i]=document.querySelectorAll("input[name=index]")[i].value;
+				wInputVal[i]=document.querySelectorAll("input[name=word]")[i].value;
+				tInputVal[i]=document.querySelectorAll("input[name=trans]")[i].value;
+				fInputVal[i]=document.querySelectorAll("input[name=favorite]")[i].value;
+			}
+	
+			for(let i=0; i<x; i++){
+				document.querySelectorAll("input[value="+dupWords[i]+"]").forEach(function(element){
+				element.style.color="red";
+				})
+			}
+		
+			$("input").each(function(){
+				$(this).removeAttr("onfocus");
+				$(this).css("width", "");
+				$(this).attr("disabled", "disabled");
+			})
+			
+			checkFavorite();
+			checkDuplicates();
 		})
 	}
-	return false;
 });

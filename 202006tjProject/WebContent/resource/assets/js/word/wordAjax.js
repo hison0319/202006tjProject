@@ -24,13 +24,12 @@ function getParameterByName(name) {
 	return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }  //parameter 받아오기
 
-function setList(){
+function getData(callback){
 	$.ajax({
 		type:"post",
 		url:"getwords?wordbookid="+getParameterByName("wordbookid"),
 		dataType:"json",
 		success:function(data){
-			console.log(data);
 			if(data.nope=="notAllowed") {
 				alert("권한이 없습니다.");
 				location.replace("wordbook/showlist");
@@ -48,6 +47,19 @@ function setList(){
 				location.replace("/");
 			}
 			else {
+				if(callback){
+					callback(data);
+				}
+				else{
+					return data;
+				}
+			}
+		}
+	});
+}
+
+function setList(){
+	getData(function(data){
 				if(data.length > 1 && arrange.value == 1){
 					data.sort(function(a,b){
 						return b.favorite-a.favorite;
@@ -101,7 +113,9 @@ function setList(){
 							tInputVal[i]=document.querySelectorAll("input[name=trans]")[i].value;
 							fInputVal[i]=document.querySelectorAll("input[name=favorite]")[i].value;
 						}
-						showList(data, iInputVal, wInputVal, tInputVal, fInputVal);
+						getData(function(data){
+							showList(data, iInputVal, wInputVal, tInputVal, fInputVal);
+						});
 						tempWidth=0;
 					}
 					else if(tempWidth==0 && windowWidth>=480){
@@ -111,17 +125,53 @@ function setList(){
 							tInputVal[i]=document.querySelectorAll("input[name=trans]")[i].value;
 							fInputVal[i]=document.querySelectorAll("input[name=favorite]")[i].value;
 						}
-						showList(data, iInputVal, wInputVal, tInputVal, fInputVal);
+						getData(function(data){
+							showList(data, iInputVal, wInputVal, tInputVal, fInputVal);
+						});
 						tempWidth=1;
 					}
 				})
+		});
+	}
+
+function checkFavorite(){
+	$("input[name=favorite][value=1]").parent().prev().children("input").css({
+		color:'white',
+		background:'rgba(0, 0, 255, 0.56)'
+	});
+	$("input[name=favorite][value=1]").prev().css({
+		color:'white',
+		background:'rgba(0, 0, 255, 0.56)'
+	});
+	$("input[name=favorite][value=0]").parent().prev().children("input").css({
+		color:'',
+		background:''
+	});
+	$("input[name=favorite][value=0]").prev().css({
+		color:'',
+		background:''
+	});
+}
+
+function checkDuplicates(){
+	wInput=document.querySelectorAll("input[name=word]");
+	wInput.forEach(function(element){
+		if(element.style.background=="rgba(0, 0, 255, 0.56)"){
+			element.style.color="white";
+		}
+		else{
+			element.style.color="";
+		}
+	});
+	wInput.forEach(function(element, index){
+		for(let i=index+1; i<wInput.length; i++){
+			if(element.value == wInput[i].value){
+				element.style.color="red";
+				wInput[i].style.color="red";
 			}
-		},
-		error:function(request,status,error){
-             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-          }
+		}
 	})
-};
+}
 
 function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){
 	$("table").find("tr:not(:last)").remove();
@@ -149,14 +199,14 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){
 					if((iInputVal.length-1-i)%2==0){  //큼, 전체짝수칸, 수정시, 홀수칸
 					console.log("3");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
-						+wInputVal[i] + "' onfocus='wordModified("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
-						+ tInputVal[i] + "' onfocus='transModified("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
+						+wInputVal[i] + "' onfocus='wordModified("+i+")' style='width:80%'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
+						+ tInputVal[i] + "' onfocus='transModified("+i+")' style='width:80%'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 					}
 					else{  //큼, 전체짝수칸, 수정시, 짝수칸
 					console.log("4");
 						$("tr").eq(0).prepend("<td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
-						+wInputVal[i] + "'  onfocus='wordModified("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
-						+ tInputVal[i] + "' onfocus='transModified("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td>");
+						+wInputVal[i] + "'  onfocus='wordModified("+i+")'/ style='width:80%'></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
+						+ tInputVal[i] + "' onfocus='transModified("+i+")'/ style='width:80%'><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td>");
 					}
 					if(i==0){
 						modifying();
@@ -165,13 +215,13 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){
 				else {  //큼, 전체짝수칸, 추가시
 					if((iInputVal.length-1-i)%2==0){  //큼, 전체짝수칸, 추가시, 홀수칸
 						if(i<data.length){  //큼, 전체짝수칸, 추가시, 홀수칸, 기존데이터
-						console.log("5");
-							$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+data[i].index+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
-							+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
-							+ data[i].trans + "' /><input name='favorite' type='hidden' value='"+data[i].favorite+"'/></td></tr>");
+							console.log("5");
+								$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+data[i].index+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
+								+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
+								+ data[i].trans + "' /><input name='favorite' type='hidden' value='"+data[i].favorite+"'/></td></tr>");
 						}
 						else{  //큼, 전체짝수칸, 추가시, 홀수칸, 신규데이터
-						console.log("6");
+							console.log("6");
 							$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 							+wInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 							+ tInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
@@ -218,20 +268,20 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){
 					if(i==iInputVal.length-1){  //전체홀수칸, 수정시, 첫 칸
 					console.log("12");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
-						+wInputVal[i] + "' onfocus='wordModified("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
-						+ tInputVal[i] + "' onfocus='transModified("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
+						+wInputVal[i] + "' onfocus='wordModified("+i+")' style='width:80%'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
+						+ tInputVal[i] + "' onfocus='transModified("+i+")' style='width:80%'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 					}
 					else if ((iInputVal.length-1-i)%2==1){  //전체홀수칸, 수정시, 짝수칸
 					console.log("13");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
-						+wInputVal[i] + "' onfocus='wordModified("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
-						+ tInputVal[i] + "' onfocus='transModified("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
+						+wInputVal[i] + "' onfocus='wordModified("+i+")' style='width:80%'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
+						+ tInputVal[i] + "' onfocus='transModified("+i+")' style='width:80%'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 					}
 					else {  //전체홀수칸, 수정시, 홀수칸
 					console.log("14");
 						$("tr").eq(0).prepend("<td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
-						+wInputVal[i] + "' onfocus='wordModified("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
-						+ tInputVal[i] + "' onfocus='transModified("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td>");
+						+wInputVal[i] + "' onfocus='wordModified("+i+")' style='width:80%'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
+						+ tInputVal[i] + "' onfocus='transModified("+i+")' style='width:80%'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td>");
 					}
 					if(i==0){
 						modifying();
@@ -239,7 +289,7 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){
 				}
 				else{  //전체홀수칸, 추가시
 					if(i==iInputVal.length-1){  //전체홀수칸, 추가시, 첫 칸
-					console.log("15");
+						console.log("15");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 						+wInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 						+ tInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
@@ -286,8 +336,8 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){
 			}
 			else if(updateBtn.innerText == "수정완료"){
 				$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
-						+wInputVal[i] + "' onfocus='wordModified("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
-						+ tInputVal[i] + "' onfocus='transModified("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
+						+wInputVal[i] + "' onfocus='wordModified("+i+")' style='width:80%'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
+						+ tInputVal[i] + "' onfocus='transModified("+i+")' style='width:80%'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 				if(i==0){
 					modifying();
 				}
@@ -295,20 +345,31 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){
 			else{
 				if(i<data.length){
 					$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
-						+wInputVal[i] + "' disabled='disabled'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
-						+ tInputVal[i] + "' disabled='disabled'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
+							+wInputVal[i] + "' disabled='disabled'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
+							+ tInputVal[i] + "' disabled='disabled'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 				}
 				else{
 					$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 							+wInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 							+ tInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 				}
+				console.log("원래길이"+data.length);
 			}
 		}
 	}
-	$("input[name=favorite][value=1]").parent().prev().children("input").css("color","red");
-	$("input[name=favorite][value=1]").prev().css("color","red");
-	console.log("빨강!!");
+	checkFavorite();
+	checkDuplicates();
+	wInput = document.querySelectorAll("input[name=word][disabled='disabled']")
+				wInput.forEach(function(element, index){
+					if(index<wInput.length-1){
+						for(let i=index+1; i<wInput.length; i++){
+							if(element.style.color!="red" && element.value == wInput[i].value){
+								element.style.color="red";
+								wInput[i].style.color="red";
+							}
+						}
+					}
+				});
 };
 
 
@@ -325,6 +386,7 @@ document.querySelector("#deleting").onclick=function(){
 		location.replace("/wordbook/delete?wordbookid="+getParameterByName("wordbookid"));
 	}
 }
+
 setList();  //단어를 펼침
 
 var arrange = document.querySelector("select#arrange");
