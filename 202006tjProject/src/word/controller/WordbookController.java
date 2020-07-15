@@ -339,6 +339,7 @@ public class WordbookController {
 			int wordbookId = Integer.parseInt(idStr);
 			WordbookDto ownerWordbook = wordbookService.selectWordbookById(wordbookId);			
 			List<WordbookDto> guestWordbookList = wordbookService.selectWordbookByGuestIdCheck(loginMember.getId());
+			List<WordbookDto> ownerWordbookList = wordbookService.selectWordbookByOwnerIdCheck(loginMember.getId());
 			//공유키 확인
 			if (ownerWordbook.getSharingKey().equals(sharingKey)) {
 				//이미 공유한 단어장이 있는지 확인
@@ -347,7 +348,13 @@ public class WordbookController {
 						m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
 						return "wordbook/wordbookUpdatefail";
 					}
-				}			
+				}
+				for (int i=0; i<ownerWordbookList.size(); i++) {
+					if (ownerWordbookList.get(i).getTitle().equals(ownerWordbook.getTitle())) {
+						m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
+						return "wordbook/wordbookUpdatefail";
+					}
+				}	
 				WordbookDto guestWordbook = new WordbookDto();
 				guestWordbook.setOwnerId(ownerWordbook.getOwnerId());
 				guestWordbook.setGuestId(loginMember.getId());
@@ -522,6 +529,13 @@ public class WordbookController {
 						m.addAttribute("text", jsonText);
 
 						try {
+							List<WordbookDto> clientWordbookList = wordbookService.selectWordbookByOwnerIdOrGuestIdCheck(loginMember.getId());
+							for (int i=0; i<clientWordbookList.size(); i++) {
+								if (clientWordbookList.get(i).getTitle().equals(title)) {
+									m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
+									return "wordbook/wordbookUpdatefail";
+								}
+							}
 							wordbookService.insertWordbook(new WordbookDto(0, loginMember.getId(), 0, 0, title,
 									relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\" + today
 											+ "\\" + now + ".json"));
@@ -609,6 +623,13 @@ public class WordbookController {
 
 					m.addAttribute("text", jsonText);
 					try {
+						List<WordbookDto> clientWordbookList = wordbookService.selectWordbookByOwnerIdOrGuestIdCheck(loginMember.getId());
+						for (int i=0; i<clientWordbookList.size(); i++) {
+							if (clientWordbookList.get(i).getTitle().equals(title)) {
+								m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
+								return "wordbook/wordbookUpdatefail";
+							}
+						}
 						wordbookService.insertWordbook(new WordbookDto(0, loginMember.getId(), 0, 0, title,
 								relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\" + today
 										+ "\\" + now + ".json"));

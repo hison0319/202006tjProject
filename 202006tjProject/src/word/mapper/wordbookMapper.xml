@@ -20,9 +20,15 @@
 	<select id="selectWordbookByOwnerIdOrGuestId" resultType="wordbook">
 		select * from wordbook where owner_id=#{id} or guest_id=#{id} group by title order by u_date desc limit #{first}, #{ea};
 	</select>
-	<!-- for sharing check -->
+	<!-- for check -->
 	<select id="selectWordbookByGuestIdCheck" resultType="wordbook">
 		select * from wordbook where guest_id=#{id};
+	</select>
+	<select id="selectWordbookByOwnerIdCheck" resultType="wordbook">
+		select * from wordbook where owner_id=#{id};
+	</select>
+	<select id="selectWordbookByOwnerIdOrGuestIdCheck" resultType="wordbook">
+		select * from wordbook where owner_id=#{id} or guest_id=#{id};
 	</select>
 	<select id="selectSharingCheckGroupByTitle" resultType="Integer">
       	select count(guest_id), title from wordbook where owner_id=#{id} and guest_id!=0 group by title order by title limit #{first}, #{ea};

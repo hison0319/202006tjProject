@@ -22,8 +22,14 @@ public interface WordbookMapper {
 	public List<WordbookDto> selectWordbookByOwnerIdOrGuestId(@Param("id") int id, @Param("first") int first,
 			@Param("ea") int ea);
 
-	// 공유 단어장 조회(공유 체크)
+	// 공유 단어장 조회(전체 체크)
 	public List<WordbookDto> selectWordbookByGuestIdCheck(@Param("id") int id);
+	
+	// 소유 단어장 조회(전체 체크)
+	public List<WordbookDto> selectWordbookByOwnerIdCheck(@Param("id") int id);
+	
+	// 소유, 공유 단어장 조회(전체 체크)
+	public List<WordbookDto> selectWordbookByOwnerIdOrGuestIdCheck(@Param("id") int id);
 	
 	// 소유자 단어장 제목 별 공유 인원 명수 체크
 	public List<Integer> selectSharingCheckGroupByTitle(@Param("id") int id, @Param("first") int first, @Param("ea") int ea);

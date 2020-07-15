@@ -3,10 +3,30 @@ let file = document.querySelector("#file");
 let text = document.querySelector("#text");
 let sharingInput = document.querySelector("#sharingKey");
 let sharing = document.querySelector("#submitSharing");
-console.log(sharing);
-console.log(file);
-console.log("ㅇㅅㅇ");
-console.log(file.files);
+let click = true;
+
+button.onclick = function() {
+	if(click) {
+		click = !click;
+		setTimeout(function() {
+			click = true;
+		}, 2000)
+	} else {
+		return false;
+	}
+}
+
+sharing.onclick = function() {
+	if(click) {
+		click = !click;
+		setTimeout(function() {
+			click = true;
+		}, 2000)
+	} else {
+		return false;
+	}
+}
+
 file.onchange = function() {
 	if (file.files.length != 0) {
 		let name = file.files[0].name;

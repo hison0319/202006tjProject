@@ -53,7 +53,7 @@
     <!-- container -->
     <section class="wrapper major-pad">
         <div class="inner">
-			<form action="complete" method="post">
+			<form id="f1" action="complete" method="post">
 				단어장 이름: <input type="text" required="required" name="title" id="title" />
 				텍스트 파일 업로드<br /><br />
 				<input type="file" accept=".txt" name="file" id="file"/> <hr />
@@ -62,7 +62,7 @@
 				<br />
 				<button id="submit" disabled="disabled">단어장 입력 완료</button>  <!-- 오른쪽이나 중앙 배치? -->
 			</form>
-			<form action="sharingKeyForm" method="post">
+			<form id="f2" action="sharingKeyForm" method="post">
 				공유 키: <input type="text" name="sharingKey" id="sharingKey" value="${sharingKey }" />
 				<button id="submitSharing" disabled="disabled">공유 단어장 등록</button>
 			</form>
