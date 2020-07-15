@@ -16,8 +16,8 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
-<link rel="stylesheet"
-	href="/css/main_wordbookList.css" />
+<link rel="stylesheet" href="/css/main_wordbookList.css" />
+<script src="/js/footer.js"></script>
 </head>
 
 <body class="is-preload">
@@ -254,6 +254,10 @@
 			<ul class="menu">
 				<li><a href="#">이용약관</a></li>
 				<li><a href="#">사이트 정책</a></li>
+				<li><button type="button" class="snslogo kakao" onclick="kakaoBtn()">kakao</button></li>
+				<li><button type="button" class="snslogo twitter" onclick="twitterBtn()">twitter</button></li>
+				<li><button type="button" class="snslogo facebook" onclick="facebookBtn()">facebook</button></li><!-- 계정이 없어 미확인 -->
+				<li><button type="button" class="snslogo naver" onclick="naverBtn()">naver</button></li>
 			</ul>
 		</div>
 	</footer>

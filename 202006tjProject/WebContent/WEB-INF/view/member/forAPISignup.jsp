@@ -15,6 +15,7 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
+<script src="/js/footer.js"></script>
 <link rel="stylesheet" href="/css/signup.css" />
 </head>
 
@@ -25,26 +26,27 @@
 		<nav id="nav">
 			<ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
-				<li><a href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
+				<li><a
+					href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
 				</li>
 				<c:choose>
 					<c:when test="${sessionScope.loginMember == null}">
-						<li style="white-space: nowrap;">
-							<a href="${pageContext.request.contextPath}/login/form" class="button">LogIn</a>
-						</li>
-						<li style="white-space: nowrap;">
-							<a href="${pageContext.request.contextPath}/signup/form" class="button">SignUp</a>
-						</li>
+						<li style="white-space: nowrap;"><a
+							href="${pageContext.request.contextPath}/login/form"
+							class="button">LogIn</a></li>
+						<li style="white-space: nowrap;"><a
+							href="${pageContext.request.contextPath}/signup/form"
+							class="button">SignUp</a></li>
 					</c:when>
 					<c:when test="${sessionScope.loginMember != null}">
-						<li>
-							<a href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
+						<li><a
+							href="${pageContext.request.contextPath}/account/showInfo">마이페이지</a>
 						</li>
-						<li style="white-space: nowrap;">
-							<a href="${pageContext.request.contextPath}/login/logout" class="button">LogOut</a>
-						</li>
+						<li style="white-space: nowrap;"><a
+							href="${pageContext.request.contextPath}/login/logout"
+							class="button">LogOut</a></li>
 					</c:when>
 				</c:choose>
 			</ul>
@@ -53,50 +55,62 @@
 
 	<!-- container -->
 	<section class="wrapper major-pad">
-        <div class="inner">
-        	<div class="signup">카카오로 회원 가입</div>
-        	<br>
+		<div class="inner">
+			<div class="signup">카카오로 회원 가입</div>
+			<br>
 			<form name="kakaoSignupForm" action="forAPISignup" method="post">
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
-						<input type="hidden" name="realId" value="${realId}" class="skip" readonly="readonly"/>
-						이름 <br> <input type="text" name="nickName" value="${nickName}" readonly="readonly"/>
-						<input type="hidden" class="skip" name="memberId" value="tempId1234" readonly="readonly"/>
-						<input type="hidden" class="skip" name="forAPIPassword" value="${forAPIPassword}" maxlength="15">
+						<input type="hidden" name="realId" value="${realId}" class="skip"
+							readonly="readonly" /> 이름 <br> <input type="text"
+							name="nickName" value="${nickName}" readonly="readonly" /> <input
+							type="hidden" class="skip" name="memberId" value="tempId1234"
+							readonly="readonly" /> <input type="hidden" class="skip"
+							name="forAPIPassword" value="${forAPIPassword}" maxlength="15">
 						<br>
-						
+
 						<div class="signup_email">
-						이메일 <br> <input type="email" id="email" name="email" value="${member.email}" required>
-							<c:if test="${eemail != null}"><p style="color:red">이메일 형식에 맞지 않습니다.</p></c:if>
+							이메일 <br> <input type="email" id="email" name="email"
+								value="${member.email}" required>
+							<c:if test="${eemail != null}">
+								<p style="color: red">이메일 형식에 맞지 않습니다.</p>
+							</c:if>
 						</div>
 						<span class="error_next_box" id="emailMsg" aria-live="assertive"></span>
-						
+
 						<div class="email_check check_box">
-							<button type="button" id="email_check" name="emailCheck">이메일 중복 확인</button>
+							<button type="button" id="email_check" name="emailCheck">이메일
+								중복 확인</button>
 						</div>
 						<br>
-						
+
 						<div class="signup_phone">
-						휴대폰 번호 <br> <input type="text" id="phone" name="phone" value="${member.phone}" placeholder="- 제외 숫자만 입력해주세요." required>
-							<c:if test="${ephone != null}"><p style="color:red">전화번호 형식에 맞지 않습니다.</p></c:if>
+							휴대폰 번호 <br> <input type="text" id="phone" name="phone"
+								value="${member.phone}" placeholder="- 제외 숫자만 입력해주세요." required>
+							<c:if test="${ephone != null}">
+								<p style="color: red">전화번호 형식에 맞지 않습니다.</p>
+							</c:if>
 						</div>
 						<span class="error_next_box" id="phoneMsg" aria-live="assertive"></span>
 
 						<div class="phone_check check_box">
-							<button type="button" id="phone_check" name="phoneCheck">전화번호 중복 확인</button>
+							<button type="button" id="phone_check" name="phoneCheck">전화번호
+								중복 확인</button>
 						</div>
 						<br>
-						
+
 						<div class="signup_addr">
-							주소 <br> <input type="hidden" id="address" name="address" class="skip" value="${member.address}"> 
-							<input type="text" id="sample4_postcode" placeholder="우편번호"> 
+							주소 <br> <input type="hidden" id="address" name="address"
+								class="skip" value="${member.address}"> <input
+								type="text" id="sample4_postcode" placeholder="우편번호">
 							<div class="check_box">
-								<button type="button" onclick="sample4_execDaumPostcode()" value="">우편번호 찾기</button>
+								<button type="button" onclick="sample4_execDaumPostcode()"
+									value="">우편번호 찾기</button>
 							</div>
-							<br> 
-							<input type="text" id="sample4_roadAddress" placeholder="도로명주소"> 
-							<input type="text" id="sample4_jibunAddress" placeholder="지번주소">
-							<input type="text" id="sample4_detailAddress" placeholder="상세주소">
+							<br> <input type="text" id="sample4_roadAddress"
+								placeholder="도로명주소"> <input type="text"
+								id="sample4_jibunAddress" placeholder="지번주소"> <input
+								type="text" id="sample4_detailAddress" placeholder="상세주소">
 							<input type="text" id="sample4_extraAddress" placeholder="참고항목">
 						</div>
 						<script
@@ -177,20 +191,18 @@
 							}
 						</script>
 						<br>
-						
-		<div class="checkbox_group">
-			<ul class="join_box">
-                <li class="checkBox">
-                    <ul class="clearfix">
-                        <li>이용약관, 개인정보 수집 및 이용에 모두 동의합니다.</li>
-                        <li class="checkAllBtn">
-                            <input type="checkbox" id="check_all">
-                        </li>
-                    </ul>
-                </li>
-                
-                <li class="checkBox">
-                 <textarea name="" id="">
+
+						<div class="checkbox_group">
+							<ul class="join_box">
+								<li class="checkBox">
+									<ul class="clearfix">
+										<li>이용약관, 개인정보 수집 및 이용에 모두 동의합니다.</li>
+										<li class="checkAllBtn"><input type="checkbox"
+											id="check_all"></li>
+									</ul>
+								</li>
+
+								<li class="checkBox"><textarea name="" id="">
 제 1 조 (목적)
 
 이 약관은 네이버 주식회사 ("회사" 또는 "네이버")가 제공하는 네이버 및 네이버 관련 제반 서비스의 이용과 관련하여 회사와 회원과의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
@@ -207,16 +219,13 @@
 ⑥"포인트"라 함은 서비스의 효율적 이용을 위해 회사가 임의로 책정 또는 지급, 조정할 수 있는 재산적 가치가 없는 "서비스" 상의 가상 데이터를 의미합니다.
 ⑦"게시물"이라 함은 "회원"이 "서비스"를 이용함에 있어 "서비스상"에 게시한 부호ㆍ문자ㆍ음성ㆍ음향ㆍ화상ㆍ동영상 등의 정보 형태의 글, 사진, 동영상 및 각종 파일과 링크 등을 의미합니다. 
       			 </textarea>
-                    <ul class="clearfix">
-                        <li>워드북 이용 약관 동의(필수)</li>
-                        <li class="checkBtn">
-                            <input type="checkbox" id="check_1" class="normal">
-                        </li>
-                    </ul> 
-                   </li>
-                
-                <li class="checkBox">
-                    <textarea name="" id="">
+									<ul class="clearfix">
+										<li>워드북 이용 약관 동의(필수)</li>
+										<li class="checkBtn"><input type="checkbox" id="check_1"
+											class="normal"></li>
+									</ul></li>
+
+								<li class="checkBox"><textarea name="" id="">
 정보통신망법 규정에 따라 네이버에 회원가입 신청하시는 분께 수집하는 개인정보의 항목, 개인정보의 수집 및 이용목적, 개인정보의 보유 및 이용기간을 안내 드리오니 자세히 읽은 후 동의하여 주시기 바랍니다.
 
 
@@ -224,24 +233,22 @@
 
 이용자는 회원가입을 하지 않아도 정보 검색, 뉴스 보기 등 대부분의 네이버 서비스를 회원과 동일하게 이용할 수 있습니다. 이용자가 메일, 캘린더, 카페, 블로그 등과 같이 개인화 혹은 회원제 서비스를 이용하기 위해 회원가입을 할 경우, 네이버는 서비스 이용을 위해 필요한 최소한의 개인정보를 수집합니다.
        </textarea>
-                    <ul class="clearfix">
-                        <li>개인정보 수집 및 이용에 대한 안내(필수)</li>
-                        <li class="checkBtn">
-                            <input type="checkbox" id="check_2" class="normal">
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-						<div class="signup_btn_box actions stacked">
-							<input type="submit" style="width: 100%;" value="회원가입"
-								class="button primary fit">
+									<ul class="clearfix">
+										<li>개인정보 수집 및 이용에 대한 안내(필수)</li>
+										<li class="checkBtn"><input type="checkbox" id="check_2"
+											class="normal"></li>
+									</ul></li>
+							</ul>
+							<div class="signup_btn_box actions stacked">
+								<input type="submit" style="width: 100%;" value="회원가입"
+									class="button primary fit">
+							</div>
 						</div>
 					</div>
 				</div>
-				</div>
 			</form>
-        </div>
-    </section>
+		</div>
+	</section>
 
 	<section class="wrapper style">
 		<div class="inner"></div>
@@ -260,6 +267,15 @@
 			<ul class="menu">
 				<li><a href="#">이용약관</a></li>
 				<li><a href="#">사이트 정책</a></li>
+				<li><button type="button" class="snslogo kakao"
+						onclick="kakaoBtn()">kakao</button></li>
+				<li><button type="button" class="snslogo twitter"
+						onclick="twitterBtn()">twitter</button></li>
+				<li><button type="button" class="snslogo facebook"
+						onclick="facebookBtn()">facebook</button></li>
+				<!-- 계정이 없어 미확인 -->
+				<li><button type="button" class="snslogo naver"
+						onclick="naverBtn()">naver</button></li>
 			</ul>
 		</div>
 	</footer>
@@ -272,8 +288,8 @@
 	<script src="/js/breakpoints.min.js"></script>
 	<script src="/js/util.js"></script>
 	<script src="/js/main.js"></script>
-	<script src="/js/signup/forAPISignup.js?v=<%=System.currentTimeMillis() %>"></script>
-	
+	<script src="/js/signup/forAPISignup.js"></script>
+
 </body>
 
 </html>

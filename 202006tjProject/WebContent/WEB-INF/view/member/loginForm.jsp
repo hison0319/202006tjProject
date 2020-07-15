@@ -18,7 +18,8 @@
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <meta name = "google-signin-client_id"content = "166221413799-su8t7c8tdrpivukd6vi396ikuh1ouch3.apps.googleusercontent.com">
 <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
-<script src="/js/login/login.js?v=<%=System.currentTimeMillis() %>"></script>
+<script src="/js/login/login.js"></script>
+<script src="/js/footer.js"></script>
 <link rel="stylesheet" href="/css/login.css" />
 </head>
 
@@ -109,6 +110,10 @@
 			<ul class="menu">
 				<li><a href="#">이용약관</a></li>
 				<li><a href="#">사이트 정책</a></li>
+				<li><button type="button" class="snslogo kakao" onclick="kakaoBtn()">kakao</button></li>
+				<li><button type="button" class="snslogo twitter" onclick="twitterBtn()">twitter</button></li>
+				<li><button type="button" class="snslogo facebook" onclick="facebookBtn()">facebook</button></li><!-- 계정이 없어 미확인 -->
+				<li><button type="button" class="snslogo naver" onclick="naverBtn()">naver</button></li>
 			</ul>
 		</div>
 	</footer>

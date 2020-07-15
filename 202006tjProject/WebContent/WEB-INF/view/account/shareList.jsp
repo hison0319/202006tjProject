@@ -16,8 +16,8 @@
 <meta name="author" content="HaniSon" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<script
-	src="/js/account/sharingList.js?v=<%=System.currentTimeMillis() %>"></script>
+<script src="/js/account/sharingList.js"></script>
+<script src="/js/footer.js"></script>
 <link rel="stylesheet" href="/css/main.css" />
 </head>
 
@@ -28,7 +28,8 @@
 		<nav id="nav">
 			<ul>
 				<li><a href="${pageContext.request.contextPath}/">홈</a></li>
-				<li><a href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
+				<li><a
+					href="${pageContext.request.contextPath}/wordbook/showlist">단어장</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/notice/showList">공지사항</a>
 				</li>
@@ -60,8 +61,12 @@
 			<div class="col-6 col-12-medium">
 				<h5 class="alt">Alternate</h5>
 				<ul class="alt">
-					<li><a href="${pageContext.request.contextPath}/account/showInfo">내 정보 보기</a></li>
-					<li><a href="${pageContext.request.contextPath}/account/showSharingList"><b>공유목록 보기</b></a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/account/showInfo">내
+							정보 보기</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/account/showSharingList"><b>공유목록
+								보기</b></a></li>
 					<li><button type="button" class="button"
 							onclick="btnModify('${sessionScope.loginMember.memberId}')">내
 							정보 수정하기</button></li>
@@ -82,12 +87,13 @@
 					</tr>
 				</thead>
 				<tbody>
-				<c:set var="sL" value="${sharingNumlist }"></c:set>
+					<c:set var="sL" value="${sharingNumlist }"></c:set>
 					<c:forEach var="wL" items="${wordbooklist}" varStatus="i">
 						<tr class="tr">
 							<td>${wL.uDateStr}</td>
-							<td><button class="showSharingList" style="box-shadow: none; border: none;">${wL.title}</button></td>
-							<td>${sL[i.index] } 명</td>
+							<td><button class="showSharingList"
+									style="box-shadow: none; border: none;">${wL.title}</button></td>
+							<td>${sL[i.index] }명</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -96,8 +102,7 @@
 		<div class="center_position">
 			<ul class="pagination">
 				<c:if test="${pageNum>1}">
-					<li><a
-						href="showSharingList?pageNumStr=${pageNum-1}"
+					<li><a href="showSharingList?pageNumStr=${pageNum-1}"
 						class="button">Prev</a></li>
 				</c:if>
 				<c:if test="${pageNum<=1}">
@@ -106,20 +111,16 @@
 				<c:forEach var="pN" items="${pageNumList}" end="4">
 					<c:choose>
 						<c:when test="${pN != pageNum}">
-							<li><a
-								href="showSharingList?pageNumStr=${pN}"
-								class="page">${pN}</a></li>
+							<li><a href="showSharingList?pageNumStr=${pN}" class="page">${pN}</a></li>
 						</c:when>
 						<c:when test="${pN == pageNum}">
-							<li><a
-								href="showSharingList?pageNumStr=${pN}"
+							<li><a href="showSharingList?pageNumStr=${pN}"
 								class="page active">${pN}</a></li>
 						</c:when>
 					</c:choose>
 				</c:forEach>
 				<c:if test="${pages>pageNum}">
-					<li><a
-						href="showSharingList?pageNumStr=${pageNum+1}"
+					<li><a href="showSharingList?pageNumStr=${pageNum+1}"
 						class="button">Next</a></li>
 				</c:if>
 				<c:if test="${pages<=pageNum}">
@@ -128,7 +129,6 @@
 			</ul>
 		</div>
 	</section>
-
 
 	<!-- Footer -->
 	<footer id="footer">
@@ -142,6 +142,10 @@
 			<ul class="menu">
 				<li><a href="#">이용약관</a></li>
 				<li><a href="#">사이트 정책</a></li>
+				<li><button type="button" class="snslogo kakao" onclick="kakaoBtn()">kakao</button></li>
+				<li><button type="button" class="snslogo twitter" onclick="twitterBtn()">twitter</button></li>
+				<li><button type="button" class="snslogo facebook" onclick="facebookBtn()">facebook</button></li><!-- 계정이 없어 미확인 -->
+				<li><button type="button" class="snslogo naver" onclick="naverBtn()">naver</button></li>
 			</ul>
 		</div>
 	</footer>

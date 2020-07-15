@@ -23,9 +23,9 @@
 <meta property="og:description" content="열공하자!" />
 <meta property="og:image" content="/images/bannerImage.jpg" />
 <!-- end -->
-<link rel="stylesheet" href="/css/main_home.css?v=<%=System.currentTimeMillis()%>" />
+<link rel="stylesheet" href="/css/main_home.css" />
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
-<script src="/js/hosting.js"></script>
+<script src="/js/footer.js"></script>
 </head>
 
 <body class="is-preload">
@@ -83,7 +83,6 @@
 		<div class="inner"></div>
 	</section>
 
-
 	<!-- Footer -->
 	<footer id="footer">
 		<div class="inner">
@@ -102,7 +101,6 @@
 				<li><button type="button" class="snslogo naver" onclick="naverBtn()">naver</button></li>
 			</ul>
 		</div>
-
 	</footer>
 
 	<!-- Scripts -->

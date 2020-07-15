@@ -16,6 +16,7 @@
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <script src="/js/signup/signupComplete.js"></script>
+    <script src="/js/footer.js"></script>
     <link rel="stylesheet" href="/css/main.css" />
 </head>
 
@@ -63,20 +64,25 @@
         <div class="inner"></div>
     </section>
 
-
-    <!-- Footer -->
-    <footer id="footer">
-        <div class="inner">
-            <div class="aboutUsSub"><strong>단어장<br /></strong>
-                <p>단어장을 만들어 사용하세요.</p>
-            </div>
-            <p class="copyright">&copy; Untitled eunji yoonseon hani. All rights reserved. </p>
-            <ul class="menu">
-                <li><a href="#">이용약관</a></li>
-                <li><a href="#">사이트 정책</a></li>
-            </ul>
-        </div>
-    </footer>
+	<!-- Footer -->
+	<footer id="footer">
+		<div class="inner">
+			<div class="aboutUsSub">
+				<strong>단어장<br /></strong>
+				<p>단어장을 만들어 사용하세요.</p>
+			</div>
+			<p class="copyright">&copy; Untitled eunji yoonseon hani. All
+				rights reserved.</p>
+			<ul class="menu">
+				<li><a href="#">이용약관</a></li>
+				<li><a href="#">사이트 정책</a></li>
+				<li><button type="button" class="snslogo kakao" onclick="kakaoBtn()">kakao</button></li>
+				<li><button type="button" class="snslogo twitter" onclick="twitterBtn()">twitter</button></li>
+				<li><button type="button" class="snslogo facebook" onclick="facebookBtn()">facebook</button></li><!-- 계정이 없어 미확인 -->
+				<li><button type="button" class="snslogo naver" onclick="naverBtn()">naver</button></li>
+			</ul>
+		</div>
+	</footer>
 
     <!-- Scripts -->
     <script src="/js/jquery.min.js"></script>
