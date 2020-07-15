@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import member.dto.MemberDto;
 import member.dto.MemberVO;
 import member.dto.MemberVOForAPI;
+import member.service.MailService;
 import member.service.MemberService;
 import word.dto.WordbookDto;
 import word.service.WordbookService;
@@ -33,6 +34,8 @@ public class AccountController {
 	MemberService memberService;
 	@Autowired
 	WordbookService wordbookService;
+	@Autowired
+	MailService mailService;
 
 	// 회원정보 리스트 조회 기능
 	@GetMapping("/showInfo")
@@ -173,34 +176,40 @@ public class AccountController {
 	// 공유한 단어장 조회기능
 	@GetMapping("showSharingList")
 	public String wordbookListShow(HttpSession session, Model m, String pageNumStr) { // 세션 모델
-		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-		int pageNum = pageNumStr == null || pageNumStr == "" ? 1 : Integer.parseInt(pageNumStr);
-		int ea = 5;// 페이지에 띄울 갯수 정의(정책)
-		int loginId = loginMember.getId();
-		// 단어장 총 갯수
-		int totalCnt = wordbookService.selectWordbookCountSharing(loginId);
-		// 페이지 리스트
-		int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
-		List<Integer> pageNumList = getPageList(pageNum, ea, pages);
-		m.addAttribute("pageNumList", pageNumList);
-		m.addAttribute("pageNum", pageNum);
-		m.addAttribute("pages", pages);
-		// 공유 인원 리스트
-		List<Integer> sharingNumlist = wordbookService.selectSharingCheckGroupByTitle(loginId, (pageNum - 1) * 5, ea);
-		// 단어장 리스트
-		List<WordbookDto> wordbooklist = wordbookService.selectWordbookSharingJoin(loginId, (pageNum - 1) * 5, ea);
-		// 등록일을 날짜만 표현
-		for (int i = 0; i < wordbooklist.size(); i++) {
-			if (wordbooklist.get(i).getuDate() != null)
-				wordbooklist.get(i).setuDateStr(wordbooklist.get(i).getuDate().toString().substring(0, 10));
+		try {
+			MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+			int pageNum = pageNumStr == null || pageNumStr == "" ? 1 : Integer.parseInt(pageNumStr);
+			int ea = 5;// 페이지에 띄울 갯수 정의(정책)
+			int loginId = loginMember.getId();
+			// 단어장 총 갯수
+			int totalCnt;
+			totalCnt = wordbookService.selectWordbookCountSharing(loginId);
+			// 페이지 리스트
+			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+			m.addAttribute("pageNumList", pageNumList);
+			m.addAttribute("pageNum", pageNum);
+			m.addAttribute("pages", pages);
+			// 공유 인원 리스트
+			List<Integer> sharingNumlist = wordbookService.selectSharingCheckGroupByTitle(loginId, (pageNum - 1) * 5, ea);
+			// 단어장 리스트
+			List<WordbookDto> wordbooklist = wordbookService.selectWordbookSharingJoin(loginId, (pageNum - 1) * 5, ea);
+			// 등록일을 날짜만 표현
+			for (int i = 0; i < wordbooklist.size(); i++) {
+				if (wordbooklist.get(i).getuDate() != null)
+					wordbooklist.get(i).setuDateStr(wordbooklist.get(i).getuDate().toString().substring(0, 10));
+			}
+			if (wordbooklist.size() == 0) {
+				m.addAttribute("listNull", "단어장을 공유해보세요!");
+			} else {
+				m.addAttribute("listNull", "");
+			}
+			m.addAttribute("sharingNumlist", sharingNumlist);
+			m.addAttribute("wordbooklist", wordbooklist);
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
 		}
-		if (wordbooklist.size() == 0) {
-			m.addAttribute("listNull", "단어장을 공유해보세요!");
-		} else {
-			m.addAttribute("listNull", "");
-		}
-		m.addAttribute("sharingNumlist", sharingNumlist);
-		m.addAttribute("wordbooklist", wordbooklist);
 		return "account/shareList";
 	}
 
@@ -225,10 +234,16 @@ public class AccountController {
 	@PostMapping("showSharingMemberList")
 	@ResponseBody
 	public List<WordbookDto> sharingMemberListShow(HttpSession session, String title) {
-		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-		List<WordbookDto> sharingWordbookMemberList = wordbookService.selectSharingMemberCheckByTitle(loginMember.getId(), title);
-		System.out.println(sharingWordbookMemberList);
-		return sharingWordbookMemberList;
+		try {
+			MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+			List<WordbookDto> sharingWordbookMemberList;
+			sharingWordbookMemberList = wordbookService.selectSharingMemberCheckByTitle(loginMember.getId(), title);
+			System.out.println(sharingWordbookMemberList);
+			return sharingWordbookMemberList;
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return null;
+		}
 	}
 	
 	//공유한 회원 삭제
@@ -236,9 +251,14 @@ public class AccountController {
 	@ResponseBody
 	public String deleteSharingMember(String id) {
 		//exception처리
-		System.out.println(id);
-		int wordbookId = Integer.parseInt(id);
-		wordbookService.deleteWordbook(wordbookId);
+		try {
+			System.out.println(id);
+			int wordbookId = Integer.parseInt(id);
+			wordbookService.deleteWordbook(wordbookId);
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "";
+		}
 		return '"'+"t"+'"';
 	}
 	

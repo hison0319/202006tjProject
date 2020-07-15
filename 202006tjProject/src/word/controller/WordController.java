@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import member.dto.MemberDto;
+import member.service.MailService;
 import word.dto.SharingDto;
 import word.service.SharingService;
 import word.service.WordbookService;
@@ -47,6 +48,8 @@ public class WordController {
 	WordbookService wordbookService;
 	@Autowired
 	SharingService sharingService;
+	@Autowired
+	MailService mailService;
 	
 	//단어 목록 조회 기능
 	@RequestMapping("showlist")
@@ -113,20 +116,23 @@ public class WordController {
 				}
 				return ajax;
 			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				mailService.sendErorrMail(e.toString());
 			} catch (FileNotFoundException e) {
 				System.out.println("출력 FNFE");
 				return "{\"nope\":\"notExist\"}";
 			} catch (IOException e) {
-				e.printStackTrace();
+				mailService.sendErorrMail(e.toString());
 			} 
 		} catch (NullPointerException e) {  //존재하지 않는 단어장
 			System.out.println("출력 NPE");
 			return "{\"nope\":\"notExist\"}";
 		} catch (NumberFormatException | IllegalStateException e) {
-			e.printStackTrace();
+			mailService.sendErorrMail(e.toString());
 			System.out.println("출력 NFE, ISE");
 			return "{\"nope\":\"wrongAccess\"}";  //잘못된 접근(주소로 직접 접근 등)
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
 		}
 		System.out.println("ㅇㅅㅇ");
 		return null;
@@ -141,6 +147,9 @@ public class WordController {
 			m.addAttribute("title", wordbookService.selectWordbookById(wordbookId).getTitle());
 		} catch (NumberFormatException | IllegalStateException e) {
 			return "error/wrongAccess";  //잘못된 접근(주소로 직접 접근 등)
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
 		}
 		return "word/wordUpdateForm";
 	}
@@ -167,6 +176,9 @@ public class WordController {
 			} catch (NullPointerException e) {  //존재하지 않는 단어장
 				System.out.println("인서트 NPE 1");
 				return "{\"nope\":\"notExist\"}";
+			} catch (Exception e) {
+				mailService.sendErorrMail(e.toString());
+				return "error/wrongAccess";
 			}
 			String address = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();
 			File origFile = new File(address);
@@ -200,8 +212,7 @@ public class WordController {
 					System.out.println("인서트 IOE");
 					return "{\"nope\":\"wrongAccess\"}";
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					mailService.sendErorrMail(e.toString());
 				}
 			}
 		} catch (NullPointerException e) {  //비로그인 시
@@ -209,6 +220,9 @@ public class WordController {
 			return "{\"nope\":\"loginPlease\"}";
 		} catch (NumberFormatException | IllegalStateException e) {
 			return "{\"nope\":\"wrongAccess\"}";  //잘못된 접근(주소로 직접 접근 등)
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
 		}
 		return "{\"message\":\"success\"}";
 	}
@@ -238,7 +252,13 @@ public class WordController {
 			Map<String, String> requestHeaders = new HashMap<>();
 			requestHeaders.put("X-Naver-Client-Id", clientId);
 			requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-			String filePath = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();
+			String filePath;
+			try {
+				filePath = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();
+			} catch (Exception e) {
+				mailService.sendErorrMail(e.toString());
+				return "error/wrongAccess";
+			}
 			File origFile = new File(filePath);
 			JSONParser jParser = new JSONParser();
 			if (file != null) {
@@ -340,7 +360,7 @@ public class WordController {
 										}
 									}
 								} catch (Exception e) {
-									e.printStackTrace();
+									mailService.sendErorrMail(e.toString());
 								}
 							}
 						}
@@ -364,14 +384,14 @@ public class WordController {
 						}
 						return "word/wordUpdateComplete";
 					} catch (FileNotFoundException e) {
-						e.printStackTrace();
+						mailService.sendErorrMail(e.toString());
 						return null;
 					} catch (IOException e) {
-						e.printStackTrace();
+						mailService.sendErorrMail(e.toString());
 						return null;
 					} catch (ParseException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						mailService.sendErorrMail(e1.toString());
 					}
 				} else { // 파일 형식이 txt가 아닐 경우
 					return "error/wrongFileType"; //``
@@ -467,7 +487,7 @@ public class WordController {
 									}
 								}
 							} catch (Exception e) {
-								e.printStackTrace();
+								mailService.sendErorrMail(e.toString());
 							}
 						}
 					}
@@ -493,16 +513,16 @@ public class WordController {
 
 				} catch (UnsupportedEncodingException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					mailService.sendErorrMail(e1.toString());
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					mailService.sendErorrMail(e1.toString());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					mailService.sendErorrMail(e1.toString());
 				} catch (ParseException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					mailService.sendErorrMail(e1.toString());
 				}
 			}
 		}
@@ -531,6 +551,9 @@ public class WordController {
 			} catch (NullPointerException e) {  //존재하지 않는 단어장
 				System.out.println("업데이트 NPE 1");
 				return "{\"nope\":\"notExist\"}";
+			} catch (Exception e) {
+				mailService.sendErorrMail(e.toString());
+				return "error/wrongAccess";
 			}
 			String address = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();
 			int tempIndex;
@@ -578,10 +601,13 @@ public class WordController {
 			}
 		} catch (NullPointerException e) {  //비로그인 시
 			System.out.println("업데이트 NPE 2");
-			e.printStackTrace();
+			mailService.sendErorrMail(e.toString());
 			return "{\"nope\":\"loginPlease\"}";
 		} catch (NumberFormatException | IllegalStateException e) {
 			return "{\"nope\":\"wrongAccess\"}";  //잘못된 접근(주소로 직접 접근 등)
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
 		}
 		return "{\"message\":\"success\"}";
 	}

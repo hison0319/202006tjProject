@@ -57,36 +57,60 @@ public class MyTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(noticeService.selectNoticeById(notice.getId()));
-		System.out.println(noticeService.selectNoticeList(1,5));
+		try {
+			System.out.println(noticeService.selectNoticeById(notice.getId()));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			System.out.println(noticeService.selectNoticeList(1,5));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	//공지 업데이트 델리트
 	@Test @Ignore
 	public void testNotice02() {
-		NoticeDto notice = noticeService.selectNoticeById(1);
-		notice.setTitle("updateTest");
-		noticeService.updateNotice(notice);
-		System.out.println(noticeService.selectNoticeById(1));
-		noticeService.deleteNotice(2);
-		System.out.println(noticeService.selectNoticeList(1,5));
+		NoticeDto notice;
+		try {
+			notice = noticeService.selectNoticeById(1);
+			notice.setTitle("updateTest");
+			noticeService.updateNotice(notice);
+			System.out.println(noticeService.selectNoticeById(1));
+			noticeService.deleteNotice(2);
+			System.out.println(noticeService.selectNoticeList(1,5));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	//단어장 삽입 셀렉 전체셀렉
 	@Test @Ignore
 	public void testWordbook01() {
 		WordbookDto wordbook = new WordbookDto(22, 0, "test_wordbook", "test");
-		wordbookService.insertWordbook(wordbook);
-		System.out.println(wordbookService.selectWordbookById(wordbook.getId()));
-		System.out.println(wordbookService.selectWordbookAll());
+		try {
+			wordbookService.insertWordbook(wordbook);
+			System.out.println(wordbookService.selectWordbookById(wordbook.getId()));
+			System.out.println(wordbookService.selectWordbookAll());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	//단어장  업데이트 델리트
 	@Test @Ignore
 	public void testWordbook02() {
-		WordbookDto wordbook = wordbookService.selectWordbookById(1);
-		wordbook.setTitle("test_wordbook");
-		wordbookService.updateWordbook(wordbook);
-		System.out.println(wordbookService.selectWordbookById(1));
-		wordbookService.deleteWordbook(2);
-		System.out.println(wordbookService.selectWordbookAll());
+		WordbookDto wordbook;
+		try {
+			wordbook = wordbookService.selectWordbookById(1);
+			wordbook.setTitle("test_wordbook");
+			wordbookService.updateWordbook(wordbook);
+			System.out.println(wordbookService.selectWordbookById(1));
+			wordbookService.deleteWordbook(2);
+			System.out.println(wordbookService.selectWordbookAll());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	//공유정보 삽입 셀렉 전체셀렉
 	@Test @Ignore

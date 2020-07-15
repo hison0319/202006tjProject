@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import member.dto.MemberDto;
+import member.service.MailService;
 import member.service.MemberService;
 import member.service.TempCharKey;
 import word.dto.WordbookDto;
@@ -51,6 +52,8 @@ public class WordbookController {
 	WordbookService wordbookService;
 	@Autowired
 	MemberService memberService;
+	@Autowired
+	MailService mailService;
 
 	// 단어장 목록 조회 기능 /기본조회 owner,guest, 수정일 순
 	@GetMapping("showlist")
@@ -61,176 +64,13 @@ public class WordbookController {
 		} else if (loginMember.getCertified() == 0) {
 			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
 		} else {
-			int pageNum = pageNumStr == null || pageNumStr == "" ? 1 : Integer.parseInt(pageNumStr);
-			int ea = 6;// 페이지에 띄울 갯수 정의(정책)
-			int loginId = loginMember.getId();
-			// 단어장 총 갯수
-			int totalCnt = wordbookService.selectWordbookCountByOwnerIdOrGuestId(loginId);
-			// 페이지 리스트
-			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
-			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
-			m.addAttribute("pageNumList", pageNumList);
-			m.addAttribute("pageNum", pageNum);
-			m.addAttribute("pages", pages);
-			// 단어장 리스트
-			List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestIdJoin(loginId, (pageNum - 1) * 6,
-					ea);
-			// 등록일을 날짜만 표현
-			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).getRegDate() != null)
-					list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
-				if (list.get(i).getuDate() != null)
-					list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
-			}
-			if (list.size() == 0) {
-				m.addAttribute("listNull", "단어장을 만들어 보세요!");
-			} else {
-				m.addAttribute("listNull", "");
-			}
-			m.addAttribute("method", "");
-			m.addAttribute("list", list);
-		}
-		return "wordbook/wordbookList";
-	}
-
-	// 단어장 목록 조회 기능 /조회 owner 수정일 순
-	@GetMapping("showlistOwner")
-	public String wordbookListShowOwner(HttpSession session, Model m, String pageNumStr) { // 세션 모델
-		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-		if (loginMember == null) {
-			m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
-		} else if (loginMember.getCertified() == 0) {
-			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
-		} else {
-			int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
-			int ea = 6;// 페이지에 띄울 갯수 정의(정책)
-			int loginId = loginMember.getId();
-			// 단어장 총 갯수
-			int totalCnt = wordbookService.selectWordbookCountByOwnerId(loginId);
-			// 페이지 리스트
-			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
-			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
-			m.addAttribute("pageNumList", pageNumList);
-			m.addAttribute("pageNum", pageNum);
-			m.addAttribute("pages", pages);
-			// 단어장 리스트
-			List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdJoin(loginId, (pageNum - 1) * 6, ea);
-			// 등록일을 날짜만 표현
-			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).getRegDate() != null)
-					list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
-				if (list.get(i).getuDate() != null)
-					list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
-			}
-			if (list.size() == 0) {
-				m.addAttribute("listNull", "단어장을 만들어 보세요!");
-			} else {
-				m.addAttribute("listNull", "");
-			}
-			m.addAttribute("method", "Owner");
-			m.addAttribute("list", list);
-		}
-		return "wordbook/wordbookList";
-	}
-
-	// 단어장 목록 조회 기능 /조회 guest 수정일 순
-	@GetMapping("showlistGuest")
-	public String wordbookListShowGuest(HttpSession session, Model m, String pageNumStr) { // 세션 모델
-		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-		if (loginMember == null) {
-			m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
-		} else if (loginMember.getCertified() == 0) {
-			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
-		} else {
-			int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
-			int ea = 6;// 페이지에 띄울 갯수 정의(정책)
-			int loginId = loginMember.getId();
-			// 단어장 총 갯수
-			int totalCnt = wordbookService.selectWordbookCountByGuestId(loginId);
-			// 페이지 리스트
-			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
-			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
-			m.addAttribute("pageNumList", pageNumList);
-			m.addAttribute("pageNum", pageNum);
-			m.addAttribute("pages", pages);
-			// 단어장 리스트
-			List<WordbookDto> list = wordbookService.selectWordbookByGuestIdJoin(loginId, (pageNum - 1) * 6, ea);
-			// 등록일을 날짜만 표현
-			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).getRegDate() != null)
-					list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
-				if (list.get(i).getuDate() != null)
-					list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
-			}
-			if (list.size() == 0) {
-				m.addAttribute("listNull", "단어장을 만들어 보세요!");
-			} else {
-				m.addAttribute("listNull", "");
-			}
-			m.addAttribute("list", list);
-		}
-		m.addAttribute("method", "Guest");
-		return "wordbook/wordbookList";
-	}
-
-	// 단어장 목록 검색 기능 /기본조회 owner,guest, 수정일 순
-	@GetMapping("showlistSearch")
-	public String wordbookListShearch(HttpSession session, Model m, String pageNumStr, String keyword) { // 세션 모델
-		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-		if (loginMember == null) {
-			m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
-		} else if (loginMember.getCertified() == 0) {
-			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
-		} else {
-			int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
-			int ea = 6;// 페이지에 띄울 갯수 정의(정책)
-			int loginId = loginMember.getId();
-			// 단어장 총 갯수
-			int totalCnt = wordbookService.selectWordbookCountBySearchJoin(loginId, keyword);
-			System.out.println(totalCnt);
-			// 페이지 리스트
-			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
-			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
-			m.addAttribute("pageNumList", pageNumList);
-			m.addAttribute("pageNum", pageNum);
-			m.addAttribute("pages", pages);
-			// 단어장 리스트
-			List<WordbookDto> list = wordbookService.selectWordbookBySearchJoin(loginId, keyword, (pageNum - 1) * 6, ea);
-			System.out.println(list);
-			// 등록일을 날짜만 표현
-			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).getRegDate() != null)
-					list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
-				if (list.get(i).getuDate() != null)
-					list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
-			}
-			if (list.size() == 0) {
-				m.addAttribute("listNull", "단어장을 만들어 보세요!");
-			} else {
-				m.addAttribute("listNull", "");
-			}
-			m.addAttribute("method", "Search");
-			m.addAttribute("keyword",keyword);
-			m.addAttribute("list", list);
-		}
-		return "wordbook/wordbookList";
-	}
-	
-	// 단어장 목록 조회 기능 /중요 owner,guest, 수정일 순
-		@GetMapping("showlistFavorite")
-		public String wordbookListShowFavorite(HttpSession session, Model m, String pageNumStr) { // 세션 모델
-			MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-			if (loginMember == null) {
-				m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
-			} else if (loginMember.getCertified() == 0) {
-				m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
-			} else {
-				System.out.println("hjahahahahah");
+			try {
 				int pageNum = pageNumStr == null || pageNumStr == "" ? 1 : Integer.parseInt(pageNumStr);
 				int ea = 6;// 페이지에 띄울 갯수 정의(정책)
 				int loginId = loginMember.getId();
 				// 단어장 총 갯수
-				int totalCnt = wordbookService.selectWordbookCountByOwnerIdOrGuestIdFavorite(loginId);
+				int totalCnt;
+				totalCnt = wordbookService.selectWordbookCountByOwnerIdOrGuestId(loginId);
 				// 페이지 리스트
 				int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
 				List<Integer> pageNumList = getPageList(pageNum, ea, pages);
@@ -238,7 +78,7 @@ public class WordbookController {
 				m.addAttribute("pageNum", pageNum);
 				m.addAttribute("pages", pages);
 				// 단어장 리스트
-				List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestIdFavoriteJoin(loginId, (pageNum - 1) * 6,
+				List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestIdJoin(loginId, (pageNum - 1) * 6,
 						ea);
 				// 등록일을 날짜만 표현
 				for (int i = 0; i < list.size(); i++) {
@@ -252,8 +92,204 @@ public class WordbookController {
 				} else {
 					m.addAttribute("listNull", "");
 				}
-				m.addAttribute("method", "Favorite");
+				m.addAttribute("method", "");
 				m.addAttribute("list", list);
+			} catch (NullPointerException e) {
+				mailService.sendErorrMail(e.toString());
+				return "error/wrongAccess";
+			} catch (Exception e) {
+				mailService.sendErorrMail(e.toString());
+				return "error/wrongAccess";
+			}
+		}
+		return "wordbook/wordbookList";
+	}
+
+	// 단어장 목록 조회 기능 /조회 owner 수정일 순
+	@GetMapping("showlistOwner")
+	public String wordbookListShowOwner(HttpSession session, Model m, String pageNumStr) { // 세션 모델
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+		} else if (loginMember.getCertified() == 0) {
+			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+		} else {
+			int totalCnt;
+			try {
+				int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
+				int ea = 6;// 페이지에 띄울 갯수 정의(정책)
+				int loginId = loginMember.getId();
+				// 단어장 총 갯수
+				totalCnt = wordbookService.selectWordbookCountByOwnerId(loginId);
+				// 페이지 리스트
+				int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+				List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+				m.addAttribute("pageNumList", pageNumList);
+				m.addAttribute("pageNum", pageNum);
+				m.addAttribute("pages", pages);
+				// 단어장 리스트
+				List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdJoin(loginId, (pageNum - 1) * 6, ea);
+				// 등록일을 날짜만 표현
+				for (int i = 0; i < list.size(); i++) {
+					if (list.get(i).getRegDate() != null)
+						list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
+					if (list.get(i).getuDate() != null)
+						list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
+				}
+				if (list.size() == 0) {
+					m.addAttribute("listNull", "단어장을 만들어 보세요!");
+				} else {
+					m.addAttribute("listNull", "");
+				}
+				m.addAttribute("method", "Owner");
+				m.addAttribute("list", list);
+			} catch (Exception e) {
+				mailService.sendErorrMail(e.toString());
+				return "error/wrongAccess";
+			}
+		}
+		return "wordbook/wordbookList";
+	}
+
+	// 단어장 목록 조회 기능 /조회 guest 수정일 순
+	@GetMapping("showlistGuest")
+	public String wordbookListShowGuest(HttpSession session, Model m, String pageNumStr) { // 세션 모델
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+		} else if (loginMember.getCertified() == 0) {
+			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+		} else {
+			try {
+				int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
+				int ea = 6;// 페이지에 띄울 갯수 정의(정책)
+				int loginId = loginMember.getId();
+				// 단어장 총 갯수
+				int totalCnt;
+				totalCnt = wordbookService.selectWordbookCountByGuestId(loginId);
+				// 페이지 리스트
+				int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+				List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+				m.addAttribute("pageNumList", pageNumList);
+				m.addAttribute("pageNum", pageNum);
+				m.addAttribute("pages", pages);
+				// 단어장 리스트
+				List<WordbookDto> list = wordbookService.selectWordbookByGuestIdJoin(loginId, (pageNum - 1) * 6, ea);
+				// 등록일을 날짜만 표현
+				for (int i = 0; i < list.size(); i++) {
+					if (list.get(i).getRegDate() != null)
+						list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
+					if (list.get(i).getuDate() != null)
+						list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
+				}
+				if (list.size() == 0) {
+					m.addAttribute("listNull", "단어장을 만들어 보세요!");
+				} else {
+					m.addAttribute("listNull", "");
+				}
+				m.addAttribute("list", list);
+				m.addAttribute("method", "Guest");
+			} catch (Exception e) {
+				mailService.sendErorrMail(e.toString());
+				return "error/wrongAccess";
+			}
+		}
+		return "wordbook/wordbookList";
+	}
+
+	// 단어장 목록 검색 기능 /기본조회 owner,guest, 수정일 순
+	@GetMapping("showlistSearch")
+	public String wordbookListShearch(HttpSession session, Model m, String pageNumStr, String keyword) { // 세션 모델
+		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+		} else if (loginMember.getCertified() == 0) {
+			m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+		} else {
+			try {
+				int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
+				int ea = 6;// 페이지에 띄울 갯수 정의(정책)
+				int loginId = loginMember.getId();
+				// 단어장 총 갯수
+				int totalCnt;
+				totalCnt = wordbookService.selectWordbookCountBySearchJoin(loginId, keyword);
+				System.out.println(totalCnt);
+				// 페이지 리스트
+				int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+				List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+				m.addAttribute("pageNumList", pageNumList);
+				m.addAttribute("pageNum", pageNum);
+				m.addAttribute("pages", pages);
+				// 단어장 리스트
+				List<WordbookDto> list = wordbookService.selectWordbookBySearchJoin(loginId, keyword, (pageNum - 1) * 6, ea);
+				System.out.println(list);
+				// 등록일을 날짜만 표현
+				for (int i = 0; i < list.size(); i++) {
+					if (list.get(i).getRegDate() != null)
+						list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
+					if (list.get(i).getuDate() != null)
+						list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
+				}
+				if (list.size() == 0) {
+					m.addAttribute("listNull", "단어장을 만들어 보세요!");
+				} else {
+					m.addAttribute("listNull", "");
+				}
+				m.addAttribute("method", "Search");
+				m.addAttribute("keyword",keyword);
+				m.addAttribute("list", list);
+			} catch (Exception e) {
+				mailService.sendErorrMail(e.toString());
+				return "error/wrongAccess";
+			}
+		}
+		return "wordbook/wordbookList";
+	}
+	
+	// 단어장 목록 조회 기능 /중요 owner,guest, 수정일 순
+		@GetMapping("showlistFavorite")
+		public String wordbookListShowFavorite(HttpSession session, Model m, String pageNumStr) { // 세션 모델
+			MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+			if (loginMember == null) {
+				m.addAttribute("loginPlease", "로그인이 필요한 서비스입니다.");
+			} else if (loginMember.getCertified() == 0) {
+				m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
+			} else {
+				try {
+					System.out.println("hjahahahahah");
+					int pageNum = pageNumStr == null || pageNumStr == "" ? 1 : Integer.parseInt(pageNumStr);
+					int ea = 6;// 페이지에 띄울 갯수 정의(정책)
+					int loginId = loginMember.getId();
+					// 단어장 총 갯수
+					int totalCnt;
+					totalCnt = wordbookService.selectWordbookCountByOwnerIdOrGuestIdFavorite(loginId);
+					// 페이지 리스트
+					int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+					List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+					m.addAttribute("pageNumList", pageNumList);
+					m.addAttribute("pageNum", pageNum);
+					m.addAttribute("pages", pages);
+					// 단어장 리스트
+					List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestIdFavoriteJoin(loginId, (pageNum - 1) * 6,
+							ea);
+					// 등록일을 날짜만 표현
+					for (int i = 0; i < list.size(); i++) {
+						if (list.get(i).getRegDate() != null)
+							list.get(i).setRegDateStr(list.get(i).getRegDate().toString().substring(0, 10));
+						if (list.get(i).getuDate() != null)
+							list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
+					}
+					if (list.size() == 0) {
+						m.addAttribute("listNull", "단어장을 만들어 보세요!");
+					} else {
+						m.addAttribute("listNull", "");
+					}
+					m.addAttribute("method", "Favorite");
+					m.addAttribute("list", list);
+				} catch (Exception e) {
+					mailService.sendErorrMail(e.toString());
+					return "error/wrongAccess";
+				}
 			}
 			return "wordbook/wordbookList";
 		}
@@ -332,36 +368,53 @@ public class WordbookController {
 	@PostMapping(value="sharingKey", produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String sharingKey(WordbookDto wordbookDto) {
-		int id = wordbookDto.getId();
-		WordbookDto wordbook = wordbookService.selectWordbookById(id);
-		String sharingKey = new TempCharKey().getKey(10, false);
-		sharingKey = id+"!"+sharingKey;
-		wordbook.setSharingKey(sharingKey);
-		wordbookService.updateWordbookSharingKey(wordbook); //공유키 수정
-		return '"'+sharingKey+'"';
+		try {
+			int id = wordbookDto.getId();
+			WordbookDto wordbook;
+			wordbook = wordbookService.selectWordbookById(id);
+			String sharingKey = new TempCharKey().getKey(10, false);
+			sharingKey = id+"!"+sharingKey;
+			wordbook.setSharingKey(sharingKey);
+			wordbookService.updateWordbookSharingKey(wordbook); //공유키 수정
+			return '"'+sharingKey+'"';
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
+		}
 	}
 	
 	@PostMapping(value="deleteSharing", produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String deleteSharing(WordbookDto wordbookDto) {
-		int id = wordbookDto.getId();
-		wordbookService.deleteWordbook(id);
-		return "1";
+		try {
+			int id = wordbookDto.getId();
+			wordbookService.deleteWordbook(id);
+			return "1";
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
+		}
 	}
 	
 	@PostMapping("favorite") // 비동기 즐겨찾기
 	@ResponseBody
 	public String toggleFavorite(WordbookDto wordbookDto) {
 		int id = wordbookDto.getId();
-		WordbookDto wordbook = wordbookService.selectWordbookById(id);
-		if (wordbook.getFavorite() == 0) {
-			wordbook.setFavorite(1);
-			wordbookService.updateWordbookFavorite(wordbook);
-			return "1";
-		} else {
-			wordbook.setFavorite(0);
-			wordbookService.updateWordbookFavorite(wordbook);
-			return "0";
+		WordbookDto wordbook;
+		try {
+			wordbook = wordbookService.selectWordbookById(id);
+			if (wordbook.getFavorite() == 0) {
+				wordbook.setFavorite(1);
+				wordbookService.updateWordbookFavorite(wordbook);
+				return "1";
+			} else {
+				wordbook.setFavorite(0);
+				wordbookService.updateWordbookFavorite(wordbook);
+				return "0";
+			}
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "";
 		}
 	}
 
@@ -457,7 +510,7 @@ public class WordbookController {
 										index++;
 									}
 								} catch (Exception e) {
-									e.printStackTrace();
+									mailService.sendErorrMail(e.toString());
 								}
 							}
 						}
@@ -468,15 +521,20 @@ public class WordbookController {
 
 						m.addAttribute("text", jsonText);
 
-						wordbookService.insertWordbook(new WordbookDto(0, loginMember.getId(), 0, 0, title,
-								relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\" + today
-										+ "\\" + now + ".json"));
+						try {
+							wordbookService.insertWordbook(new WordbookDto(0, loginMember.getId(), 0, 0, title,
+									relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\" + today
+											+ "\\" + now + ".json"));
+						} catch (Exception e) {
+							mailService.sendErorrMail(e.toString());
+							return null;
+						}
 						return "wordbook/wordbookUpdateComplete";
 					} catch (FileNotFoundException e) {
-						e.printStackTrace();
+						mailService.sendErorrMail(e.toString());
 						return null;
 					} catch (IOException e) {
-						e.printStackTrace();
+						mailService.sendErorrMail(e.toString());
 						return null;
 					}
 				} else { // 파일 형식이 txt가 아닐 경우
@@ -540,7 +598,7 @@ public class WordbookController {
 									index++;
 								}
 							} catch (Exception e) {
-								e.printStackTrace();
+								mailService.sendErorrMail(e.toString());
 							}
 						}
 					}
@@ -550,20 +608,21 @@ public class WordbookController {
 					bw.flush();
 
 					m.addAttribute("text", jsonText);
-					wordbookService.insertWordbook(new WordbookDto(0, loginMember.getId(), 0, 0, title,
-							relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\" + today
-									+ "\\" + now + ".json"));
+					try {
+						wordbookService.insertWordbook(new WordbookDto(0, loginMember.getId(), 0, 0, title,
+								relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\" + today
+										+ "\\" + now + ".json"));
+					} catch (Exception e) {
+						mailService.sendErorrMail(e.toString());
+					}
 					return "wordbook/wordbookUpdateComplete";
 
 				} catch (UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					mailService.sendErorrMail(e1.toString());
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					mailService.sendErorrMail(e1.toString());
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					mailService.sendErorrMail(e1.toString());
 				}
 			}
 		}
@@ -586,7 +645,8 @@ public class WordbookController {
 					return "error/wrongAccess";
 				}
 				wordbookService.deleteWordbook(wordbookId);
-			} catch(NumberFormatException | IllegalStateException | NullPointerException e) {
+			} catch( Exception e) {
+				mailService.sendErorrMail(e.toString());
 				return "error/wrongAccess";
 			}
 		}

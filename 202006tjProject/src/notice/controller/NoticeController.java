@@ -32,10 +32,16 @@ public class NoticeController {
 	@GetMapping("show")
 	public String noticeShow(Model m, int id, String memberId) {
 		System.out.println(id);
-		NoticeDto notice = noticeService.selectNoticeById(id);
-		m.addAttribute("notice", notice);
-		m.addAttribute("memberId", memberId);
-		return "notice/notice";
+		NoticeDto notice;
+		try {
+			notice = noticeService.selectNoticeById(id);
+			m.addAttribute("notice", notice);
+			m.addAttribute("memberId", memberId);
+			return "notice/notice";
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
+		}
 	}
 
 	@GetMapping("showList")
@@ -43,20 +49,26 @@ public class NoticeController {
 		int pageNum = pageNumStr == null ? 1 : Integer.parseInt(pageNumStr);
 		int ea = 5;// 페이지에 띄울 갯수 정의(정책)
 		// 공지 총 갯수
-		int totalCnt = noticeService.selectNoticeCount();
-		// 페이지 리스트
-		int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
-		List<Integer> pageNumList = getPageList(pageNum, ea, pages);
-		m.addAttribute("pageNumList", pageNumList);
-		m.addAttribute("pageNum", pageNum);
-		m.addAttribute("pages", pages);
-		List<NoticeDto> noticeList = noticeService.selectNoticeListJoin((pageNum - 1) * 5, ea);
-		//regDate 날짜까지만 나오도록 변경
-		for(int i=0; i<noticeList.size(); i++) {
-			if(noticeList.get(i).getRegDate()!=null)noticeList.get(i).setRegDateStr(noticeList.get(i).getRegDate().toString().substring(0, 10));
+		int totalCnt;
+		try {
+			totalCnt = noticeService.selectNoticeCount();
+			// 페이지 리스트
+			int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
+			List<Integer> pageNumList = getPageList(pageNum, ea, pages);
+			m.addAttribute("pageNumList", pageNumList);
+			m.addAttribute("pageNum", pageNum);
+			m.addAttribute("pages", pages);
+			List<NoticeDto> noticeList = noticeService.selectNoticeListJoin((pageNum - 1) * 5, ea);
+			//regDate 날짜까지만 나오도록 변경
+			for(int i=0; i<noticeList.size(); i++) {
+				if(noticeList.get(i).getRegDate()!=null)noticeList.get(i).setRegDateStr(noticeList.get(i).getRegDate().toString().substring(0, 10));
+			}
+			m.addAttribute("noticeList", noticeList);
+			return "notice/noticeList";
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
 		}
-		m.addAttribute("noticeList", noticeList);
-		return "notice/noticeList";
 	}
 
 	// 페이지 네이션 구현 기능
@@ -88,6 +100,7 @@ public class NoticeController {
 			noticeService.insertNotice(notice);
 		} catch (Exception e) {
 			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
 		}
 		return "notice/noticeInsertComplete";
 	}
@@ -95,23 +108,38 @@ public class NoticeController {
 	// 공지사항 수정 기능
 	@GetMapping("update")
 	public String noticeUpdateForm(Model m, int id) {
-		NoticeDto notice = noticeService.selectNoticeById(id);
-		m.addAttribute("notice", notice);
-		return "notice/noticeUpdateForm";
+		NoticeDto notice;
+		try {
+			notice = noticeService.selectNoticeById(id);
+			m.addAttribute("notice", notice);
+			return "notice/noticeUpdateForm";
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
+		}
 	}
 
 	@PostMapping("update")
 	public String noticeUpdate(Model m, NoticeDto notice) {
-		// 유효성검증필요
-		noticeService.updateNotice(notice);
-		m.addAttribute("id", notice.getId());
-		return "notice/noticeUpdateComplete";
+		try {
+			noticeService.updateNotice(notice);
+			m.addAttribute("id", notice.getId());
+			return "notice/noticeUpdateComplete";
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
+		}
 	}
 
 	// 공지사항 삭제 기능
 	@GetMapping("delete")
 	public String noticeDelete(int id) {
-		noticeService.deleteNotice(id);
-		return "notice/noticeDeleteComplete";
+		try {
+			noticeService.deleteNotice(id);
+			return "notice/noticeDeleteComplete";
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
+		}
 	}
 }
