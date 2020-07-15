@@ -1,5 +1,6 @@
 package member.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -267,6 +268,17 @@ public class AccountController {
 	//회원 탈퇴
 	@GetMapping("/delete")
 	public String memberDelete(int id, HttpSession session) {
+		//회원이 보유한 단어장 파일을 삭제 하기위한 주소 조회
+		List<String> addressList = wordbookService.selectAddressGroupByAddressByOwnerId(id);
+		for(int i=0;i<addressList.size(); i++) {	//모든 파일 삭제
+			File deleteFile = new File(addressList.get(i));
+			if(!deleteFile.delete()) {
+				return "error/wrongAccess";
+			}
+		}
+		//회원이 보유한 단어장 data 삭제
+		wordbookService.deleteWordbookByOwnerIdOrGuestId(id);
+		//회원 data 삭제
 		memberService.deleteMember(id);
 		session.removeAttribute("loginMember");  //세션에서 로그인 정보 삭제
 		if(session.getAttribute("access_token") != null) {

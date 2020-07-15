@@ -96,4 +96,10 @@ public interface WordbookMapper {
 
 	// 단어장 리스트 갯수 조회(for search)
 	public int selectWordbookCountBySearchJoin(@Param("id") int id, @Param("keyword") String keyword);
+
+	// 회원 탈퇴 시 단어장 주소 전체 조회 (주소 그룸)
+	public List<String> selectAddressGroupByAddressByOwnerId(@Param("id") int id);
+	
+	// 회원 탈퇴 시 회원이 보유한 단어장 data 모두 삭제
+	public void deleteWordbookByOwnerIdOrGuestId(@Param("id") int id);
 }

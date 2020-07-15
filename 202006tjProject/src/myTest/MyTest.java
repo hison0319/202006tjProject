@@ -1,5 +1,7 @@
 package myTest;
 
+import java.util.List;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -138,5 +140,10 @@ public class MyTest {
 		System.out.println("mailO"+signupController.confirmEmail(""));
 		System.out.println("memberIdX"+signupController.confirmMemberId("test0003"));		
 		System.out.println("memberIdO"+signupController.confirmMemberId("tsdf"));		
+	}
+	@Test @Ignore
+	public void testSignout01() {
+		List<String> addressList = wordbookService.selectAddressGroupByAddressByOwnerId(21);
+		System.out.println(addressList);
 	}
 }

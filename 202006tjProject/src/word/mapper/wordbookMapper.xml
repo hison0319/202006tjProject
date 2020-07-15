@@ -71,6 +71,13 @@
 	<delete id="deleteWordbook">
 		delete from wordbook where id=#{id}
 	</delete>
+	<!-- 회원 탈퇴 시 단어장 전체 삭제를 위한 address select, wordbook list delete -->
+	<select id="selectAddressGroupByAddressByOwnerId" resultType="String">
+		SELECT wordbook_address from wordbook where owner_id =#{id} group by wordbook_address;
+	</select>
+	<delete id="deleteWordbookByOwnerIdOrGuestId">
+		delete from wordbook where owner_id=#{id} or guest_id=#{id};
+	</delete>
 	<!-- for list join output -->
 	<!-- 소유만 -->
 	<select id="selectWordbookByOwnerIdJoin" resultType="wordbook">

@@ -147,4 +147,14 @@ public class WordbookService {
 	public void deleteWordbook(int id) throws Exception {
 		wordbookMapper.deleteWordbook(id);
 	}
+
+	// 회원 탈퇴 시 단어장 주소 전체 조회 (주소 그룸)
+	public List<String> selectAddressGroupByAddressByOwnerId(int id) {
+		return wordbookMapper.selectAddressGroupByAddressByOwnerId(id);
+	}
+
+	// 회원 탈퇴 시 회원이 보유한 단어장 data 모두 삭제
+	public void deleteWordbookByOwnerIdOrGuestId(int id) {
+		wordbookMapper.deleteWordbookByOwnerIdOrGuestId(id);
+	}
 }
