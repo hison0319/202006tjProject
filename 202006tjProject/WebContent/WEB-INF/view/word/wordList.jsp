@@ -54,15 +54,8 @@
     <!-- container -->
     <section class="wrapper major-pad">
         <div class="inner">
-			<!-- <div>단어 게시판</div>
-			<div>중요도 정렬방식(순서, 중요도, 셔플) 검색 삭제 삽입 한줄수정-> 비동기</div>
-			<div>전체수정 -> 동기</div> -->
 			<div class="array tool">
 				<select name="arrange" id="arrange">
-					<!-- <option value="1"  selected="selected">중요 단어 - 최근 수정</option>
-					<option value="2" >중요 단어 - 오름차순</option>
-					<option value="3" >최근 수정</option>
-					<option value="4" >오름차순</option> -->
 					<option value="1" selected="selected">중요 단어 - 입력 순서</option>
 					<option value="2">중요 단어 - 오름차순</option>
 					<option value="3">입력 순서</option>

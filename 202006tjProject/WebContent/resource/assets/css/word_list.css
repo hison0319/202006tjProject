@@ -8,16 +8,21 @@ td{
 	word-break:break-all;
 }
 
-td > button.favorite{
-	box-shadow: none;
-	border: none;
-}
-
 td > button.favorite, .clear{
 	width:20%;
 	padding:0px;
 	margin:0 auto;
 	display:inline-block;
+	box-shadow: none;
+	border: none;
+}
+
+td > button.favorite{
+	margin-left:-2%;
+}
+
+td > button.clear{
+	margin-right:-2%;
 }
 
 input[name=word], input[name=trans]{
