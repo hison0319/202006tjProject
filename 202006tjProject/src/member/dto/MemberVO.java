@@ -8,13 +8,13 @@ import javax.validation.constraints.Pattern;
 public class MemberVO {
 	private int id;
 	@NotNull(message="m")
-	@Pattern(regexp = "^[a-z | A-Z]{3,6}[0-9]{3,6}$",message="m")
+	@Pattern(regexp = "/^[A-Za-z]{2,15}[0-9]{1,15}$/",message="m")
 	private String memberId;
-	@Pattern(regexp="^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$",message="m")
+	@Pattern(regexp="/(?=.*\\d{1,15})(?=.*[~`!@#$%\\^&*()-+=]{1,15})(?=.*[a-zA-Z]{1,50}).{8,15}$/",message="m")
 	private String password;
-	@Pattern(regexp="^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$",message="m")
+	@Pattern(regexp="/^[0-9a-zA-Z]+@[0-9a-zA-Z]+\\.[a-zA-z]{2,3}$/",message="m")
 	private String email;
-	@Pattern(regexp ="^\\d{3}\\d{3,4}\\d{4}$", message="m")
+	@Pattern(regexp ="/^\\d{3}\\d{4}\\d{4}$/", message="m")
 	private String phone;
 	private String address;
 	private Timestamp regDate;
@@ -31,10 +31,10 @@ public class MemberVO {
 //	}
 	
 	public MemberVO(
-			@NotNull(message = "공백입니다.") @Pattern(regexp = "^[a-z | A-Z]{3,6}[0-9]{3,6}$", message = "m") String memberId,
-			@Pattern(regexp = "^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$", message = "m") String password,
-			@Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$", message = "m") String email,
-			@Pattern(regexp = "^^\\d{3}\\d{3,4}\\d{4}$", message = "m") String phone,
+			@NotNull(message = "공백입니다.") @Pattern(regexp = "/^[A-Za-z]{2,15}[0-9]{1,15}$/", message = "m") String memberId,
+			@Pattern(regexp = "/(?=.*\\d{1,15})(?=.*[~`!@#$%\\^&*()-+=]{1,15})(?=.*[a-zA-Z]{1,50}).{8,15}$/", message = "m") String password,
+			@Pattern(regexp = "/^[0-9a-zA-Z]+@[0-9a-zA-Z]+\\.[a-zA-z]{2,3}$/", message = "m") String email,
+			@Pattern(regexp = "/^\\d{3}\\d{4}\\d{4}$/", message = "m") String phone,
 			String address) {
 		this.memberId = memberId;
 		this.password = password;
@@ -44,10 +44,10 @@ public class MemberVO {
 	}
 	
 	public MemberVO(int id,
-			@NotNull(message = "공백입니다.") @Pattern(regexp = "^[a-z | A-Z]{3,6}[0-9]{3,6}$", message = "m") String memberId,
-			@Pattern(regexp = "^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$", message = "m") String password,
-			@Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$", message = "m") String email,
-			@Pattern(regexp = "^\\d{3}\\d{3,4}\\d{4}$", message = "m") String phone,
+			@NotNull(message = "공백입니다.") @Pattern(regexp = "/^[A-Za-z]{2,15}[0-9]{1,15}$/", message = "m") String memberId,
+			@Pattern(regexp = "/(?=.*\\d{1,15})(?=.*[~`!@#$%\\^&*()-+=]{1,15})(?=.*[a-zA-Z]{1,50}).{8,15}$/", message = "m") String password,
+			@Pattern(regexp = "/^[0-9a-zA-Z]+@[0-9a-zA-Z]+\\.[a-zA-z]{2,3}$/", message = "m") String email,
+			@Pattern(regexp = "/^\\d{3}\\d{4}\\d{4}$/", message = "m") String phone,
 			String address, Timestamp regDate, int certified) {
 		super();
 		this.id = id;

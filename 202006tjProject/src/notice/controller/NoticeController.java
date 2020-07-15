@@ -31,15 +31,14 @@ public class NoticeController {
 	// 공지사항 조회 기능
 	@GetMapping("show")
 	public String noticeShow(Model m, int id, String memberId) {
-		System.out.println(id);
 		NoticeDto notice;
 		try {
-			notice = noticeService.selectNoticeById(id);
-			m.addAttribute("notice", notice);
-			m.addAttribute("memberId", memberId);
+			notice = noticeService.selectNoticeById(id);	//공지사항 아이디로 공지사항 단일 조회
+			m.addAttribute("notice", notice);	//공지사항 Model에 저장
+			m.addAttribute("memberId", memberId);	//운영자 아이디 확인 위해 memberId를 저장
 			return "notice/notice";
 		} catch (Exception e) {
-			mailService.sendErorrMail(e.toString());
+			mailService.sendErorrMail(e.toString());	//에러 시 개발자에게 메일 전송
 			return "error/wrongAccess";
 		}
 	}
@@ -93,7 +92,8 @@ public class NoticeController {
 	public String noticeInsertForm() {
 		return "notice/noticeInsertForm";
 	}
-
+	
+	// 공지사항 생성 기능
 	@PostMapping("insert")
 	public String noticeInsert(NoticeDto notice) {
 		try {
@@ -105,7 +105,7 @@ public class NoticeController {
 		return "notice/noticeInsertComplete";
 	}
 
-	// 공지사항 수정 기능
+	// 공지사항 수정 폼 이동
 	@GetMapping("update")
 	public String noticeUpdateForm(Model m, int id) {
 		NoticeDto notice;
@@ -118,7 +118,8 @@ public class NoticeController {
 			return "error/wrongAccess";
 		}
 	}
-
+	
+	// 공지사항 수정 기능
 	@PostMapping("update")
 	public String noticeUpdate(Model m, NoticeDto notice) {
 		try {

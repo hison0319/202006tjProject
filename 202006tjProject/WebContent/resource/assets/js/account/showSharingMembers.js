@@ -5,8 +5,6 @@ for (let i = 0; i < showSharingList.length; i++) {
 	showSharingList.eq(i).on(
 			"click",
 			function() {
-				console.log("showSharingList "+i);
-				console.dir(this.innerText);
 				var data = $.parseJSON( '{ "title": "'+this.innerText+'" }' );
 				$.ajax({
 					url : "showSharingMemberList",
@@ -15,7 +13,7 @@ for (let i = 0; i < showSharingList.length; i++) {
 					dataType : "json",
 					success : function(data) {
 						if (toggle) {
-							for (let j=0; j<data.length; j++) {
+							for (let j=0; j<data.length; j++) {	//toggle이 true일 시 해당 tr뒤에 공유멤버리스트릴 after함
 								tr.eq(i).after("<tr class='memberList'><td></td><td>"+data[(data.length-1)-j].memberId+
 										"</td><td><button class='deleteSharing' style='box-shadow: none; border: none;'>공유 취소</button></td></tr>")							
 							}
@@ -23,12 +21,10 @@ for (let i = 0; i < showSharingList.length; i++) {
 							for (let j = 0; j<deleteSharing.length; j++) {
 								deleteSharing.eq(j).on(
 										"click",
-										function() {
+										function() {	//공유를 취소하는 비동기 ajax기능
 											if(!confirm("정말 공유를 삭제하시겠습니까?")) {
 												return false;
 											}
-											console.log("deleteSharing "+j);
-											console.log("wordbookId : "+data[j].id);
 											var idData = $.parseJSON( '{ "id": "'+data[j].id+'" }' );
 											$.ajax({
 												url : "deleteSharingMember",
@@ -54,7 +50,6 @@ for (let i = 0; i < showSharingList.length; i++) {
 							toggle = false;
 						} else {
 							$(".memberList").detach();
-							//없어짐
 							toggle = true;
 						}
 					},

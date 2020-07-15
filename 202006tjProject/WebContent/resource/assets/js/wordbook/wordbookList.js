@@ -1,6 +1,5 @@
-$("#arraySelect").on("change",function() {
+$("#arraySelect").on("change",function() {	//순서정렬 기능
 	let method = $("#arraySelect option:selected").val()
-	console.log(method);
 	if(method == 2) {
 		location.replace("/wordbook/showlistFavorite");
 	} else if(method == 3) {
@@ -10,8 +9,4 @@ $("#arraySelect").on("change",function() {
 	} else {
 		location.replace("/wordbook/showlist");
 	}
-});
-
-$(".searchBtn").on("click",function() {
-	console.log("a");
 });

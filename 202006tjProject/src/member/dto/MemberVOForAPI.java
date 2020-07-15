@@ -8,9 +8,9 @@ public class MemberVOForAPI {
    private int id;
    private String memberId;
    private String password;
-   @Pattern(regexp="^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$",message="m")
+   @Pattern(regexp="/^[0-9a-zA-Z]+@[0-9a-zA-Z]+\\.[a-zA-z]{2,3}$/",message="m")
    private String email;
-   @Pattern(regexp ="^\\d{3}\\d{3,4}\\d{4}$", message="m")
+   @Pattern(regexp ="/^\\d{3}\\d{4}\\d{4}$/", message="m")
    private String phone;
    private String address;
    private Timestamp regDate;
@@ -18,8 +18,8 @@ public class MemberVOForAPI {
    public MemberVOForAPI() {}
    
    public MemberVOForAPI(String memberId, String password,
-         @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$", message = "m") String email,
-         @Pattern(regexp = "^^\\d{3}\\d{3,4}\\d{4}$", message = "m") String phone,
+         @Pattern(regexp = "/^[0-9a-zA-Z]+@[0-9a-zA-Z]+\\.[a-zA-z]{2,3}$/", message = "m") String email,
+         @Pattern(regexp = "/^\\d{3}\\d{4}\\d{4}$/", message = "m") String phone,
          String address) {
       this.memberId = memberId;
       this.password = password;
@@ -29,8 +29,8 @@ public class MemberVOForAPI {
    }
    
    public MemberVOForAPI(int id, String memberId, String password,
-         @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$", message = "m") String email,
-         @Pattern(regexp = "^\\d{3}\\d{3,4}\\d{4}$", message = "m") String phone,
+         @Pattern(regexp = "/^[0-9a-zA-Z]+@[0-9a-zA-Z]+\\.[a-zA-z]{2,3}$/", message = "m") String email,
+         @Pattern(regexp = "/^\\d{3}\\d{4}\\d{4}$/", message = "m") String phone,
          String address, Timestamp regDate, int certified) {
       this.id = id;
       this.memberId = memberId;

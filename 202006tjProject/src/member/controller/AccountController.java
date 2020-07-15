@@ -43,16 +43,18 @@ public class AccountController {
 		return "/account/showInfo";
 	}
 
-	// 회원정보 수정 기능-비동기?
+	// 수정 하기 전 패스워드 확인 폼 이동
 	@GetMapping("/confirmP")
 	public String memberConfirmPasswordForm() {
 		return "/account/confirmPassword";
 	}
 
+	// 수정 하기 전 패스워드 확인 기능
 	@ResponseBody
 	@PostMapping("/confirmP")
 	public String memberConfirmPassword(HttpSession session, String passwordC) {
 		MemberDto member = (MemberDto) session.getAttribute("loginMember");
+		//로그인 한 멤버의 패스워드와 입력한 패스워드를 비교해서 t, f 반환
 		if (member.getPassword().equals(passwordC)) {
 			return "t";
 		} else {
@@ -60,12 +62,13 @@ public class AccountController {
 		}
 	}
 
-	// 회원 정보 수정
+	// 회원 정보 수정 폼 이동
 	@GetMapping("/update")
 	public String memberModifyForm() {
 		return "/account/modify";
 	}
-
+	
+	//회원 정보 수정 유효성 검사
 	@PostMapping("/update")
 	public String memberModify(HttpSession session, @ModelAttribute("MemberVo") @Valid MemberVO memberVo,
 			BindingResult result, Model m) {
@@ -101,7 +104,7 @@ public class AccountController {
 		return "account/modifyComplete";
 	}
 
-	// 비동기 이메일, 폰번호 검사
+	// 비동기 이메일 중복 검사
 	@ResponseBody
 	@PostMapping("/confirmEmail")
 	public String confirmEmail(HttpSession session, String email) {
@@ -116,7 +119,8 @@ public class AccountController {
 			}
 		}
 	}
-
+	
+	// 비동기 폰번호 중복 검사
 	@ResponseBody
 	@PostMapping("/confirmPhone")
 	public String confirmPhone(HttpSession session, String phone) {
@@ -131,32 +135,32 @@ public class AccountController {
 			}
 		}
 	}
-
+	
+	//카카오 가입자 수정 폼 이동
 	@GetMapping("/forAPIupdate")
 	public String APIModifyForm() {
 		return "/account/modifyAPI";
 	}
-
+	
+	//카카오 가입자 수정 유효성 검사
 	@PostMapping("forAPIupdate")
 	public String APIModify(@ModelAttribute("MemberVo") @Valid MemberVOForAPI memberVo, BindingResult result, Model m,
 			HttpSession session) {
 		MemberDto member = new MemberDto();
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 		MemberDto changeMember = new MemberDto(memberVo.getMemberId(), memberVo.getPassword(), memberVo.getEmail(),
-				memberVo.getPhone(), memberVo.getAddress());
+				memberVo.getPhone(), memberVo.getAddress()); //기존 회원의 정보를 넣어줌
 		changeMember.setId(memberVo.getId());
-		if (loginMember.getEmail().equals(changeMember.getEmail())) {
+		if (loginMember.getEmail().equals(changeMember.getEmail())) { //이메일이 바뀌면 인증이 취소됨
 			changeMember.setCertified(loginMember.getCertified());
 		} else {
 			changeMember.setCertified(0);
 		}
-		;
+		//유효성 검사
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
-			System.out.println(result.toString());
 			for (FieldError fe : errors) {
 				m.addAttribute("e" + fe.getField(), fe.getField());
-				System.out.println(fe.getField());
 			}
 			m.addAttribute("member", member);
 			return "account/modifyAPI";
@@ -238,8 +242,7 @@ public class AccountController {
 			MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
 			List<WordbookDto> sharingWordbookMemberList;
 			sharingWordbookMemberList = wordbookService.selectSharingMemberCheckByTitle(loginMember.getId(), title);
-			System.out.println(sharingWordbookMemberList);
-			return sharingWordbookMemberList;
+			return sharingWordbookMemberList; //비동기식으로 멤버리스트를 반환함
 		} catch (Exception e) {
 			mailService.sendErorrMail(e.toString());
 			return null;
@@ -250,9 +253,8 @@ public class AccountController {
 	@PostMapping("deleteSharingMember")
 	@ResponseBody
 	public String deleteSharingMember(String id) {
-		//exception처리
 		try {
-			System.out.println(id);
+			//공유한 단어장의 아이디 값을 받아서 삭제
 			int wordbookId = Integer.parseInt(id);
 			wordbookService.deleteWordbook(wordbookId);
 		} catch (Exception e) {
@@ -271,6 +273,7 @@ public class AccountController {
 			JsonNode accessToken = (JsonNode) session.getAttribute("access_token");
 			session.removeAttribute("access_token");
 		}
+		//회원이 소유한 단어장과 공유받은 단어장 DB에서 삭제되도록 기능 구현 필요
 		return "/account/memberDeleteComplete";
 	}
 }

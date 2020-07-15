@@ -14,7 +14,7 @@ for (let i = 0; i < showListSharing.length; i++) {
 			});
 };
 for (let i = 0; i < getkeySharing.length; i++) {
-	getkeySharing.eq(i).on(
+	getkeySharing.eq(i).on(	//공유키를 누를 시 비동기식 ajax로 공유키를 받고 자동으로 클립보드에 복사
 			"click",
 			function() {
 				var data = $("form").eq(i+1).serialize();
@@ -47,7 +47,7 @@ for (let i = 0; i < getkeySharing.length; i++) {
 			});
 };
 for (let i = 0; i < kakaoSharing.length; i++) {
-	kakaoSharing.eq(i).on(
+	kakaoSharing.eq(i).on(	//공유키 카카오톡 전송
 			"click",
 			function() {
 				let memberIdForSend = memberId.eq(i).text();
@@ -79,7 +79,7 @@ for (let i = 0; i < kakaoSharing.length; i++) {
 			});
 };
 for (let i = 0; i < deleteSharing.length; i++) {
-	deleteSharing.eq(i).on(
+	deleteSharing.eq(i).on(	//공유 취소
 			"click",
 			function() {
 				if(!confirm("정말 공유를 취소하시겠습니까?")) {

@@ -28,7 +28,6 @@ public class KakaoLogout {
 			final HttpResponse response = client.execute(post);
 			ObjectMapper mapper = new ObjectMapper();
 			returnNode = mapper.readTree(response.getEntity().getContent());
-			System.out.println(returnNode);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

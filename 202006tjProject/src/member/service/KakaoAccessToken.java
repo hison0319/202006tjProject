@@ -24,7 +24,7 @@ public class KakaoAccessToken {
 		
 		final String RequestUrl = "https://kauth.kakao.com/oauth/token"; //Host
 		final List<NameValuePair> postParams = new ArrayList<NameValuePair>();
-		
+		//내 카카오 개발자 앱키, 허용 도메인 정보를 넣는다.
 		postParams.add(new BasicNameValuePair("grant_type", "authorization_code"));
 		postParams.add(new BasicNameValuePair("client_id", "e4e1b163f0c81274eec3c688bcfe3f54"));
 		postParams.add(new BasicNameValuePair("redirect_uri", "http://localhost:8080/kakaologin"));
@@ -42,7 +42,7 @@ public class KakaoAccessToken {
 			
 			//JSON형태 반환값 처리
 			ObjectMapper mapper = new ObjectMapper();
-			
+			//RequestUrl에 앱키와 허용도메인, 사용자 로그인 코드를 정리한 객체를 보내고 json형식으로 반환 받음
 			returnNode = mapper.readTree(response.getEntity().getContent());
 		} catch(UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -51,6 +51,6 @@ public class KakaoAccessToken {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return returnNode;
+		return returnNode;//받은 정보를 json형태로 리턴
 	}
 }

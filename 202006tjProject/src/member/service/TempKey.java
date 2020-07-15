@@ -9,7 +9,7 @@ public class TempKey {
 		this.size = size;
 		return init();
 	}
-	
+	//랜덤의 0~9까지의 키 생성
 	private String init() {
 		Random ran = new Random();
 		int num = 0;

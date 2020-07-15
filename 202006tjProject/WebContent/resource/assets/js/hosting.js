@@ -1,5 +1,5 @@
 Kakao.init('0e4fcd913762bd2a1016dc2dc2798451');
-
+//카카오, 트위터, 페이스북, 네이버 공유버튼 기능
 function kakaoBtn() {
 	Kakao.Link.sendCustom({
 		templateId : 32279

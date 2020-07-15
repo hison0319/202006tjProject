@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import member.dto.MemberDto;
-import member.dto.MemberDtoForGoogle;
+//import member.dto.MemberDtoForGoogle;
 import member.dto.MemberVO;
 import member.service.KakaoAccessToken;
 import member.service.KakaoUserInfo;
@@ -32,7 +32,8 @@ import member.service.TempCharKey;
 public class ForAPILoginController {
 	@Autowired
 	MemberService memberService;
-	
+
+	//구글 sign in 기능 구현 미완
 //	@ResponseBody
 //	@PostMapping("/googlelogin")
 //	public String googleLogin(MemberDtoForGoogle googleInfo, HttpSession session, Model m) {
@@ -48,7 +49,6 @@ public class ForAPILoginController {
 //		else {
 //		}
 //		String realId = name + id;
-//		System.out.println("SDFSDFXCXCVCX");
 //		MemberDto memberGoogle;
 //		try {
 //			memberGoogle = memberService.selectMemberByMemberIdforApi(id);
@@ -57,7 +57,6 @@ public class ForAPILoginController {
 //			session.setAttribute("access_token", "google");
 //			return "t";
 //		} catch (IndexOutOfBoundsException e) {
-//			System.out.println("SDFSDFxcvzxcvxxzczvxcvXCXCVCX");
 //			MemberDto member = new MemberDto();
 //			String googlePassword = new TempCharKey().getKey(50, false);
 //
@@ -78,33 +77,34 @@ public class ForAPILoginController {
 //		}
 //	}
 	
+	//카카오 로그인 기능
 	@RequestMapping(value = "/kakaologin", produces = "application/json", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	public String kakaoLogin(@RequestParam("code") String code, Model m, HttpSession session) {
 		JsonNode accessToken;
-		JsonNode jsonToken = KakaoAccessToken.getKakaoAccessToken(code);
+		JsonNode jsonToken = KakaoAccessToken.getKakaoAccessToken(code); //카카오 토큰 발급
 		accessToken = jsonToken.get("access_token");
 
-		JsonNode userInfo = KakaoUserInfo.getKakaoUserInfo(accessToken);
-		String id = "!" + userInfo.path("id").asText();
+		JsonNode userInfo = KakaoUserInfo.getKakaoUserInfo(accessToken); //발급받은 토큰으로 사용자 유저 정보를 가져옴.
+		String id = "!" + userInfo.path("id").asText();	//우리 DB에 맞게 카카오 아이디를 변경하여 저장 (!+kakaoID)
 		String name = null;
 		String email = null;
 
 		JsonNode properties = userInfo.path("properties");
-		JsonNode kakao_account = userInfo.path("kakao_account");
+		JsonNode kakao_account = userInfo.path("kakao_account");	//가져온 유저 정보를 json객체로 저장
 
-		name = properties.path("nickname").asText();
-		email = kakao_account.path("email").asText();
+		name = properties.path("nickname").asText();	//name에는 kakaoNickname을 저장
+		email = kakao_account.path("email").asText();	//email이 있으면 이메일 저장.(string null허용)
 
-		String realId = name + id;
+		String realId = name + id;	//우리 DB에 맞게 카카오 아이디를 변경하여 저장 (kakaoNickname+!+kakaoID)
 		MemberDto memberKakao;
 		try {
-			memberKakao = memberService.selectMemberByMemberIdforApi(id);
+			memberKakao = memberService.selectMemberByMemberIdforApi(id); //만약 기존에 가입된 회원이라면 로그인 완료.
 			memberKakao.setMemberId(name+"(kakao)");
 			session.setAttribute("loginMember", memberKakao);
 			session.setAttribute("access_token", accessToken);
 			return "/hosting";
-		} catch (IndexOutOfBoundsException e) {
+		} catch (IndexOutOfBoundsException e) {	//로그인되 회원이 아니면 회원가입창으로 이동.
 			MemberDto member = new MemberDto();
 			String kakaoPassword = new TempCharKey().getKey(50, false);
 
@@ -114,13 +114,13 @@ public class ForAPILoginController {
 			m.addAttribute("realId", realId);
 			m.addAttribute("nickName", name);
 			m.addAttribute("forAPIPassword", kakaoPassword);
-			m.addAttribute("realId", realId);
+			m.addAttribute("realId", realId);	//이동 시 정보들을 MODEL에 저장.
 
 			return "/member/forAPISignup";
 		}
 	}
 
-	// 비동기 식 이메일, 번호 중복 확인
+	// 비동기 식 이메일 중복확인
 	@ResponseBody
 	@PostMapping("/forAPIConfirmEmail")
 	public String confirmEmail(String email) {
@@ -130,7 +130,7 @@ public class ForAPILoginController {
 			return "f";
 		}
 	}
-
+	// 비동기 식 전화번호 중복확인
 	@ResponseBody
 	@PostMapping("/forAPIConfirmPhone")
 	public String confirmPhone(String phone) {
@@ -141,6 +141,7 @@ public class ForAPILoginController {
 		}
 	}
 	
+	//카카오 사용자 회원가입 기능
 	@PostMapping("forAPISignup")
 	public String APISignup(@ModelAttribute("MemberVo") @Valid MemberVO memberVo, BindingResult result, Model m,
 			String realId, String nickName, String forAPIPassword) {
@@ -148,12 +149,11 @@ public class ForAPILoginController {
 		member.setEmail(memberVo.getEmail());
 		member.setPhone(memberVo.getPhone());
 		member.setAddress(memberVo.getAddress());
+		//유효성 검사
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
-			System.out.println(result.toString());
 			for (FieldError fe : errors) {
 				m.addAttribute("e" + fe.getField(), fe.getField());
-				System.out.println(fe.getField());
 			}
 			m.addAttribute("member", member);
 			m.addAttribute("realId", realId);
@@ -162,11 +162,11 @@ public class ForAPILoginController {
 			return "member/forAPISignup";
 		} else {
 			try {
-				member.setMemberId(realId);
+				member.setMemberId(realId); //변형된 아이디 값을 저장.
 				member.setPassword(forAPIPassword);
 				memberService.insertMember(member);
 			} catch (Exception e) {
-				m.addAttribute("member", member);
+				m.addAttribute("member", member);	//유효성 검사에서 에러 발생시 기존 값을 넣고 다시 회원가입 페이지로 이동
 				m.addAttribute("realId", realId);
 				m.addAttribute("nickName", nickName);
 				m.addAttribute("forAPIPassword", forAPIPassword);
@@ -185,6 +185,7 @@ public class ForAPILoginController {
 			JsonNode accessToken = (JsonNode) session.getAttribute("access_token");
 			session.removeAttribute("access_token");
 		}
+		//회원이 소유한 단어장과 공유받은 단어장 DB에서 삭제되도록 기능 구현 필요
 		return "/account/memberDeleteComplete";
 	}
 }

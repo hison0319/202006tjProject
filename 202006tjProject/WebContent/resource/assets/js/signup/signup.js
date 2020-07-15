@@ -3,7 +3,7 @@ window.addEventListener("DOMContentLoaded",function(){
 	var empJ = /\s/g; //공백체크
 	var memberIdPattern = /^[A-Za-z]{2,15}[0-9]{1,15}$/;
 	//숫자 1회 이상, 영문 2개 이상 사용하여 2자리 이상 총 15자리 이하 입력, 특수문자 사용 불가
-	var passwordPattern = /(?=.*\d{1,15})(?=.*[~`!@#$%\^&*()-+=]{1,15})(?=.*[a-zA-Z]{2,50}).{8,15}$/;
+	var passwordPattern = /(?=.*\d{1,15})(?=.*[~`!@#$%\^&*()-+=]{1,15})(?=.*[a-zA-Z]{1,50}).{8,15}$/;
 	//숫자, 특수문자 각 1회 이상, 영문 2개 이상 사용하여 8자리 이상 총 15자리 이하 입력
 	var emailPattern = /^[0-9a-zA-Z]+@[0-9a-zA-Z]+\.[a-zA-z]{2,3}$/;
 	var phonePattern =  /^\d{3}\d{4}\d{4}$/;

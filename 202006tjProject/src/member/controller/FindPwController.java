@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import member.dto.MemberDto;
 import member.service.MailService;
 import member.service.MemberService;
 
@@ -37,6 +36,7 @@ public class FindPwController {
 		}  //이메일 틀릴 경우
 		
 		try {
+			//이메일이 맞을 경우 새로운 패스워드를 발급하여 사용자에게 메일을 전송함.
 			mailService.findPwSendMail(memberId, email);;
 		} catch (Exception e) {
 			return "";

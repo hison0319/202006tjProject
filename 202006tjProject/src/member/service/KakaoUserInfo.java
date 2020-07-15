@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class KakaoUserInfo {
 	public static JsonNode getKakaoUserInfo(JsonNode accessToken) {
-		
 		final String RequestUrl = "https://kapi.kakao.com/v2/user/me";
 		final HttpClient client = HttpClientBuilder.create().build();
 		final HttpPost post = new HttpPost(RequestUrl);
@@ -23,6 +22,7 @@ public class KakaoUserInfo {
 		
 		JsonNode returnNode = null;
 		
+		//AccessToken을 통해 발급받은 토큰을 RequestUrl으로 보내고 사용자 정보를 json형태로 받아옴.
 		try {
 			final HttpResponse response = client.execute(post);
 			
@@ -37,7 +37,7 @@ public class KakaoUserInfo {
 		} finally {
 			//Clear resources
 		}
-		
+		//다시 json형태로 반환
 		return returnNode;
 	}
 }

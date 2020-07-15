@@ -8,13 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 import member.dto.MemberDto;
-import member.service.KakaoLogout;
 import member.service.MemberService;
 
 @Controller
@@ -43,17 +41,16 @@ public class LoginController {
 			else {
 				MemberDto loginMember = memberService.selectMemberByMemberId(memberDto.getMemberId());  //로그인 한 멤버의 id숫자 가져옴
 				session.setAttribute("loginMember", loginMember);
-				System.out.println("loginMember : "+loginMember);
 				return "t";
 			}
 		}
 	}
-	
+	//로그인 완료 페이지 이동
 	@GetMapping("complete")
 	public String complete() {
 		return "member/loginComplete";
 	}
-	
+	//로그아웃 기능 구현
 	@GetMapping("logout")
 	public String logout(HttpSession session) {
 		session.removeAttribute("loginMember");  //세션에서 로그인 정보 삭제
@@ -61,6 +58,6 @@ public class LoginController {
 			JsonNode accessToken = (JsonNode) session.getAttribute("access_token");
 			session.removeAttribute("access_token");
 		}
-		return "member/logout";  //만약 잘못 된 방법으로 로그아웃 접근 시 처리는?(뒤로가기 후 로그아웃 버튼 다시 누르기 등)
+		return "member/logout";
 	}
 }

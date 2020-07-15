@@ -77,9 +77,8 @@ public class WordbookController {
 				m.addAttribute("pageNumList", pageNumList);
 				m.addAttribute("pageNum", pageNum);
 				m.addAttribute("pages", pages);
-				// 단어장 리스트
-				List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestIdJoin(loginId, (pageNum - 1) * 6,
-						ea);
+				// 단어장 리스트 ownerId와 guestId를 통한 조회 페이지 당 6개씩 출력
+				List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestIdJoin(loginId, (pageNum - 1) * 6, ea);
 				// 등록일을 날짜만 표현
 				for (int i = 0; i < list.size(); i++) {
 					if (list.get(i).getRegDate() != null)
@@ -88,7 +87,7 @@ public class WordbookController {
 						list.get(i).setuDateStr(list.get(i).getuDate().toString().substring(0, 10));
 				}
 				if (list.size() == 0) {
-					m.addAttribute("listNull", "단어장을 만들어 보세요!");
+					m.addAttribute("listNull", "단어장을 만들어 보세요!");	//조회할 단어장이 없을 때
 				} else {
 					m.addAttribute("listNull", "");
 				}
@@ -127,7 +126,7 @@ public class WordbookController {
 				m.addAttribute("pageNumList", pageNumList);
 				m.addAttribute("pageNum", pageNum);
 				m.addAttribute("pages", pages);
-				// 단어장 리스트
+				// 단어장 리스트 ownerId를 통한 조회 페이지 당 6개씩 출력
 				List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdJoin(loginId, (pageNum - 1) * 6, ea);
 				// 등록일을 날짜만 표현
 				for (int i = 0; i < list.size(); i++) {
@@ -167,7 +166,7 @@ public class WordbookController {
 				// 단어장 총 갯수
 				int totalCnt;
 				totalCnt = wordbookService.selectWordbookCountByGuestId(loginId);
-				// 페이지 리스트
+				// 페이지 리스트 guestId를 통한 조회 페이지 당 6개씩 출력
 				int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
 				List<Integer> pageNumList = getPageList(pageNum, ea, pages);
 				m.addAttribute("pageNumList", pageNumList);
@@ -213,16 +212,14 @@ public class WordbookController {
 				// 단어장 총 갯수
 				int totalCnt;
 				totalCnt = wordbookService.selectWordbookCountBySearchJoin(loginId, keyword);
-				System.out.println(totalCnt);
 				// 페이지 리스트
 				int pages = totalCnt % ea == 0 ? totalCnt / ea : totalCnt / ea + 1;
 				List<Integer> pageNumList = getPageList(pageNum, ea, pages);
 				m.addAttribute("pageNumList", pageNumList);
 				m.addAttribute("pageNum", pageNum);
 				m.addAttribute("pages", pages);
-				// 단어장 리스트
+				// 단어장 리스트 title과 memberId조회를 통한 검색, ownerId와 guestId를 통한 조회 페이지 당 6개씩 출력
 				List<WordbookDto> list = wordbookService.selectWordbookBySearchJoin(loginId, keyword, (pageNum - 1) * 6, ea);
-				System.out.println(list);
 				// 등록일을 날짜만 표현
 				for (int i = 0; i < list.size(); i++) {
 					if (list.get(i).getRegDate() != null)
@@ -256,7 +253,6 @@ public class WordbookController {
 				m.addAttribute("certifyPlease", "인증이 필요한 서비스입니다.");
 			} else {
 				try {
-					System.out.println("hjahahahahah");
 					int pageNum = pageNumStr == null || pageNumStr == "" ? 1 : Integer.parseInt(pageNumStr);
 					int ea = 6;// 페이지에 띄울 갯수 정의(정책)
 					int loginId = loginMember.getId();
@@ -269,7 +265,7 @@ public class WordbookController {
 					m.addAttribute("pageNumList", pageNumList);
 					m.addAttribute("pageNum", pageNum);
 					m.addAttribute("pages", pages);
-					// 단어장 리스트
+					// 단어장 리스트 favorite의 값이 1인 단어장만 조회
 					List<WordbookDto> list = wordbookService.selectWordbookByOwnerIdOrGuestIdFavoriteJoin(loginId, (pageNum - 1) * 6,
 							ea);
 					// 등록일을 날짜만 표현
@@ -311,7 +307,7 @@ public class WordbookController {
 		return pageNumList;
 	}
 
-	// 단어장 생성 페이지
+	// 단어장 생성 페이지 이동
 	@GetMapping("form")
 	public String wordbookForm(HttpSession session) {
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
@@ -323,6 +319,7 @@ public class WordbookController {
 		return "wordbook/wordbookUpdateForm";
 	}
 	
+	//공유키를 볼 수 있는 페이지로 이동.(카카오로 접속)
 	@GetMapping("sharingKeyForm")
 	public String insertBySharingKey(HttpSession session, Model m, String sharingKey, String memberId, String title) {
 		m.addAttribute("sharingKey",sharingKey);
@@ -330,70 +327,73 @@ public class WordbookController {
 		m.addAttribute("title",title);
 		return "wordbook/showSharingKey";
 	}
-	
+	//공유키를 통한 단어장 추가
 	@PostMapping("sharingKeyForm")
 	public String completeBySharingKey(HttpSession session, Model m, String sharingKey) {
 		try {
 			MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-			String idStr = sharingKey.substring(0, sharingKey.indexOf("!"));
+			String idStr = sharingKey.substring(0, sharingKey.indexOf("!"));	//공유키 "!"앞의 아이디 값을 출력
 			int wordbookId = Integer.parseInt(idStr);
-			WordbookDto ownerWordbook = wordbookService.selectWordbookById(wordbookId);			
+			WordbookDto ownerWordbook = wordbookService.selectWordbookById(wordbookId);		//아이디값을 조회
+			//이미 추가된 단어장에서 같은 제목이 있는지 조회하기 위한 단어장 리스트 생성
 			List<WordbookDto> guestWordbookList = wordbookService.selectWordbookByGuestIdCheck(loginMember.getId());
 			List<WordbookDto> ownerWordbookList = wordbookService.selectWordbookByOwnerIdCheck(loginMember.getId());
 			//공유키 확인
 			if (ownerWordbook.getSharingKey().equals(sharingKey)) {
-				//이미 공유한 단어장이 있는지 확인
+				//guestWordbookList에서 이미 추가된 단어장이 있는지 확인
 				for (int i=0; i<guestWordbookList.size(); i++) {
 					if (guestWordbookList.get(i).getTitle().equals(ownerWordbook.getTitle())) {
 						m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
 						return "wordbook/wordbookUpdatefail";
 					}
 				}
+				//ownerWordbookList에서 이미 추가된 단어장이 있는지 확인
 				for (int i=0; i<ownerWordbookList.size(); i++) {
 					if (ownerWordbookList.get(i).getTitle().equals(ownerWordbook.getTitle())) {
 						m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
 						return "wordbook/wordbookUpdatefail";
 					}
 				}	
-				WordbookDto guestWordbook = new WordbookDto();
+				WordbookDto guestWordbook = new WordbookDto();	//새로운 단어장을 guestId에 로그인 아이디를 넣어 생성.
 				guestWordbook.setOwnerId(ownerWordbook.getOwnerId());
 				guestWordbook.setGuestId(loginMember.getId());
 				guestWordbook.setTitle(ownerWordbook.getTitle());
 				guestWordbook.setWordbookAddress(ownerWordbook.getWordbookAddress());
 				wordbookService.insertWordbook(guestWordbook);
 			} else {
-				m.addAttribute("errorMessage","공유키가 맞지 않습니다.");
+				m.addAttribute("errorMessage","공유키가 맞지 않습니다.");	//공유키가 맞지 않을 시
 				return "wordbook/wordbookUpdatefail";
 			}
 			return "wordbook/wordbookUpdateComplete";
 		} catch (Exception e) {
-			m.addAttribute("errorMessage","유효한 공유키가 아닙니다.");
+			m.addAttribute("errorMessage","유효한 공유키가 아닙니다.");	//에러 발생 시
 			return "wordbook/wordbookUpdatefail";
 		}
 	}
-	
+	//공유키 생성 및 반환
 	@PostMapping(value="sharingKey", produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String sharingKey(WordbookDto wordbookDto) {
 		try {
 			int id = wordbookDto.getId();
 			WordbookDto wordbook;
-			wordbook = wordbookService.selectWordbookById(id);
-			String sharingKey = new TempCharKey().getKey(10, false);
-			sharingKey = id+"!"+sharingKey;
-			wordbook.setSharingKey(sharingKey);
-			wordbookService.updateWordbookSharingKey(wordbook); //공유키 수정
-			return '"'+sharingKey+'"';
+			wordbook = wordbookService.selectWordbookById(id);	//사용자가 선택한 단어장 조회
+			String sharingKey = new TempCharKey().getKey(10, false);	//10개의 대소문자 구분된 공유키 생성
+			sharingKey = id+"!"+sharingKey;	//아이디 + "!" +공유키로 유효하고 유니크한 공유키 생성
+			wordbook.setSharingKey(sharingKey);	//사용자가 선택한 단어장에 생성된 공유키를 삽입
+			wordbookService.updateWordbookSharingKey(wordbook); //단어장 수정
+			return '"'+sharingKey+'"';	//공유키 반환
 		} catch (Exception e) {
 			mailService.sendErorrMail(e.toString());
 			return "error/wrongAccess";
 		}
 	}
 	
+	//공유 취소시 공유한 단어장 제거
 	@PostMapping(value="deleteSharing", produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String deleteSharing(WordbookDto wordbookDto) {
-		try {
+		try {	//비동기 처리
 			int id = wordbookDto.getId();
 			wordbookService.deleteWordbook(id);
 			return "1";
@@ -409,15 +409,15 @@ public class WordbookController {
 		int id = wordbookDto.getId();
 		WordbookDto wordbook;
 		try {
-			wordbook = wordbookService.selectWordbookById(id);
+			wordbook = wordbookService.selectWordbookById(id);	//사용자가 조회한 단어장
 			if (wordbook.getFavorite() == 0) {
 				wordbook.setFavorite(1);
 				wordbookService.updateWordbookFavorite(wordbook);
-				return "1";
+				return "1";	//favorite이 0이면 1로 수정 후 1을 반환
 			} else {
 				wordbook.setFavorite(0);
 				wordbookService.updateWordbookFavorite(wordbook);
-				return "0";
+				return "0";	//favorite이 1이면 0으로 수정 후 0을 반환
 			}
 		} catch (Exception e) {
 			mailService.sendErorrMail(e.toString());
@@ -529,9 +529,10 @@ public class WordbookController {
 						m.addAttribute("text", jsonText);
 
 						try {
+							//같은 제목이 있는지 조회하기 위한 clientWordbookList생성
 							List<WordbookDto> clientWordbookList = wordbookService.selectWordbookByOwnerIdOrGuestIdCheck(loginMember.getId());
 							for (int i=0; i<clientWordbookList.size(); i++) {
-								if (clientWordbookList.get(i).getTitle().equals(title)) {
+								if (clientWordbookList.get(i).getTitle().equals(title)) {	//같은 제목의 단어장이 있을 시.
 									m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
 									return "wordbook/wordbookUpdatefail";
 								}
@@ -623,9 +624,10 @@ public class WordbookController {
 
 					m.addAttribute("text", jsonText);
 					try {
+						//같은 제목이 있는지 조회하기 위한 clientWordbookList생성
 						List<WordbookDto> clientWordbookList = wordbookService.selectWordbookByOwnerIdOrGuestIdCheck(loginMember.getId());
 						for (int i=0; i<clientWordbookList.size(); i++) {
-							if (clientWordbookList.get(i).getTitle().equals(title)) {
+							if (clientWordbookList.get(i).getTitle().equals(title)) {	//같은 제목의 단어장이 있을 시
 								m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
 								return "wordbook/wordbookUpdatefail";
 							}

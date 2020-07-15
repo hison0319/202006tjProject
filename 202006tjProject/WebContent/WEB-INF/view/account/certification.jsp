@@ -62,7 +62,7 @@
 			<form>
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-xsmall">
-						<input type="text" class="skip" name="certifyKey" value="${certifyKey}" readonly="readonly">
+						<input type="hidden" name="certifyKey" value="${certifyKey}" readonly="readonly">
 						<div class="certify">
 							<input type="text" name="memberKey" value="" placeholder="인증번호를 입력하세요.">
 						</div>

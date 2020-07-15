@@ -5,12 +5,10 @@ let sharingInput = document.querySelector("#sharingKey");
 let sharing = document.querySelector("#submitSharing");
 let click = true;
 
+//버튼 중복클리 방지 기능
 button.onclick = function() {
 	if(click) {
 		click = !click;
-		setTimeout(function() {
-			click = true;
-		}, 2000)
 	} else {
 		return false;
 	}
@@ -19,14 +17,12 @@ button.onclick = function() {
 sharing.onclick = function() {
 	if(click) {
 		click = !click;
-		setTimeout(function() {
-			click = true;
-		}, 2000)
 	} else {
 		return false;
 	}
 }
 
+//각 form안의 input내용이 변경 시 submit버튼 disabled 토글
 file.onchange = function() {
 	if (file.files.length != 0) {
 		let name = file.files[0].name;

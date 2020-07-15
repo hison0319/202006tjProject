@@ -34,7 +34,6 @@ public class FindIdController {
 		}  //이메일 틀릴 경우
 		
 		String loginMemberId = memberService.selectMemberIdByEmail(email);  //로그인 한 멤버의 이메일 가져옴
-		System.out.println(loginMemberId);
 		return loginMemberId;
 		
 	}
