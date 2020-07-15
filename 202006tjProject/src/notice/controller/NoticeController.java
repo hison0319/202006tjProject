@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import member.service.MailService;
 import notice.dto.NoticeDto;
 import notice.service.NoticeService;
 
@@ -18,6 +19,8 @@ import notice.service.NoticeService;
 public class NoticeController {
 	@Autowired
 	NoticeService noticeService;
+	@Autowired
+	MailService mailService;
 
 	// 운영자 아이디 확인 기능 구현
 	@GetMapping("admin")
@@ -81,8 +84,11 @@ public class NoticeController {
 
 	@PostMapping("insert")
 	public String noticeInsert(NoticeDto notice) {
-		// 유효성검증필요
-		noticeService.insertNotice(notice);
+		try {
+			noticeService.insertNotice(notice);
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+		}
 		return "notice/noticeInsertComplete";
 	}
 

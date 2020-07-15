@@ -19,7 +19,7 @@ public class NoticeService {
 	}
 
 	// 공지 추가
-	public void insertNotice(NoticeDto noticeDto) {
+	public void insertNotice(NoticeDto noticeDto) throws Exception{
 		noticeMapper.insertNotice(noticeDto);
 	}
 

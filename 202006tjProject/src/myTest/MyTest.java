@@ -1,7 +1,5 @@
 package myTest;
 
-import static org.junit.Assert.*;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +52,11 @@ public class MyTest {
 	@Test @Ignore
 	public void testNotice01() {
 		NoticeDto notice = new NoticeDto("test", 1, "test");
-		noticeService.insertNotice(notice);
+		try {
+			noticeService.insertNotice(notice);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		System.out.println(noticeService.selectNoticeById(notice.getId()));
 		System.out.println(noticeService.selectNoticeList(1,5));
 	}

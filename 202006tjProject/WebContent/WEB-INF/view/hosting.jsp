@@ -18,7 +18,7 @@
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <!-- for API facebook send link -->
 <meta property="og:url" content="http://localhost:8080/" />
-<meta property="og:type" content="website" />
+<meta property="og:type" content="website" />+
 <meta property="og:title" content="단어장 만들어보자!" />
 <meta property="og:description" content="열공하자!" />
 <meta property="og:image" content="/images/bannerImage.jpg" />

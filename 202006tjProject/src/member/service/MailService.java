@@ -1,5 +1,8 @@
 package member.service;
 
+import java.io.UnsupportedEncodingException;
+
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +63,25 @@ public class MailService {
 		sendMail.setFrom("hison0319test@gmail.com","단어장");
 		sendMail.setTo(member.getEmail());
 		sendMail.send();		
+	}
+	
+	public void sendErorrMail(String e){
+		MailHandler sendMail;
+		try {
+			sendMail = new MailHandler(mailSender);
+			sendMail.setSubject("단어장에서 보낸 메일입니다.");
+			sendMail.setText(
+					"<h2>사용자 에러 메세지 입니다.</h2>"+
+							"<p>에러는 <br>"+e+"<br> 입니다.</p>");
+			try {
+				sendMail.setFrom("hison0319test@gmail.com","단어장");
+				sendMail.setTo("hison0319test@gmail.com");
+				sendMail.send();	
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+		} catch (MessagingException e1) {
+			e1.printStackTrace();
+		}
 	}
 }
