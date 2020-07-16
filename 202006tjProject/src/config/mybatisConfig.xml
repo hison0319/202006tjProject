@@ -11,6 +11,5 @@
 		<typeAlias type="member.dto.MemberDto" alias="member"/>
 		<typeAlias type="notice.dto.NoticeDto" alias="notice"/>
 		<typeAlias type="word.dto.WordbookDto" alias="wordbook"/>
-		<typeAlias type="word.dto.SharingDto" alias="sharing"/>
 	</typeAliases>
 </configuration>
