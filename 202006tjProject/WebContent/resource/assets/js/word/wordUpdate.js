@@ -159,27 +159,27 @@ $("#update").eq(0).on("click",function(){
 		formBtn.disabled = null;  //장문추가버튼 활성화
 		selectBar.disabled = null;  //정렬방식 활성화
 		updateBtn.innerText="수정";  //수정완료버튼 변경
-		sendUpdateData(function(){  //수정 데이터 전송 후 다음 진행
-			var deleted=0;  //정리된 칸 수
-			var standard;  //기준점(현재 삭제되는 index 값을 찾기 위한 변수)
-			trs=$("tr:not(:last)");  //마지막 버튼 줄 외 모든 줄
-			trs.children().children().remove("button");  //추가된 버튼들(중요단어, 지우기) 삭제
-			wInput = $("input[name=word]");
-			tInput = $("input[name=trans]");
-			for(let i = 0; i<wInput.length;i++){
-				if($.trim(wInput.eq(i).val()) == "" && $.trim(tInput.eq(i).val()) == ""){  //빈 칸이라면
-					iInput = document.querySelectorAll("input[name=index]");  //모든 인덱스 선택
-					standard = iInput[i-deleted].value;  //삭제 될 인덱스 선택
-					for (let j = 0; j<iInput.length;j++){
-						if(Number(iInput[j].value)>Number(standard)){  //삭제 될 인덱스보다 큰 인덱스
-							iInput[j].value--;  //1씩 감소
-						}
+		wInput = $("input[name=word]");
+		tInput = $("input[name=trans]");
+		var deleted=0;  //정리된 칸 수
+		var standard;  //기준점(현재 삭제되는 index 값을 찾기 위한 변수)
+		trs=$("tr:not(:last)");  //마지막 버튼 줄 외 모든 줄
+		trs.children().children().remove("button");  //추가된 버튼들(중요단어, 지우기) 삭제
+		for(let i = 0; i<wInput.length;i++){
+			if($.trim(wInput.eq(i).val()) == "" && $.trim(tInput.eq(i).val()) == ""){  //빈 칸이라면
+				iInput = document.querySelectorAll("input[name=index]");  //모든 인덱스 선택
+				standard = iInput[i-deleted].value;  //삭제 될 인덱스 선택
+				for (let j = 0; j<iInput.length;j++){
+					if(Number(iInput[j].value)>Number(standard)){  //삭제 될 인덱스보다 큰 인덱스
+						iInput[j].value--;  //1씩 감소
 					}
-					deleted++;
-					wInput.eq(i).parent().remove();  //td 삭제
-					tInput.eq(i).parent().remove();  //td 삭제
 				}
+				deleted++;
+				wInput.eq(i).parent().remove();  //td 삭제
+				tInput.eq(i).parent().remove();  //td 삭제
 			}
+		}
+		sendUpdateData(function(){  //수정 데이터 전송 후 다음 진행
 			complete();  //빈 칸, 줄 정리
 			$("input").each(function(){  //모든 input
 				$(this).css("width", "");  //너비 초기화

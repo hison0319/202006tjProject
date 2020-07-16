@@ -70,6 +70,7 @@ public class WordController {
 		return "word/wordList";
 	}
 	
+	//단어장 들어가면 처음 펼치는 과정
 	@RequestMapping("getwords")
 	@ResponseBody
 	public String getWordbook(HttpSession session, String wordbookid) {
@@ -87,54 +88,37 @@ public class WordController {
 		boolean isOK = false;
 		try {
 			int wordbookId = Integer.parseInt(wordbookid);
-			if(loginId<=20) {  //관리자 아이디일 경우
-				isOK = true;
-			}
-			else if (wordbookService.selectWordbookById(wordbookId).getOwnerId() == loginId) {  //단어장 주인일 경우
-				isOK = true;
-			}
-			else {  //공유받은 단어장일 경우
-				List<SharingDto> sharing = sharingService.selectSharingByWordbookId(wordbookId);
-				for(SharingDto sw : sharing) {
-					if(sw.getGuestId() == loginId) {
-						isOK =true;
-						break;
-					}
-				}
-			}
-			if (!isOK) {  //관리자X, 단어장 주인X, 공유받은 단어장X
+			if(loginId>21 && wordbookService.selectWordbookById(wordbookId).getOwnerId()==loginId
+					&& wordbookService.selectWordbookById(wordbookId).getGuestId()==loginId) {  //관리자, 주인, 공유받은 사람이 아닐 경우
 				return "{\"nope\":\"notAllowed\"}";
 			}
-			String wordbookAddress = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();
-			session.removeAttribute("wordbookid");
-			File file = new File(wordbookAddress);
-			String s;
-			String ajax = "";
+			String wordbookAddress = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();  //파일 경로
+			File file = new File(wordbookAddress);  //파일을 가져옴
+			String s;  //readLine을 위한 임시 String
+			String ajax = "";  //파일의 내용을 저장할 String
 			try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 				while((s=br.readLine()) != null) {
-					ajax += s;
+					ajax += s;  //한 줄씩 읽어서 추가
 				}
-				return ajax;
+				return ajax;  //파일 내용 반환
 			} catch (UnsupportedEncodingException e) {
 				mailService.sendErorrMail(e.toString());
 			} catch (FileNotFoundException e) {
-				System.out.println("출력 FNFE");
+				mailService.sendErorrMail(e.toString());
 				return "{\"nope\":\"notExist\"}";
 			} catch (IOException e) {
 				mailService.sendErorrMail(e.toString());
 			} 
 		} catch (NullPointerException e) {  //존재하지 않는 단어장
-			System.out.println("출력 NPE");
+			mailService.sendErorrMail(e.toString());
 			return "{\"nope\":\"notExist\"}";
 		} catch (NumberFormatException | IllegalStateException e) {
 			mailService.sendErorrMail(e.toString());
-			System.out.println("출력 NFE, ISE");
 			return "{\"nope\":\"wrongAccess\"}";  //잘못된 접근(주소로 직접 접근 등)
 		} catch (Exception e) {
 			mailService.sendErorrMail(e.toString());
-			return "error/wrongAccess";
+			return "{\"nope\":\"wrongAccess\"}";
 		}
-		System.out.println("ㅇㅅㅇ");
 		return null;
 	}
 	
@@ -144,7 +128,7 @@ public class WordController {
 		try {
 			int wordbookId = Integer.parseInt(wordbookid);
 			m.addAttribute("wordbookId", wordbookId);
-			m.addAttribute("title", wordbookService.selectWordbookById(wordbookId).getTitle());
+			m.addAttribute("title", wordbookService.selectWordbookById(wordbookId).getTitle());  //단어장 이름
 		} catch (NumberFormatException | IllegalStateException e) {
 			return "error/wrongAccess";  //잘못된 접근(주소로 직접 접근 등)
 		} catch (Exception e) {
@@ -163,66 +147,66 @@ public class WordController {
 		try{
 			loginMember = (MemberDto) session.getAttribute("loginMember");
 			if(loginMember.getCertified() == 0) {
-				System.out.println("인서트 미인증");
 				return "{\"nope\":\"certifyPlease\"}";  //미인증 시
 			}
 			loginId = loginMember.getId();  //로그인 아이디 확인
 			int wordbookId = Integer.parseInt(wordbookid);
 			try {
 				if (wordbookService.selectWordbookById(wordbookId).getOwnerId() != loginId) {  //단어장 주인일 아닐경우
-					System.out.println("추가 권한 없음");
 					return "{\"nope\":\"notAllowed\"}";
 				}
 			} catch (NullPointerException e) {  //존재하지 않는 단어장
-				System.out.println("인서트 NPE 1");
+				mailService.sendErorrMail(e.toString());
 				return "{\"nope\":\"notExist\"}";
 			} catch (Exception e) {
 				mailService.sendErorrMail(e.toString());
-				return "error/wrongAccess";
+				return "{\"nope\":\"wrongAccess\"}";
 			}
-			String address = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();
-			File origFile = new File(address);
+			String address = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();  //파일 경로
+			File origFile = new File(address);  //원래 파일
 			if(word!=null) {
 				try(BufferedReader br = new BufferedReader(new InputStreamReader(
-						new FileInputStream(origFile),"UTF-8"))){
-					JSONParser jParser = new JSONParser();
-					JSONArray jsonArray = (JSONArray)jParser.parse(br);
-					String origStr = jsonArray.toString();
-					origStr = origStr.replace(']', ',');
-					int index = jsonArray.size();
+						new FileInputStream(origFile),"UTF-8"))){  //원래 파일을 불러옴
+					JSONParser jParser = new JSONParser();  //json 사용을 위한 객체
+					JSONArray jsonArray = (JSONArray)jParser.parse(br);  //파일을 사용할 수 있게 변환
+					String origStr = jsonArray.toString();  //원래 파일의 내용
+					origStr = origStr.replace(']', ',');  //끝을 더 이어갈 수 있게 변경
+					int index = jsonArray.size();  //기존 단어 갯수
 					for (int i = 0; i < word.length; i++) {
-						if(!word[i].isBlank() || !trans[i].isBlank()) {
+						if(!word[i].isBlank() || !trans[i].isBlank()) {  //둘 다 공백인게 아니면
 							origStr += "{\"index\":" + index + ",\"word\":\"" + word[i] + "\",\"trans\":\""
 									+ trans[i] + "\",\"favorite\":" + 0 + "},";
 							index++;
 						}
 					}
-					origStr = origStr.substring(0,origStr.length()-1);
-					origStr +="]";
+					origStr = origStr.substring(0,origStr.length()-1);  //마지막 쉼표 제거
+					origStr +="]";  //json 형태 끝
 					try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(origFile),"UTF-8"))){
 						bw.write(origStr);
 						bw.flush();
-					}
+					}  //원래 파일에서 덮어씀
 				} catch (UnsupportedEncodingException e) {
-					System.out.println("what");
+					mailService.sendErorrMail(e.toString());
+					return "{\"nope\":\"wrongAccess\"}";
 				} catch (FileNotFoundException e) {
-					System.out.println("인서트 FNFE");
+					mailService.sendErorrMail(e.toString());
 					return "{\"nope\":\"notExist\"}";
 				} catch (IOException e) {
-					System.out.println("인서트 IOE");
+					mailService.sendErorrMail(e.toString());
 					return "{\"nope\":\"wrongAccess\"}";
 				} catch (ParseException e) {
 					mailService.sendErorrMail(e.toString());
+					return "{\"nope\":\"wrongAccess\"}";
 				}
 			}
 		} catch (NullPointerException e) {  //비로그인 시
-			System.out.println("인서트 NPE 2");
 			return "{\"nope\":\"loginPlease\"}";
 		} catch (NumberFormatException | IllegalStateException e) {
+			mailService.sendErorrMail(e.toString());
 			return "{\"nope\":\"wrongAccess\"}";  //잘못된 접근(주소로 직접 접근 등)
 		} catch (Exception e) {
 			mailService.sendErorrMail(e.toString());
-			return "error/wrongAccess";
+			return "{\"nope\":\"wrongAccess\"}";
 		}
 		return "{\"message\":\"success\"}";
 	}
@@ -242,17 +226,22 @@ public class WordController {
 				return "error/wrongAccess";
 			}
 			else {
-				wordbookId = Integer.parseInt(wordbookid);
+				try{
+					wordbookId = Integer.parseInt(wordbookid);
+				} catch (NumberFormatException | IllegalStateException e) {  //wordbookid가 숫자가 아닐 경우
+					mailService.sendErorrMail(e.toString());
+					return "error/wrongAccess";
+				}
 			}
-			JSONParser parser = new JSONParser();
-			String regex = "[^-^{A-Z}^{a-z}]+";
-			String clientId = "FaGdiV_h1RX1lMv2w2tW";// 애플리케이션 클라이언트 아이디값";
-			String clientSecret = "NhiFrOn9g1";// 애플리케이션 클라이언트 시크릿값";
+			JSONParser parser = new JSONParser();  //json을 사용하기 위한 객체
+			String regex = "[^-^{A-Z}^{a-z}]+";  //-, 알파벳을 제외한 모든 문자
+			String clientId = "FaGdiV_h1RX1lMv2w2tW";// 애플리케이션 클라이언트 아이디값
+			String clientSecret = "NhiFrOn9g1";// 애플리케이션 클라이언트 시크릿값
 			String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
-			Map<String, String> requestHeaders = new HashMap<>();
-			requestHeaders.put("X-Naver-Client-Id", clientId);
-			requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-			String filePath;
+			Map<String, String> requestHeaders = new HashMap<>();  //api
+			requestHeaders.put("X-Naver-Client-Id", clientId);  //api
+			requestHeaders.put("X-Naver-Client-Secret", clientSecret);  //api
+			String filePath;  //파일 경로
 			try {
 				filePath = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();
 			} catch (Exception e) {
@@ -260,23 +249,23 @@ public class WordController {
 				return "error/wrongAccess";
 			}
 			File origFile = new File(filePath);
-			JSONParser jParser = new JSONParser();
-			if (file != null) {
-				String fileExtension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-				if (fileExtension.equals("txt")) {
+			JSONParser jParser = new JSONParser();  //json을 사용하기 위한 객체
+			if (file != null) {  //파일 업로드 시
+				String fileExtension = file.getName().substring(file.getName().lastIndexOf(".") + 1);  //파일 확장자를 뽑아냄
+				if (fileExtension.equals("txt")) {  //txt가 맞으면
 					try (BufferedReader obr = new BufferedReader(
-								new InputStreamReader(new FileInputStream(origFile), "UTF-8"));
+								new InputStreamReader(new FileInputStream(origFile), "UTF-8"));  //기존 파일 가져옴
 							BufferedReader br = new BufferedReader(
-									new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
+									new InputStreamReader(new FileInputStream(file), "UTF-8"))) {  //업로드 파일
 						JSONArray jsonArray = (JSONArray)jParser.parse(obr);  //기존 파일 사용가능 형태로 변환
 						
-						Long[] origIndex = new Long[jsonArray.size()];
-						String[] origWord = new String[jsonArray.size()];
-						String[] origTrans = new String[jsonArray.size()];
-						Long[] origFavorite = new Long[jsonArray.size()];
+						Long[] origIndex = new Long[jsonArray.size()];  //기존 index 배열
+						String[] origWord = new String[jsonArray.size()];  //기존 word 배열
+						String[] origTrans = new String[jsonArray.size()];  //기존 trans 배열
+						Long[] origFavorite = new Long[jsonArray.size()];  //기존 favorite 배열
 						int x = 0;
 						for (Object o : jsonArray) {
-							JSONObject wordObj = (JSONObject) o;
+							JSONObject wordObj = (JSONObject) o;  //일반 Object를 json형식으로 변환
 							origIndex[x] = (Long) wordObj.get("index");
 							origWord[x] = (String) wordObj.get("word");
 							origTrans[x] = (String) wordObj.get("trans");
@@ -284,9 +273,7 @@ public class WordController {
 							x++;
 						}
 						int index = jsonArray.size();  //추가하는 단어의 index 시작 값
-						/*String jsonText = jsonArray.toString();  //기존 파일 내용 String
-						jsonText = jsonText.replace(']', ',');  //json 끝의 ]를 ,로 변경
-						*/						String s;  //readLine() 메서드를 위한 임시 String
+						String s;  //readLine() 메서드를 위한 임시 String
 						String fileText = "";  //업로드한 파일의 내용을 담을 String
 						while ((s = br.readLine()) != null) {  //남은 내용이 있으면 실행
 							fileText += (s + " ");
@@ -297,27 +284,28 @@ public class WordController {
 						int[] count = new int[textArr.length];  //같은 단어 등장 횟수
 						String[] responseBody = new String[textArr.length];  //word를 보낸 결과로 반환되는 json 형태를 가진 String을 담을 배열
 						for (int i = 0; i < textArr.length; i++) {
-							if (textArr[i] != null && textArr[i].length() > 1) {
+							if (textArr[i] != null && textArr[i].length() > 1) {  //한 글자 단어 무시
 								try {
-									word = URLEncoder.encode(textArr[i], "UTF-8");
+									word = URLEncoder.encode(textArr[i], "UTF-8");  //인코딩
 								} catch (UnsupportedEncodingException e) {
+									mailService.sendErorrMail(e.toString());
 									throw new RuntimeException("인코딩 실패", e);
 								}
 								count[i] = 1;
 								for (int j = i + 1; j < textArr.length; j++) {
-									if (textArr[j] != null && textArr[j].equals(textArr[i])) {
-										textArr[j] = null;
-										count[i]++;
+									if (textArr[j] != null && textArr[j].equals(textArr[i])) {  //현재 단어 이후
+										textArr[j] = null;  //같은 단어 삭제
+										count[i]++;  //횟수 증가
 									}
 								}
-								responseBody[i] = post(apiURL, requestHeaders, word);
+								responseBody[i] = post(apiURL, requestHeaders, word);  //api 결과
 							} else {
-								count[i] = 0;
+								count[i] = 0;  //null인 경우
 							}
 						}
-						String tempEng;
-						int tempCnt;
-						String tempTrans;
+						String tempEng;  //순서 변경을 위한 임시 String
+						int tempCnt;  //순서 변경을 위한 임시 int
+						String tempTrans;  //순서 변경을 위한 임시 String
 						String[] transArr = new String[textArr.length];
 						for (int i = 0; i < textArr.length; i++) {
 							for (int j = 0; j < textArr.length - 1 - i; j++) {
@@ -333,9 +321,9 @@ public class WordController {
 									responseBody[j + 1] = tempTrans;
 								}
 							}
-						}
-						String jsonText="[";
-						boolean isContaining;
+						}  //count 내림차순
+						String jsonText="[";  //json 형태 시작
+						boolean isContaining;  //기존 단어에 이미 있었는가
 						for (int i = 0; i < textArr.length; i++) {
 							if (textArr[i] != null && textArr[i].length() > 1) {
 								try {
@@ -343,18 +331,18 @@ public class WordController {
 									JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);  //json으로 변환
 									JSONObject message = (JSONObject) resultJson.get("message");  //json의 key(message)로 값 반환
 									JSONObject result = (JSONObject) message.get("result");  //json의 key(result)로 값 반환
-									transArr[i] = (String) result.get("translatedText");
+									transArr[i] = (String) result.get("translatedText");  //해석 배열에 해석값을 담음
 									for(int j=0; j<origWord.length; j++) {
-										if(textArr[i].equals(origWord[j])) {
-											textArr[i]=null;
-											for(String t : origTrans[j].split(", ")) {
-												if(t.equals(transArr[i])) {
+										if(textArr[i].equals(origWord[j])) {  //기존에 단어가 이미 있었다면
+											textArr[i]=null;  //현재 단어 삭제
+											for(String t : origTrans[j].split(", ")) {  //쉼표 후 띄어쓰기 단위로 뜻을 분리
+												if(t.equals(transArr[i])) {  //이미 같은 뜻이 있었는지 판단
 													isContaining=true;
 													break;
 												}
 											}
-											if(!isContaining) {
-												origTrans[j] += ", " + transArr[i];
+											if(!isContaining) {  //새로운 뜻이라면
+												origTrans[j] += ", " + transArr[i];  //기존 뜻에 추가
 											}
 											break;
 										}
@@ -364,34 +352,33 @@ public class WordController {
 								}
 							}
 						}
-						for (int i = 0; i < origWord.length; i++) {
+						for (int i = 0; i < origWord.length; i++) {  //기존 단어를 먼저 씀
 							jsonText += "{\"index\":" + origIndex[i] + ",\"word\":\"" + origWord[i] + "\",\"trans\":\""
 									+ origTrans[i] + "\",\"favorite\":" + origFavorite[i] + "},";
 						}
-						for (int i = 0; i < textArr.length; i++) {
+						for (int i = 0; i < textArr.length; i++) {  //추가되는 단어를 씀
 							if (textArr[i]!=null && !textArr[i].equals(transArr[i])) {
 								jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
 										+ transArr[i] + "\",\"favorite\":" + 0 + "},";
 								index++;
 							}
 						}
-						jsonText = jsonText.substring(0, jsonText.length() - 1);
-						jsonText += "]";
+						jsonText = jsonText.substring(0, jsonText.length() - 1);  //마지막 쉼표 제거
+						jsonText += "]";  //json 마지막 문자
 						try(BufferedWriter obw = new BufferedWriter(
 									new OutputStreamWriter(new FileOutputStream(origFile), "UTF-8"))){
 							obw.write(jsonText);
 							obw.flush();
-						}
+						}  //기존 파일에 덮어씀
 						return "word/wordUpdateComplete";
 					} catch (FileNotFoundException e) {
 						mailService.sendErorrMail(e.toString());
-						return null;
+						return "error/wrongAccess";
 					} catch (IOException e) {
 						mailService.sendErorrMail(e.toString());
-						return null;
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						mailService.sendErorrMail(e1.toString());
+						return "error/wrongAccess";
+					} catch (ParseException e) {
+						mailService.sendErorrMail(e.toString());
 					}
 				} else { // 파일 형식이 txt가 아닐 경우
 					return "error/wrongFileType"; //``
@@ -408,44 +395,45 @@ public class WordController {
 					text = text.replaceAll(regex, " ");
 					String[] textArr = text.split(" ");
 					String word;
-					Long[] origIndex = new Long[jsonArray.size()];
-					String[] origWord = new String[jsonArray.size()];
-					String[] origTrans = new String[jsonArray.size()];
-					Long[] origFavorite = new Long[jsonArray.size()];
+					Long[] origIndex = new Long[jsonArray.size()];  //기존 index 배열
+					String[] origWord = new String[jsonArray.size()];  //기존 word 배열
+					String[] origTrans = new String[jsonArray.size()];  //기존 trans 배열
+					Long[] origFavorite = new Long[jsonArray.size()];  //기존 favorite 배열
 					int x = 0;
 					for (Object o : jsonArray) {
-						JSONObject wordObj = (JSONObject) o;
+						JSONObject wordObj = (JSONObject) o;  //일반 Object를 json형식으로 변환
 						origIndex[x] = (Long) wordObj.get("index");
 						origWord[x] = (String) wordObj.get("word");
 						origTrans[x] = (String) wordObj.get("trans");
 						origFavorite[x] = (Long) wordObj.get("favorite");
 						x++;
 					}
-					int[] count = new int[textArr.length];
-					String[] responseBody = new String[textArr.length];
+					int[] count = new int[textArr.length];  //단어 횟수
+					String[] responseBody = new String[textArr.length];  //api 결과 배열
 					for (int i = 0; i < textArr.length; i++) {
 						if (textArr[i] != null && textArr[i].length() > 1) {
 							try {
-								word = URLEncoder.encode(textArr[i], "UTF-8");
+								word = URLEncoder.encode(textArr[i], "UTF-8");  //인코딩
 							} catch (UnsupportedEncodingException e) {
+								mailService.sendErorrMail(e.toString());
 								throw new RuntimeException("인코딩 실패", e);
 							}
 							count[i] = 1;
 							for (int j = i + 1; j < textArr.length; j++) {
-								if (textArr[j] != null && textArr[j].equals(textArr[i])) {
-									textArr[j] = null;
-									count[i]++;
+								if (textArr[j] != null && textArr[j].equals(textArr[i])) {  //현재 단어 이후
+									textArr[j] = null;  //같은 단어 삭제
+									count[i]++;  //횟수 증가
 								}
 							}
-							responseBody[i] = post(apiURL, requestHeaders, word);
+							responseBody[i] = post(apiURL, requestHeaders, word);  //api 결과
 						} else {
-							count[i] = 0;
+							count[i] = 0;  //null인 경우
 						}
 					}
+					String tempEng;  //순서 변경을 위한 임시 String
+					int tempCnt;  //순서 변경을 위한 임시 int
+					String tempTrans;  //순서 변경을 위한 임시 String
 					String[] transArr = new String[textArr.length];
-					String tempEng;
-					int tempCnt;
-					String tempTrans;
 					for (int i = 0; i < textArr.length; i++) {
 						for (int j = 0; j < textArr.length - 1 - i; j++) {
 							if (count[j] > count[j + 1]) {
@@ -460,9 +448,9 @@ public class WordController {
 								responseBody[j + 1] = tempTrans;
 							}
 						}
-					}
-					String jsonText="[";
-					boolean isContaining;
+					}  //count 내림차순
+					String jsonText="[";  //json 형태 시작
+					boolean isContaining;  //기존 단어에 이미 있었는가
 					for (int i = 0; i < textArr.length; i++) {
 						if (textArr[i] != null && textArr[i].length() > 1) {
 							try {
@@ -470,18 +458,18 @@ public class WordController {
 								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);  //json으로 변환
 								JSONObject message = (JSONObject) resultJson.get("message");  //json의 key(message)로 값 반환
 								JSONObject result = (JSONObject) message.get("result");  //json의 key(result)로 값 반환
-								transArr[i] = (String) result.get("translatedText");
+								transArr[i] = (String) result.get("translatedText");  //해석 배열에 해석값을 담음
 								for(int j=0; j<origWord.length; j++) {
-									if(textArr[i].equals(origWord[j])) {
-										textArr[i]=null;
-										for(String t : origTrans[j].split(", ")) {
-											if(t.equals(transArr[i])) {
+									if(textArr[i].equals(origWord[j])) {  //기존에 단어가 이미 있었다면
+										textArr[i]=null;  //현재 단어 삭제
+										for(String t : origTrans[j].split(", ")) {  //쉼표 후 띄어쓰기 단위로 뜻을 분리
+											if(t.equals(transArr[i])) {  //이미 같은 뜻이 있었는지 판단
 												isContaining=true;
 												break;
 											}
 										}
-										if(!isContaining) {
-											origTrans[j] += ", " + transArr[i];
+										if(!isContaining) {  //새로운 뜻이라면
+											origTrans[j] += ", " + transArr[i];  //기존 뜻에 추가
 										}
 										break;
 									}
@@ -491,42 +479,41 @@ public class WordController {
 							}
 						}
 					}
-					for (int i = 0; i < origWord.length; i++) {
+					for (int i = 0; i < origWord.length; i++) {  //기존 단어를 먼저 씀
 						jsonText += "{\"index\":" + origIndex[i] + ",\"word\":\"" + origWord[i] + "\",\"trans\":\""
 								+ origTrans[i] + "\",\"favorite\":" + origFavorite[i] + "},";
 					}
-					for (int i = 0; i < textArr.length; i++) {
+					for (int i = 0; i < textArr.length; i++) {  //추가되는 단어를 씀
 						if (textArr[i]!=null && !textArr[i].equals(transArr[i])) {
 							jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
 									+ transArr[i] + "\",\"favorite\":" + 0 + "},";
 							index++;
 						}
 					}
-					jsonText = jsonText.substring(0, jsonText.length() - 1);
-					jsonText += "]";
+					jsonText = jsonText.substring(0, jsonText.length() - 1);  //마지막 쉼표 제거
+					jsonText += "]";  //json 마지막 문자
 					try(BufferedWriter obw = new BufferedWriter(
-							new OutputStreamWriter(new FileOutputStream(origFile), "UTF-8"))){
-					obw.write(jsonText);
-					obw.flush();
-				}
+								new OutputStreamWriter(new FileOutputStream(origFile), "UTF-8"))){
+						obw.write(jsonText);
+						obw.flush();
+					}  //기존 파일에 덮어씀
 					return "word/wordUpdateComplete";
-
 				} catch (UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
 					mailService.sendErorrMail(e1.toString());
+					return "error/wrongAccess";
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					mailService.sendErorrMail(e1.toString());
+					return "error/wrongAccess";
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					mailService.sendErorrMail(e1.toString());
+					return "error/wrongAccess";
 				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
 					mailService.sendErorrMail(e1.toString());
+					return "error/wrongAccess";
 				}
 			}
 		}
-		return "wordbook/wordbookUpdateComplete";  //``
+		return "word/wordUpdateComplete";
 	}
 	
 	//단어 개별 수정 기능
@@ -538,22 +525,20 @@ public class WordController {
 		try{
 			loginMember = (MemberDto) session.getAttribute("loginMember");
 			if(loginMember.getCertified() == 0) {
-				System.out.println("업데이트 미인증");
 				return "{\"nope\":\"certifyPlease\"}";  //미인증 시
 			}
 			loginId = loginMember.getId();  //로그인 아이디 확인
 			int wordbookId = Integer.parseInt(wordbookid);
 			try {
 				if (wordbookService.selectWordbookById(wordbookId).getOwnerId() != loginId) {  //단어장 주인일 아닐경우
-					System.out.println("업데이트 권한 없음");
 					return "{\"nope\":\"notAllowed\"}";
 				}
 			} catch (NullPointerException e) {  //존재하지 않는 단어장
-				System.out.println("업데이트 NPE 1");
+				mailService.sendErorrMail(e.toString());
 				return "{\"nope\":\"notExist\"}";
 			} catch (Exception e) {
 				mailService.sendErorrMail(e.toString());
-				return "error/wrongAccess";
+				return "{\"nope\":\"wrongAccess\"}";
 			}
 			String address = wordbookService.selectWordbookById(wordbookId).getWordbookAddress();
 			int tempIndex;
@@ -592,26 +577,30 @@ public class WordController {
 				bw.append(']');
 				bw.flush();
 			} catch (UnsupportedEncodingException e) {
+				mailService.sendErorrMail(e.toString());
+				return "{\"nope\":\"wrongAccess\"}";
 			} catch (FileNotFoundException e) {
-				System.out.println("업데이트 FNFE");
+				mailService.sendErorrMail(e.toString());
 				return "{\"nope\":\"notExist\"}";
 			} catch (IOException e) {
-				System.out.println("업데이트 IOE");
+				mailService.sendErorrMail(e.toString());
 				return "{\"nope\":\"wrongAccess\"}";
 			}
 		} catch (NullPointerException e) {  //비로그인 시
-			System.out.println("업데이트 NPE 2");
 			mailService.sendErorrMail(e.toString());
 			return "{\"nope\":\"loginPlease\"}";
 		} catch (NumberFormatException | IllegalStateException e) {
+			mailService.sendErorrMail(e.toString());
 			return "{\"nope\":\"wrongAccess\"}";  //잘못된 접근(주소로 직접 접근 등)
 		} catch (Exception e) {
 			mailService.sendErorrMail(e.toString());
-			return "error/wrongAccess";
+			return "{\"nope\":\"wrongAccess\"}";
 		}
 		return "{\"message\":\"success\"}";
 	}
 	
+	
+	//여기서부턴 api
 	private static String post(String apiUrl, Map<String, String> requestHeaders, String text) {
 		HttpURLConnection con = connect(apiUrl);
 		String postParams = "source=en&target=ko&text=" + text; // 원본언어: 한국어 (ko) -> 목적언어: 영어 (en)

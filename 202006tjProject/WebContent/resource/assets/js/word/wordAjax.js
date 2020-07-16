@@ -96,7 +96,6 @@ function setList(){
 			tInputVal[i]=data[i].trans;
 			fInputVal[i]=data[i].favorite;
 		}
-		console.log(wInputVal);
 		showList(data, iInputVal, wInputVal, tInputVal, fInputVal);  //단어를 펼침
 		windowWidth = $(window).width();  //창 너비
 		if(windowWidth>=480){  //480px 이상
@@ -184,13 +183,11 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){  //단어�
 			if(iInputVal.length%2==0){  //칸 수가 짝수일 경우
 				if(insertBtn.innerText == "추가" && updateBtn.innerText == "수정"){  //평상시
 					if((iInputVal.length-1-i)%2==0){  //큼, 전체짝수칸, 평상시, 홀수칸
-					console.log("1");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 						+wInputVal[i] + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 						+ tInputVal[i] + "' /><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 					}
 					else{  //큼, 전체짝수칸, 평상시, 짝수칸
-					console.log("2");
 						$("tr").eq(0).prepend("<td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 						+wInputVal[i] + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 						+ tInputVal[i] + "' /><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td>");
@@ -198,13 +195,11 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){  //단어�
 				}
 				else if(updateBtn.innerText == "수정완료"){
 					if((iInputVal.length-1-i)%2==0){  //큼, 전체짝수칸, 수정시, 홀수칸
-					console.log("3");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 						+wInputVal[i] + "' style='width:80%'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 						+ tInputVal[i] + "' style='width:80%'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 					}
 					else{  //큼, 전체짝수칸, 수정시, 짝수칸
-					console.log("4");
 						$("tr").eq(0).prepend("<td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 						+wInputVal[i] + "' style='width:80%'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 						+ tInputVal[i] + "' style='width:80%'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td>");
@@ -216,13 +211,11 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){  //단어�
 				else {  //큼, 전체짝수칸, 추가시
 					if((iInputVal.length-1-i)%2==0){  //큼, 전체짝수칸, 추가시, 홀수칸
 						if(i<data.length){  //큼, 전체짝수칸, 추가시, 홀수칸, 기존데이터
-							console.log("5");
 								$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+data[i].index+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 								+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 								+ data[i].trans + "' /><input name='favorite' type='hidden' value='"+data[i].favorite+"'/></td></tr>");
 						}
 						else{  //큼, 전체짝수칸, 추가시, 홀수칸, 신규데이터
-							console.log("6");
 							$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 							+wInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 							+ tInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
@@ -230,13 +223,11 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){  //단어�
 					}
 					else {   //큼, 전체짝수칸, 추가시, 짝수칸
 						if(i<data.length){   //큼, 전체짝수칸, 추가시, 짝수칸, 기존데이터
-						console.log("7");
 							$("tr").eq(0).prepend("<td><input name='index' type='hidden' value='"+data[i].index+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 							+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 							+ data[i].trans + "' /><input name='favorite' type='hidden' value='"+data[i].favorite+"'/></td>");
 						}
 						else{   //큼, 전체짝수칸, 추가시, 짝수칸, 신규데이터
-						console.log("8");
 							$("tr").eq(0).prepend("<td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 							+wInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 							+ tInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td>");
@@ -247,19 +238,16 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){  //단어�
 			else {  //전체홀수칸
 				if(insertBtn.innerText == "추가" && updateBtn.innerText == "수정"){  //평상시
 					if(i==iInputVal.length-1){  //전체홀수칸, 평상시, 첫 칸
-					console.log("9");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 						+wInputVal[i] + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 						+ tInputVal[i] + "' /><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 					}
 					else if ((iInputVal.length-1-i)%2==1){  //전체홀수칸, 평상시, 짝수칸
-					console.log("10");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 						+wInputVal[i] + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 						+ tInputVal[i] + "' /><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 					}
 					else {  //전체홀수칸, 평상시, 홀수칸
-					console.log("11");
 						$("tr").eq(0).prepend("<td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 						+wInputVal[i] + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 						+ tInputVal[i] + "' /><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td>");
@@ -267,19 +255,16 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){  //단어�
 				}
 				else if(updateBtn.innerText == "수정완료"){  //전체홀수칸, 수정시
 					if(i==iInputVal.length-1){  //전체홀수칸, 수정시, 첫 칸
-					console.log("12");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 						+wInputVal[i] + "' style='width:80%'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 						+ tInputVal[i] + "' style='width:80%'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 					}
 					else if ((iInputVal.length-1-i)%2==1){  //전체홀수칸, 수정시, 짝수칸
-					console.log("13");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 						+wInputVal[i] + "' style='width:80%'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 						+ tInputVal[i] + "' style='width:80%'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 					}
 					else {  //전체홀수칸, 수정시, 홀수칸
-					console.log("14");
 						$("tr").eq(0).prepend("<td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 						+wInputVal[i] + "' style='width:80%'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 						+ tInputVal[i] + "' style='width:80%'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td>");
@@ -290,20 +275,17 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){  //단어�
 				}
 				else{  //전체홀수칸, 추가시
 					if(i==iInputVal.length-1){  //전체홀수칸, 추가시, 첫 칸
-						console.log("15");
 						$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 						+wInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 						+ tInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
 					}
 					else if((iInputVal.length-1-i)%2==1){  //전체홀수칸, 추가시, 짝수칸
 						if(i<data.length){  //전체홀수칸, 추가시, 짝수칸, 기존데이터
-						console.log("16");
 							$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+data[i].index+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 							+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 							+ data[i].trans + "' /><input name='favorite' type='hidden' value='"+data[i].favorite+"'/></td></tr>");
 						}
 						else{  //전체홀수칸, 추가시, 짝수칸, 신규데이터
-						console.log("17");
 							$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 							+wInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 							+ tInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");
@@ -311,13 +293,11 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){  //단어�
 					}
 					else{  //전체홀수칸, 추가시, 홀수칸
 						if(i<data.length){  //전체홀수칸, 추가시, 홀수칸, 기존데이터
-						console.log("18");
 							$("tr").eq(0).prepend("<td><input name='index' type='hidden' value='"+data[i].index+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 							+data[i].word + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 							+ data[i].trans + "' /><input name='favorite' type='hidden' value='"+data[i].favorite+"'/></td>");
 						}
 						else{  //전체홀수칸, 추가시, 홀수칸, 신규데이터
-						console.log("19");
 							$("tr").eq(0).prepend("<td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' value='"
 							+wInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/></td><td><input name='trans' id='trans"+i+"' type='text' value='" 
 							+ tInputVal[i] + "' onkeyup='toggleAddLine("+i+")'/><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td>");
@@ -330,7 +310,6 @@ function showList(data, iInputVal, wInputVal, tInputVal, fInputVal){  //단어�
 	else {  //창 너비가 480px 미만인 경우
 		for(let i=iInputVal.length-1; i>=0; i--){  //가장 index가 큰 단어부터 prepend => 아래로 점점 밀려나는 배치
 			if(insertBtn.innerText == "추가" && updateBtn.innerText == "수정"){  //평상시
-				console.log("20");
 				$("table").eq(0).prepend("<tr><td><input name='index' type='hidden' value='"+iInputVal[i]+"'/><input name='word' id='word"+i+"' type='text' disabled='disabled' value='"
 						+wInputVal[i] + "' /></td><td><input name='trans' id='trans"+i+"' type='text' disabled='disabled' value='" 
 						+ tInputVal[i] + "' /><input name='favorite' type='hidden' value='"+fInputVal[i]+"'/></td></tr>");

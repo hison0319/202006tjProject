@@ -429,64 +429,64 @@ public class WordbookController {
 	public String wordbookInsert(HttpSession session, Model m, String title,
 			@RequestParam(required = false) String text, @RequestParam(required = false) File file) {
 		MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
-
 		if (loginMember == null) { // 비로그인
 			return "error/loginPlease";
 		} else if (loginMember.getCertified() == 0) { // 미인증
 			return "error/certifyPlease";
 		} else { // 정상 작동
-			JSONParser parser = new JSONParser();
-			String regex = "[^-^{A-Z}^{a-z}]+";
-			String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY_MM_dd"));
-			String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH_mm_ss"));
-			Path relativePath = Paths.get("");
-			File path = new File("..\\eclipse-workspace\\jsonFiles\\" + today);
-			File json = new File("..\\eclipse-workspace\\jsonFiles\\" + today + "\\" + now + ".json");
-			path.mkdirs();
-			String jsonText = "[";
-			String clientId = "FaGdiV_h1RX1lMv2w2tW";// 애플리케이션 클라이언트 아이디값";
-			String clientSecret = "NhiFrOn9g1";// 애플리케이션 클라이언트 시크릿값";
-			String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
-			Map<String, String> requestHeaders = new HashMap<>();
-			requestHeaders.put("X-Naver-Client-Id", clientId);
-			requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-			String tempEng;
-			int tempCnt;
-			String tempTrans;
-			if (file != null) {
-				String fileExtension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-				if (fileExtension.equals("txt")) {
+			JSONParser parser = new JSONParser();  //json을 사용하기 위한 객체
+			String regex = "[^-^{A-Z}^{a-z}]+";  //-와 알파벳을 제외한 모든 문자
+			String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY_MM_dd"));  //폴더를 위한 현재 날짜
+			String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH_mm_ssSSS"));  //파일명을 위한 현재 시각
+			Path relativePath = Paths.get("");  //상대경로
+			File path = new File("..\\eclipse-workspace\\jsonFiles\\" + today);  //폴더 생성용 파일 객체
+			File json = new File("..\\eclipse-workspace\\jsonFiles\\" + today + "\\" + loginMember.getId() + "-" + now + ".json");  //json 파일
+			path.mkdirs();  //폴더 생성
+			String jsonText = "[";  //json 파일 내용 시작
+			String clientId = "FaGdiV_h1RX1lMv2w2tW";  //애플리케이션 클라이언트 아이디값
+			String clientSecret = "NhiFrOn9g1";  //애플리케이션 클라이언트 시크릿값
+			String apiURL = "https://openapi.naver.com/v1/papago/n2mt";  //api 주소
+			Map<String, String> requestHeaders = new HashMap<>();  //api 관련 무언가
+			requestHeaders.put("X-Naver-Client-Id", clientId);  //api 관련 무언가
+			requestHeaders.put("X-Naver-Client-Secret", clientSecret);  //api 관련 무언가
+			String tempEng;  //순서 변경을 위한 임시 String
+			int tempCnt;  //순서 변경을 위한 임시 int
+			String tempTrans;  //순서 변경을 위한 임시 String
+			if (file != null) {  //파일 업로드 시
+				String fileExtension = file.getName().substring(file.getName().lastIndexOf(".") + 1);  //확장자 뽑아내기
+				if (fileExtension.equals("txt")) {  //확장자가 txt가 맞으면
 					try (BufferedReader br = new BufferedReader(
 							new InputStreamReader(new FileInputStream(file), "UTF-8"));
 							BufferedWriter bw = new BufferedWriter(
 									new OutputStreamWriter(new FileOutputStream(json), "UTF-8"))) {
-						String s;
+						String s;  //readLine을 위한 임시 String
 						String fileText = "";
-						while ((s = br.readLine()) != null) {
-							fileText += (s + " ");
+						while ((s = br.readLine()) != null) {  //마지막 줄이 끝날때까지
+							fileText += (s + " ");  //한 줄씩 읽어서 저장
 						}
-						fileText = fileText.replaceAll(regex, " ");
-						String[] textArr = fileText.split("\\s"); // " " 에서 변경
-						String word;
-						int[] count = new int[textArr.length];
-						String[] responseBody = new String[textArr.length];
+						fileText = fileText.replaceAll(regex, " ");  //-. 알파벳 외 모든 문자 공백으로 변경
+						String[] textArr = fileText.split("\\s");  //공백문자를 기준으로 단어로 나눔
+						String word;  //인코딩 단어를 담을 임시 String
+						int[] count = new int[textArr.length];  //각 단어가 나온 횟수
+						String[] responseBody = new String[textArr.length];  //api를 돌려서 나오는 결과json
 						for (int i = 0; i < textArr.length; i++) {
-							if (textArr[i] != null && textArr[i].length() > 1) {
+							if (textArr[i] != null && textArr[i].length() > 1) {  //한 글자 단어는 무시
 								try {
-									word = URLEncoder.encode(textArr[i], "UTF-8");
+									word = URLEncoder.encode(textArr[i], "UTF-8");  //인코딩
 								} catch (UnsupportedEncodingException e) {
+									mailService.sendErorrMail(e.toString());
 									throw new RuntimeException("인코딩 실패", e);
 								}
 								count[i] = 1;
-								for (int j = i + 1; j < textArr.length; j++) {
-									if (textArr[j] != null && textArr[j].equals(textArr[i])) {
-										textArr[j] = null;
-										count[i]++;
+								for (int j = i + 1; j < textArr.length; j++) {  //현재 단어 이후의 단어들 모두 확인
+									if (textArr[j] != null && textArr[j].equals(textArr[i])) {  //같은 단어가 있으면
+										textArr[j] = null;  //나중에 나온 단어를 지움
+										count[i]++;  //카운트 증가
 									}
 								}
-								responseBody[i] = post(apiURL, requestHeaders, word);
+								responseBody[i] = post(apiURL, requestHeaders, word);  //api 전송 결과
 							} else {
-								count[i] = 0;
+								count[i] = 0;  //null인 경우
 							}
 						}
 						for (int i = 0; i < textArr.length; i++) {
@@ -503,28 +503,28 @@ public class WordbookController {
 									responseBody[j + 1] = tempTrans;
 								}
 							}
-						}
+						}  //count 순으로 순서 변경
 						int index = 0;
 						for (int i = 0; i < textArr.length; i++) {
 							if (textArr[i] != null && textArr[i].length() > 1) {
 								try {
-									JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
-									JSONObject message = (JSONObject) resultJson.get("message");
-									JSONObject result = (JSONObject) message.get("result");
-									if (!textArr[i].equals(result.get("translatedText"))) {
+									JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);  //api 결과를 json으로 변경
+									JSONObject message = (JSONObject) resultJson.get("message");  //결과에서 message 파트 가져옴
+									JSONObject result = (JSONObject) message.get("result");  //message에서 result 파트 가져옴
+									if (!textArr[i].equals(result.get("translatedText"))) {  //번역값과 입력값이 같으면 제외
 										jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
 												+ result.get("translatedText") + "\",\"favorite\":" + 0 + "},";
-										index++;
+										index++;  //인덱스를 1씩 증가시키며 저장
 									}
 								} catch (Exception e) {
 									mailService.sendErorrMail(e.toString());
 								}
 							}
 						}
-						jsonText = jsonText.substring(0, jsonText.length() - 1);
-						jsonText += "]";
+						jsonText = jsonText.substring(0, jsonText.length() - 1);  //마지막 쉼표 제거
+						jsonText += "]";  //json 형식 마지막 문자
 						bw.write(jsonText);
-						bw.flush();
+						bw.flush();  //파일 쓰기
 
 						m.addAttribute("text", jsonText);
 
@@ -539,7 +539,7 @@ public class WordbookController {
 							}
 							wordbookService.insertWordbook(new WordbookDto(0, loginMember.getId(), 0, 0, title,
 									relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\" + today
-											+ "\\" + now + ".json"));
+									+ "\\" + loginMember.getId() + "-" + now + ".json"));
 						} catch (Exception e) {
 							mailService.sendErorrMail(e.toString());
 							return null;
@@ -557,31 +557,32 @@ public class WordbookController {
 				}
 			}
 
-			else {
+			else {  //직접 입력 방식
 				try (BufferedWriter bw = new BufferedWriter(
 						new OutputStreamWriter(new FileOutputStream(json), "UTF-8"))) {
-					text = text.replaceAll(regex, " ");
-					String[] textArr = text.split(" ");
-					String word;
-					int[] count = new int[textArr.length];
-					String[] responseBody = new String[textArr.length];
+					text = text.replaceAll(regex, " ");  //입력한 값의 -, 알파벳을 제외한 모든 문자 공백으로 변경
+					String[] textArr = text.split(" ");  //공백을 기준으로 단어로 나눔
+					String word;  //인코딩 단어를 담을 임시 String
+					int[] count = new int[textArr.length];  //나온 횟수
+					String[] responseBody = new String[textArr.length];  //api 결과를 담을 string
 					for (int i = 0; i < textArr.length; i++) {
-						if (textArr[i] != null && textArr[i].length() > 1) {
+						if (textArr[i] != null && textArr[i].length() > 1) {  //한 글자 단어 무시
 							try {
-								word = URLEncoder.encode(textArr[i], "UTF-8");
+								word = URLEncoder.encode(textArr[i], "UTF-8");  //인코딩
 							} catch (UnsupportedEncodingException e) {
+								mailService.sendErorrMail(e.toString());
 								throw new RuntimeException("인코딩 실패", e);
 							}
 							count[i] = 1;
 							for (int j = i + 1; j < textArr.length; j++) {
-								if (textArr[j] != null && textArr[j].equals(textArr[i])) {
-									textArr[j] = null;
-									count[i]++;
+								if (textArr[j] != null && textArr[j].equals(textArr[i])) {  //같은 단어가 나오면
+									textArr[j] = null;  //나중에 나온 단어 삭제
+									count[i]++;  //카운트 증가
 								}
 							}
-							responseBody[i] = post(apiURL, requestHeaders, word);
+							responseBody[i] = post(apiURL, requestHeaders, word);  //api를 사용해 값을 받아옴
 						} else {
-							count[i] = 0;
+							count[i] = 0;  //null인 경우
 						}
 					}
 
@@ -599,28 +600,28 @@ public class WordbookController {
 								responseBody[j + 1] = tempTrans;
 							}
 						}
-					}
+					}  //count 내림차순
 					int index = 0;
 					for (int i = 0; i < textArr.length; i++) {
 						if (textArr[i] != null && textArr[i].length() > 1) {
 							try {
-								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);
-								JSONObject message = (JSONObject) resultJson.get("message");
-								JSONObject result = (JSONObject) message.get("result");
-								if (!textArr[i].equals(result.get("translatedText"))) {
+								JSONObject resultJson = (JSONObject) parser.parse(responseBody[i]);  //api 결과를 json으로 변경
+								JSONObject message = (JSONObject) resultJson.get("message");  //결과에서 message 파트 가져옴
+								JSONObject result = (JSONObject) message.get("result");  //message에서 result 파트 가져옴
+								if (!textArr[i].equals(result.get("translatedText"))) {  //번역값과 입력값이 같으면 제외
 									jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
 											+ result.get("translatedText") + "\",\"favorite\":" + 0 + "},";
-									index++;
+									index++;  //인덱스를 1씩 증가시키며 저장
 								}
 							} catch (Exception e) {
 								mailService.sendErorrMail(e.toString());
 							}
 						}
 					}
-					jsonText = jsonText.substring(0, jsonText.length() - 1);
-					jsonText += "]";
+					jsonText = jsonText.substring(0, jsonText.length() - 1);  //마지막 쉼표 제거
+					jsonText += "]";  //json 형식 마지막 문자
 					bw.write(jsonText);
-					bw.flush();
+					bw.flush();  //파일 쓰기
 
 					m.addAttribute("text", jsonText);
 					try {
@@ -634,7 +635,7 @@ public class WordbookController {
 						}
 						wordbookService.insertWordbook(new WordbookDto(0, loginMember.getId(), 0, 0, title,
 								relativePath.toAbsolutePath().getParent() + "\\eclipse-workspace\\jsonFiles\\" + today
-										+ "\\" + now + ".json"));
+								+ "\\" + loginMember.getId() + "-" + now + ".json"));
 					} catch (Exception e) {
 						mailService.sendErorrMail(e.toString());
 					}
