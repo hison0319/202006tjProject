@@ -17,7 +17,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -49,7 +48,7 @@ public class WordController {
 	
 	//단어 목록 조회 기능
 	@RequestMapping("showlist")
-	public String wordListShow(HttpSession session, String wordbookid) {
+	public String wordListShow(HttpSession session, Model m, String wordbookid) {
 		try{
 			MemberDto loginMember = (MemberDto)session.getAttribute("loginMember");
 			if(loginMember.getCertified() == 0) {
@@ -58,10 +57,22 @@ public class WordController {
 			if(wordbookid ==null) {
 				throw new NumberFormatException();
 			}
+			int loginId = loginMember.getId();
+			int wordbookId = Integer.parseInt(wordbookid);
+			if(loginId <= 20 || loginId == wordbookService.selectWordbookById(wordbookId).getOwnerId()) {
+				m.addAttribute("isOwner", true);
+			}
+			else {
+				m.addAttribute("isOwner", false);
+			}
 		} catch (NumberFormatException | IllegalStateException e) {
+			mailService.sendErorrMail(e.toString());
 			return "error/wrongAccess";  //잘못된 접근(주소로 직접 접근 등)
 		} catch (NullPointerException e) {
 			return "error/loginPlease";  //비로그인 시
+		} catch (Exception e) {
+			mailService.sendErorrMail(e.toString());
+			return "error/wrongAccess";
 		}
 		return "word/wordList";
 	}
@@ -81,7 +92,6 @@ public class WordController {
 		} catch (NullPointerException e) {  //비로그인 상태
 			return "{\"nope\":\"loginPlease\"}";
 		}
-		boolean isOK = false;
 		try {
 			int wordbookId = Integer.parseInt(wordbookid);
 			if(loginId>21 && wordbookService.selectWordbookById(wordbookId).getOwnerId()==loginId
@@ -353,7 +363,7 @@ public class WordController {
 									+ origTrans[i] + "\",\"favorite\":" + origFavorite[i] + "},";
 						}
 						for (int i = 0; i < textArr.length; i++) {  //추가되는 단어를 씀
-							if (textArr[i]!=null && !textArr[i].equals(transArr[i]) && textArr[i].length() > 1) {
+							if (textArr[i]!=null && !textArr[i].equals(transArr[i])  && textArr[i].length() > 1) {
 								jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
 										+ transArr[i] + "\",\"favorite\":" + 0 + "},";
 								index++;
@@ -480,7 +490,7 @@ public class WordController {
 								+ origTrans[i] + "\",\"favorite\":" + origFavorite[i] + "},";
 					}
 					for (int i = 0; i < textArr.length; i++) {  //추가되는 단어를 씀
-						if (textArr[i]!=null && !textArr[i].equals(transArr[i])  && textArr[i].length() > 1) {
+						if (textArr[i]!=null && !textArr[i].equals(transArr[i]) && textArr[i].length() > 1) {
 							jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
 									+ transArr[i] + "\",\"favorite\":" + 0 + "},";
 							index++;
