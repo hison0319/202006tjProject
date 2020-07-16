@@ -92,7 +92,7 @@
 	<!-- 전체 -->
 	<select id="selectWordbookByOwnerIdOrGuestIdJoin" resultType="wordbook">
 		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
-		where owner_id=#{id} or guest_id=#{id} group by title order by u_date desc limit #{first}, #{ea};
+		where owner_id=#{id} or guest_id=#{id} group by wordbook_address order by u_date desc limit #{first}, #{ea};
 	</select>
 	<!-- 전체에서 중요 -->
 	<select id="selectWordbookByOwnerIdOrGuestIdFavoriteJoin" resultType="wordbook">

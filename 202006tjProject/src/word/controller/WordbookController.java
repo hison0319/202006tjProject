@@ -337,7 +337,6 @@ public class WordbookController {
 			WordbookDto ownerWordbook = wordbookService.selectWordbookById(wordbookId);		//아이디값을 조회
 			//이미 추가된 단어장에서 같은 제목이 있는지 조회하기 위한 단어장 리스트 생성
 			List<WordbookDto> guestWordbookList = wordbookService.selectWordbookByGuestIdCheck(loginMember.getId());
-			List<WordbookDto> ownerWordbookList = wordbookService.selectWordbookByOwnerIdCheck(loginMember.getId());
 			//공유키 확인
 			if (ownerWordbook.getSharingKey().equals(sharingKey)) {
 				//guestWordbookList에서 이미 추가된 단어장이 있는지 확인
@@ -347,13 +346,6 @@ public class WordbookController {
 						return "wordbook/wordbookUpdatefail";
 					}
 				}
-				//ownerWordbookList에서 이미 추가된 단어장이 있는지 확인
-				for (int i=0; i<ownerWordbookList.size(); i++) {
-					if (ownerWordbookList.get(i).getTitle().equals(ownerWordbook.getTitle())) {
-						m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
-						return "wordbook/wordbookUpdatefail";
-					}
-				}	
 				WordbookDto guestWordbook = new WordbookDto();	//새로운 단어장을 guestId에 로그인 아이디를 넣어 생성.
 				guestWordbook.setOwnerId(ownerWordbook.getOwnerId());
 				guestWordbook.setGuestId(loginMember.getId());
@@ -530,7 +522,7 @@ public class WordbookController {
 
 						try {
 							//같은 제목이 있는지 조회하기 위한 clientWordbookList생성
-							List<WordbookDto> clientWordbookList = wordbookService.selectWordbookByOwnerIdOrGuestIdCheck(loginMember.getId());
+							List<WordbookDto> clientWordbookList = wordbookService.selectWordbookByOwnerIdCheck(loginMember.getId());
 							for (int i=0; i<clientWordbookList.size(); i++) {
 								if (clientWordbookList.get(i).getTitle().equals(title)) {	//같은 제목의 단어장이 있을 시.
 									m.addAttribute("errorMessage","이미 같은 제목의 단어장이 있습니다.");
