@@ -37,8 +37,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import member.dto.MemberDto;
 import member.service.MailService;
-import word.dto.SharingDto;
-import word.service.SharingService;
 import word.service.WordbookService;
 
 @Controller
@@ -46,8 +44,6 @@ import word.service.WordbookService;
 public class WordController {
 	@Autowired
 	WordbookService wordbookService;
-	@Autowired
-	SharingService sharingService;
 	@Autowired
 	MailService mailService;
 	

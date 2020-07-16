@@ -1,4 +1,5 @@
 let button = document.querySelector("#submit");
+let title = document.querySelector("#title");
 let file = document.querySelector("#file");
 let text = document.querySelector("#text");
 let sharingInput = document.querySelector("#sharingKey");
@@ -22,6 +23,24 @@ sharing.onclick = function() {
 	}
 }
 
+
+title.onkeyup = function(){
+	if(title.value.trim()==""){
+		button.disabled="disabled";
+	}
+	else{
+		if (file.files.length != 0) {
+			let name = file.files[0].name;
+			if (name.substring(name.lastIndexOf(".") + 1, name.length)
+					.search("txt") != -1) {
+				button.disabled=null;
+			}
+		}
+		else if(text.value.trim() != ""){
+			button.disabled=null;
+		}
+	}
+}
 //각 form안의 input내용이 변경 시 submit버튼 disabled 토글
 file.onchange = function() {
 	if (file.files.length != 0) {
@@ -43,6 +62,9 @@ file.onchange = function() {
 			button.disabled = "disabled";
 		}
 	}
+	if(title.value.trim()==""){
+		button.disabled="disabled";
+	}
 }
 text.onkeyup = function() {
 	if (file.files.length != 0) {
@@ -60,6 +82,9 @@ text.onkeyup = function() {
 		} else {
 			button.disabled = null;
 		}
+	}
+	if(title.value.trim()==""){
+		button.disabled="disabled";
 	}
 }
 sharingInput.onkeyup = function(){

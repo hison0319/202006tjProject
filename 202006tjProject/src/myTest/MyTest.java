@@ -14,9 +14,7 @@ import member.dto.MemberDto;
 import member.service.MemberService;
 import notice.dto.NoticeDto;
 import notice.service.NoticeService;
-import word.dto.SharingDto;
 import word.dto.WordbookDto;
-import word.service.SharingService;
 import word.service.WordbookService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,8 +26,6 @@ public class MyTest {
 	NoticeService noticeService;
 	@Autowired
 	WordbookService wordbookService;
-	@Autowired
-	SharingService sharingService;
 	@Autowired
 	SignupController signupController;
 	//멤버 삽입 셀렉 전체셀렉
@@ -113,23 +109,6 @@ public class MyTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	//공유정보 삽입 셀렉 전체셀렉
-	@Test @Ignore
-	public void testSharing01() {
-		System.out.println(sharingService.selectSharingAll());
-		SharingDto sharing = new SharingDto(1, 21, 23);
-		sharingService.insertSharing(sharing);
-		System.out.println(sharingService.selectSharingById(sharing.getId()));
-	}
-	//공유정보 업데이트 델리트
-	@Test @Ignore
-	public void testSharing02() {
-		SharingDto sharing = sharingService.selectSharingById(2);
-		sharing.setGuestId(25);
-		System.out.println(sharingService.selectSharingById(2));
-		sharingService.updateSharing(sharing);
-		System.out.println(sharingService.selectSharingById(2));
 	}
 	//회원가입 아이디, 메일, 번호 중복확인
 	@Test @Ignore

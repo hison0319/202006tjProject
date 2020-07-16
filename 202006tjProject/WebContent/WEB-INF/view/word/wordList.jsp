@@ -65,7 +65,12 @@
 				</select>
 			</div>
 			<form action="#" method="post" accept-charset="utf-8">
+			<c:if test="${isOwner == true }">
 				<table><tr><td><button id="insert">추가</button><button id="update" type="button">수정</button></td><td><button id="form" type="button">장문 추가</button><td></td><td><button id="deleting" type="button">단어장 삭제</button></td></tr></table>
+			</c:if>
+			<c:if test="${isOwner == false }">
+				<table><tr><td><button id="insert" type="button" disabled>추가</button><button id="update" type="button" disabled>수정</button></td><td><button id="form" type="button" disabled>장문 추가</button><td></td><td><button id="deleting" type="button">단어장 삭제</button></td></tr></table>
+			</c:if>
 			</form>
         </div>
     </section>
