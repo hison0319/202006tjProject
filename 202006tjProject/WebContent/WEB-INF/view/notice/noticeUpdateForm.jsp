@@ -16,6 +16,7 @@
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <script src="/js/notice/noticeUpdateForm.js"></script>
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
     <!-- include libraries(jQuery, bootstrap) -->
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

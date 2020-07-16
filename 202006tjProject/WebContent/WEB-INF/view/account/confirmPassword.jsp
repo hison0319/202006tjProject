@@ -16,7 +16,8 @@
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="/css/main.css" />
-     <link rel="stylesheet" href="/css/signup.css" />
+    <link rel="stylesheet" href="/css/signup.css" />
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script src="/js/account/confirmPassword.js"></script>
     <script src="/js/footer.js"></script>
 </head>

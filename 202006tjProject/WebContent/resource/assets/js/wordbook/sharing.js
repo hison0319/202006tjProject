@@ -1,4 +1,4 @@
-Kakao.init('0e4fcd913762bd2a1016dc2dc2798451');
+
 var showListSharing = $("[class*=showListSharing]");
 var getkeySharing = $("[class*=getkeySharing]");
 var kakaoSharing = $("[class*=kakaoSharing]");

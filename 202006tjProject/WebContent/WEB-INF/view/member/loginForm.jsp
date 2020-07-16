@@ -18,6 +18,7 @@
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <meta name = "google-signin-client_id"content = "166221413799-su8t7c8tdrpivukd6vi396ikuh1ouch3.apps.googleusercontent.com">
 <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script src="/js/login/login.js"></script>
 <script src="/js/footer.js"></script>
 <link rel="stylesheet" href="/css/login.css" />

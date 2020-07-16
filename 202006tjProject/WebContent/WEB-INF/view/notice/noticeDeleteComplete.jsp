@@ -15,6 +15,7 @@
     <meta name="description" content="basic" />
     <meta name="author" content="HaniSon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script src="/js/notice/noticeDeleteComplete.js"></script>
     <script src="/js/footer.js"></script>
     <link rel="stylesheet" href="/css/main.css" />
