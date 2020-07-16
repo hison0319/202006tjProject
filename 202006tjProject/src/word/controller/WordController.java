@@ -376,6 +376,7 @@ public class WordController {
 							obw.write(jsonText);
 							obw.flush();
 						}  //기존 파일에 덮어씀
+						m.addAttribute("wordbookid", wordbookid);
 						return "word/wordUpdateComplete";
 					} catch (FileNotFoundException e) {
 						mailService.sendErorrMail(e.toString());
@@ -503,6 +504,7 @@ public class WordController {
 						obw.write(jsonText);
 						obw.flush();
 					}  //기존 파일에 덮어씀
+					m.addAttribute("wordbookid", wordbookid);
 					return "word/wordUpdateComplete";
 				} catch (UnsupportedEncodingException e1) {
 					mailService.sendErorrMail(e1.toString());
