@@ -353,7 +353,7 @@ public class WordController {
 									+ origTrans[i] + "\",\"favorite\":" + origFavorite[i] + "},";
 						}
 						for (int i = 0; i < textArr.length; i++) {  //추가되는 단어를 씀
-							if (textArr[i]!=null && !textArr[i].equals(transArr[i])) {
+							if (textArr[i]!=null && !textArr[i].equals(transArr[i]) && textArr[i].length() > 1) {
 								jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
 										+ transArr[i] + "\",\"favorite\":" + 0 + "},";
 								index++;
@@ -480,7 +480,7 @@ public class WordController {
 								+ origTrans[i] + "\",\"favorite\":" + origFavorite[i] + "},";
 					}
 					for (int i = 0; i < textArr.length; i++) {  //추가되는 단어를 씀
-						if (textArr[i]!=null && !textArr[i].equals(transArr[i])) {
+						if (textArr[i]!=null && !textArr[i].equals(transArr[i])  && textArr[i].length() > 1) {
 							jsonText += "{\"index\":" + index + ",\"word\":\"" + textArr[i] + "\",\"trans\":\""
 									+ transArr[i] + "\",\"favorite\":" + 0 + "},";
 							index++;
