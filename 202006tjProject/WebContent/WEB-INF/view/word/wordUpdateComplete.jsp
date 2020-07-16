@@ -56,7 +56,7 @@
     <section class="wrapper major-pad">
         <div class="inner">
 			<div>단어 게시판 수정 완료</div>
-			<div><a href="${pageContext.request.contextPath}/wordbook/showlist">단어장 목록으로 이동</a></div>
+			<div><a href="${pageContext.request.contextPath}/wordbook/showlist?wordbookid=${wordbookid }">단어장으로 이동</a></div>
         </div>
     </section>
 
