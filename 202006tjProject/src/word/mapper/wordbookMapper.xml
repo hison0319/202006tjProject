@@ -39,19 +39,19 @@
     </select>
 	<!-- for count check -->
 	<select id="selectWordbookCountByOwnerId" resultType="int">
-		select count(distinct title) from wordbook where owner_id=#{id};
+		select count(title) from wordbook where owner_id=#{id};
 	</select>
 	<select id="selectWordbookCountByGuestId" resultType="int">
 		select count(id) from wordbook where guest_id=#{id};
 	</select>
 	<select id="selectWordbookCountByOwnerIdOrGuestId" resultType="int">
-		select count(distinct title) from wordbook where owner_id=#{id} or guest_id=#{id};
+		select count(title) from wordbook where owner_id=#{id} or guest_id=#{id};
 	</select>
 	<select id="selectWordbookCountByOwnerIdOrGuestIdFavorite" resultType="int">
-		select count(distinct title) from wordbook where (owner_id=#{id} or guest_id=#{id}) and favorite = 1;
+		select count(title) from wordbook where (owner_id=#{id} or guest_id=#{id}) and favorite = 1;
 	</select>
 	<select id="selectWordbookCountSharing" resultType="int">
-		select count(distinct title) from wordbook where owner_id=#{id} and guest_id!=0;
+		select count(title) from wordbook where owner_id=#{id} and guest_id!=0;
 	</select>
 	<select id="selectWordbookAll" resultType="wordbook">
 		select id,owner_id,favorite,guest_id,title,reg_date,u_date,wordbook_address from wordbook
@@ -108,10 +108,10 @@
 	<select id="selectWordbookBySearchJoin" resultType="wordbook">
 		select wordbook.*, member.member_id from wordbook join member on wordbook.owner_id = member.id 
 		where (owner_id=#{id} or guest_id=#{id}) And (member_id like CONCAT('%', #{keyword}, '%') or title like CONCAT('%', #{keyword}, '%')) 
-		group by title order by u_date desc limit #{first}, #{ea};
+		group by wordbook_address order by u_date desc limit #{first}, #{ea};
 	</select>
 	<select id="selectWordbookCountBySearchJoin" resultType="int">
-		select count(distinct title) from wordbook join member on wordbook.owner_id = member.id 
+		select count(title) from wordbook join member on wordbook.owner_id = member.id 
 		where (owner_id=#{id} or guest_id=#{id}) And (member_id like CONCAT('%', #{keyword}, '%') or title like CONCAT('%', #{keyword}, '%'));
 	</select>
 </mapper>

@@ -59,11 +59,14 @@ public class WordController {
 			}
 			int loginId = loginMember.getId();
 			int wordbookId = Integer.parseInt(wordbookid);
-			if(loginId <= 20 || loginId == wordbookService.selectWordbookById(wordbookId).getOwnerId()) {
+			if (loginId <= 20 || loginId == wordbookService.selectWordbookById(wordbookId).getOwnerId()) {
 				m.addAttribute("isOwner", true);
 			}
-			else {
+			else if (loginId > 20 && loginId == wordbookService.selectWordbookById(wordbookId).getGuestId()){
 				m.addAttribute("isOwner", false);
+			}
+			else {
+				return "error/notAllowed";
 			}
 		} catch (NumberFormatException | IllegalStateException e) {
 			mailService.sendErorrMail(e.toString());
