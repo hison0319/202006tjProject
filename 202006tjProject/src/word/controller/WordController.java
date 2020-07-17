@@ -51,7 +51,10 @@ public class WordController {
 	public String wordListShow(HttpSession session, Model m, String wordbookid) {
 		try{
 			MemberDto loginMember = (MemberDto)session.getAttribute("loginMember");
-			if(loginMember.getCertified() == 0) {
+			if(loginMember == null) {
+				return "error/loginPlease";
+			}
+			else if(loginMember.getCertified() == 0) {
 				return "error/certifyPlease";  //미인증 시
 			}
 			if(wordbookid ==null) {
@@ -72,7 +75,7 @@ public class WordController {
 			mailService.sendErorrMail(e.toString());
 			return "error/wrongAccess";  //잘못된 접근(주소로 직접 접근 등)
 		} catch (NullPointerException e) {
-			return "error/loginPlease";  //비로그인 시
+			return "error/wrongAccess";  //비로그인 시
 		} catch (Exception e) {
 			mailService.sendErorrMail(e.toString());
 			return "error/wrongAccess";
