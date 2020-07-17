@@ -16,6 +16,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import member.dto.MemberDto;
 import member.service.MailService;
+import word.dto.WordbookDto;
 import word.service.WordbookService;
 
 @Controller
@@ -210,6 +214,8 @@ public class WordController {
 					mailService.sendErorrMail(e.toString());
 					return "{\"nope\":\"wrongAccess\"}";
 				}
+				wordbookService.updateWordbookuDate(new WordbookDto(wordbookId, 0, 0, 0,
+						null, null, Timestamp.valueOf(LocalDateTime.now()), "", "", "", ""));
 			}
 		} catch (NullPointerException e) {  //비로그인 시
 			return "{\"nope\":\"loginPlease\"}";
@@ -382,6 +388,8 @@ public class WordController {
 							obw.write(jsonText);
 							obw.flush();
 						}  //기존 파일에 덮어씀
+						wordbookService.updateWordbookuDate(new WordbookDto(wordbookId, 0, 0, 0,
+								null, null, Timestamp.valueOf(LocalDateTime.now()), "", "", "", ""));
 						m.addAttribute("wordbookid", wordbookid);
 						return "word/wordUpdateComplete";
 					} catch (FileNotFoundException e) {
@@ -392,6 +400,10 @@ public class WordController {
 						return "error/wrongAccess";
 					} catch (ParseException e) {
 						mailService.sendErorrMail(e.toString());
+						return "error/wrongAccess";
+					} catch (Exception e) {
+						mailService.sendErorrMail(e.toString());
+						return "error/wrongAccess";
 					}
 				} else { // 파일 형식이 txt가 아닐 경우
 					return "error/wrongFileType"; //``
@@ -510,6 +522,8 @@ public class WordController {
 						obw.write(jsonText);
 						obw.flush();
 					}  //기존 파일에 덮어씀
+					wordbookService.updateWordbookuDate(new WordbookDto(wordbookId, 0, 0, 0,
+							null, null, Timestamp.valueOf(LocalDateTime.now()), "", "", "", ""));
 					m.addAttribute("wordbookid", wordbookid);
 					return "word/wordUpdateComplete";
 				} catch (UnsupportedEncodingException e1) {
@@ -524,10 +538,12 @@ public class WordController {
 				} catch (ParseException e1) {
 					mailService.sendErorrMail(e1.toString());
 					return "error/wrongAccess";
+				} catch (Exception e) {
+					mailService.sendErorrMail(e.toString());
+					return "error/wrongAccess";
 				}
 			}
 		}
-		return "word/wordUpdateComplete";
 	}
 	
 	//단어 개별 수정 기능
@@ -590,6 +606,8 @@ public class WordController {
 				bw.write(str);
 				bw.append(']');
 				bw.flush();
+				wordbookService.updateWordbookuDate(new WordbookDto(wordbookId, 0, 0, 0,
+						null, null, Timestamp.valueOf(LocalDateTime.now()), "", "", "", ""));
 			} catch (UnsupportedEncodingException e) {
 				mailService.sendErorrMail(e.toString());
 				return "{\"nope\":\"wrongAccess\"}";

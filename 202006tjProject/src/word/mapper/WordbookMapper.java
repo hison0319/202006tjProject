@@ -60,6 +60,8 @@ public interface WordbookMapper {
 
 	// 단어장 수정
 	public void updateWordbook(WordbookDto wordbookDto);
+	
+	public void updateWordbookuDate(WordbookDto wordbookDto);
 
 	// 단어장 선호도만 수정(favorite, uDtae)
 	public void updateWordbookFavorite(WordbookDto wordbookDto);

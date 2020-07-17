@@ -132,6 +132,10 @@ public class WordbookService {
 	public void updateWordbook(WordbookDto wordbookDto) throws Exception {
 		wordbookMapper.updateWordbook(wordbookDto);
 	}
+	
+	public void updateWordbookuDate(WordbookDto wordbookDto) throws Exception {
+		wordbookMapper.updateWordbookuDate(wordbookDto);
+	}
 
 	// 단어장 공유 키 수정(sharingKey, uDtae)
 	public void updateWordbookSharingKey(WordbookDto wordbookDto) throws Exception {

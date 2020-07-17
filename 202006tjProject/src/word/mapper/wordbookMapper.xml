@@ -60,6 +60,9 @@
 		update wordbook set owner_id=#{ownerId}, favorite=#{favorite}, guest_id=#{guestId}, 
 		title=#{title}, wordbook_address=#{wordbookAddress} where id=#{id}
 	</update>
+	<update id="updateWordbookuDate" parameterType="wordbook">
+		update wordbook set u_date=#{uDate} where id=#{id}
+	</update>
 	<!-- favorite 업데이트시 uDate를 변경하지 않음. -->
 	<update id="updateWordbookFavorite" keyProperty="id">
 		update wordbook set favorite=#{favorite}, u_date=#{uDate} where id=#{id};
