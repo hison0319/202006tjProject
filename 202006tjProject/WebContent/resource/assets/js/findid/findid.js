@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded",function(){
 					document.querySelector("#foundid").innerText= "이메일과 일치하는 아이디가 없습니다.";
 					/*alert("이메일과 일치하는 아이디가 없습니다.");*/
 				} else {
-					document.querySelector("#foundid").innerText=data;
+					document.querySelector("#foundid").innerText="아이디는 " + data + "입니다.";
 				}
 			}
 		})
