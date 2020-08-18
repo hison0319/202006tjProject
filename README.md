@@ -4,4 +4,20 @@
 ## 팀원 : 손한이, 심윤선, 조은지
 ### 개요 : 개인 단어장을 번역API를 활용하여 문단 삽입 시 자동으로 생성하고, 생성된 단어장을 타 사용자에게 공유하는 기능을 갖는 스프링 프레임워크 기반의 웹 서버 개발
 > 1. 개발 환경
->> - java 11.0.6
+>> *	Java 11.0.6
+>> *	Apache Tomcat 9.0.35
+>> *	MySQL 8.0.20
+>> *	Spring 3.9.13
+>> *	Servlet 4.0
+>> *	Jquery 1.12.4
+>> *	Window10, eclipse 4.15.0, HTML5, CSS3, Bootstrap 3.4.1, JSP 2.3
+
+> 2. 요구사항 정의서(기능 정리)
+>> * 회원가입 서비스
+>>> - 기본 회원 가입
+>>>> + 프론트 엔드 유효성 검사(javascript, jquery)
+>>>> + 벡엔드 유효성 검사(dependency hibernate-validator, validation-api)
+>>>> + 이용약관 동의
+>>>> + 데이터 베이스 무결성 검증(DB 외래키, 유니크키)
+>>>> + 주소 API (DAUM API)
+>>> - 로그인
